@@ -218,7 +218,7 @@
                 </div>
             @endif
 
-            <form action="#" method="POST">
+            <form action="{{ route('admin.login') }}" method="POST">
                 @csrf
 
                 {{-- Email --}}
