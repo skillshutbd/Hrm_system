@@ -139,6 +139,20 @@
     transition: all 0.2s;
 }
 
+.sidebar-nav .sub-link {
+   
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+    margin-bottom: 2px;
+}
+.sidebar-nav .sub-link:hover {  background: rgba(255,255,255,0.07); }
+.sidebar-nav .sub-link.active { color: #fff; background: rgba(255,94,43,0.5); }
+
 .sidebar-bottom .nav-link:hover {
     color: #DADADA;
     background: rgba(255,255,255,0.07);

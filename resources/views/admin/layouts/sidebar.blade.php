@@ -1,7 +1,4 @@
-
-
 <aside class="app-sidebar" id="sidebar">
-
 
     <div class="sidebar-brand">
         <div class="brand-logo">
@@ -15,42 +12,59 @@
 
     <nav class="sidebar-nav my-4">
         <ul class="nav flex-column">
+
             <li class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-grid-1x2-fill me-3"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
+
+            {{-- User Management Dropdown --}}
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }}">
-                    <i class="bi bi-people-fill me-3"></i>
-                    <span>Employee List</span>
+                <a class="nav-link d-flex justify-content-between align-items-center {{ request()->routeIs('admin.employee.*') || request()->routeIs('admin.tl.*') ? 'active' : '' }}"
+                   data-bs-toggle="collapse" href="#userManagement" role="button"
+                   aria-expanded="{{ request()->routeIs('admin.employee.*') || request()->routeIs('admin.tl.*') ? 'true' : 'false' }}">
+                    <span><i class="bi bi-people-fill me-3"></i>User Management</span>
+                    <i class="bi bi-chevron-down" style="font-size:0.7rem;"></i>
                 </a>
+                <div class="collapse {{ request()->routeIs('admin.employee.*') || request()->routeIs('admin.tl.*') ? 'show' : '' }}" id="userManagement">
+                    <ul class="nav flex-column ms-4 mt-1">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.employee.index') }}" class="nav-link sub-link {{ request()->routeIs('admin.employee.*') ? 'active' : '' }}">
+                                <i class="bi bi-person-lines-fill me-2"></i> Employee Directory
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.teamlead.index') }}" class="nav-link sub-link {{ request()->routeIs('admin.tl.*') ? 'active' : '' }}">
+                                <i class="bi bi-person-check-fill me-2"></i> TL Assignment
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
+
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('departments.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.department.index') }}" class="nav-link {{ request()->routeIs('admin.department.*') ? 'active' : '' }}">
                     <i class="bi bi-diagram-3-fill me-3"></i>
                     <span>Department List</span>
                 </a>
             </li>
+
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('tl-assignments.*') ? 'active' : '' }}">
-                    <i class="bi bi-person-check-fill me-3"></i>
-                    <span>TL Assignment</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('leave-requests.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.employee_leave.index') }}" class="nav-link {{ request()->routeIs('admin.employee_leave.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event-fill me-3"></i>
                     <span>Leave Requests</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('activity.*') ? 'active' : '' }}">
+
+            <!-- <li class="nav-item">
+                <a href="{{ route('admin.employee_activity.index') }}" class="nav-link {{ request()->routeIs('admin.employee_activity.*') ? 'active' : '' }}">
                     <i class="bi bi-bar-chart-fill me-3"></i>
                     <span>Employee Activity</span>
                 </a>
-            </li>
+            </li> -->
+
         </ul>
     </nav>
 
@@ -64,7 +78,7 @@
         <hr class="sidebar-divider">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link py-2 {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link py-2 {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                     <i class="bi bi-gear-fill me-3"></i>
                     <span>Settings</span>
                 </a>
