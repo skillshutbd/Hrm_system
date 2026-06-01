@@ -13,6 +13,10 @@ use App\Http\Controllers\Auth\AdminAuthController;
 | contains the "web" middleware group. Now create something great!
 |*/
 
+Route::get('/', function () {
+    return redirect()->route('admin.login');
+});
+
 Route::get('/admin/signup', [AdminAuthController::class, 'registrationForm'])->name('admin.signup');
 Route::post('/admin/signup', [AdminAuthController::class, 'registration'])->name('admin.reg.submit');
 Route::get('/admin/login', [AdminAuthController::class, 'loginForm'])->name('admin.login');

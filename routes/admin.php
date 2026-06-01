@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\EmployeeController;
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [SidebarController::class, 'dashbooard'])->name('admin.dashboard.index');
@@ -17,4 +19,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/teamlead', [SidebarController::class, 'TeamLead'])->name('admin.teamlead.index');
     Route::get('/admin/employee-activity', [SidebarController::class, 'employee_activity'])->name('admin.employee_activity.index');
     Route::get('/admin/employee-leave', [SidebarController::class, 'employee_leave'])->name('admin.employee_leave.index');
+    Route::get('/admin/employee/create', [EmployeeController::class, 'create'])->name('admin.employee.create');
+    Route::post('/admin/employee', [EmployeeController::class, 'store'])->name('admin.employee.store');
 });
