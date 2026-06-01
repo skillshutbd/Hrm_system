@@ -179,4 +179,14 @@ class EmployeeController extends Controller
 
         return redirect()->route('admin.employee.index')->with('success', 'Employee deleted successfully.');
     }
+
+
+    public function toggleTeamLead(Employee $employee)
+{
+    $employee->update([
+        'role' => $employee->role === 'team_lead' ? 'employee' : 'team_lead',
+    ]);
+
+    return back()->with('success', 'Employee role updated successfully.');
+}
 }
