@@ -109,6 +109,70 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employee.index')->with('success', 'Employee updated successfully.');
     }
 
+    public function exportCsv()
+{
+    $fileName = 'employees.csv';
+
+    $employees = \App\Models\Employee::with('department')->latest()->get();
+
+    $headers = [
+        'Content-Type' => 'text/csv; charset=UTF-8',
+        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        'Pragma' => 'no-cache',
+        'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+        'Expires' => '0',
+    ];
+
+    $callback = function () use ($employees) {
+        $file = fopen('php://output', 'w');
+
+        // Excel-friendly UTF-8 BOM
+        fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+        fputcsv($file, [
+            'Employee ID',
+            'NID',
+            'Name',
+            'Email',
+            'Phone',
+            'Department',
+            'Designation',
+            'Role',
+            'Hire Date',
+            'Status',
+            'Address',
+            'Emergency Contact Name',
+            'Emergency Contact Phone',
+            'Emergency Contact Relationship',
+            'Created At',
+        ]);
+
+        foreach ($employees as $employee) {
+            fputcsv($file, [
+                $employee->employee_id,
+                $employee->nid,
+                $employee->name,
+                $employee->email,
+                $employee->phone,
+                $employee->department->name ?? '',
+                $employee->designation,
+                $employee->role,
+                $employee->hire_date,
+                $employee->status,
+                $employee->address,
+                $employee->emergency_contact_name,
+                $employee->emergency_contact_phone,
+                $employee->emergency_contact_relationship,
+                optional($employee->created_at)->format('Y-m-d H:i:s'),
+            ]);
+        }
+
+        fclose($file);
+    };
+
+    return response()->streamDownload($callback, $fileName, $headers);
+}
+
     public function destroy(Employee $employee)
     {
         $employee->delete();

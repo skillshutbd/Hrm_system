@@ -24,5 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/employee/{employee}', [EmployeeController::class, 'show'])->name('admin.employee.show');
     Route::get('/admin/employee/{employee}/edit', [EmployeeController::class, 'edit'])->name('admin.employee.edit');
     Route::put('/admin/employee/{employee}', [EmployeeController::class, 'update'])->name('admin.employee.update');
+
+    
+// export আগে
+Route::get('/employee/export-csv', [EmployeeController::class, 'exportCsv'])->name('employee.export-csv');
+Route::get('/employee/{employee}', [EmployeeController::class, 'show'])->name('employee.show');
     Route::delete('/admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employee.destroy');
 });

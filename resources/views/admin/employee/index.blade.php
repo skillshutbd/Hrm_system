@@ -56,6 +56,24 @@
 
 @section('content')
 
+@php
+    $departments = \App\Models\Department::orderBy('name')->get();
+
+    $employees = \App\Models\Employee::with('department')
+        ->when(request('department_id'), function ($query) {
+            $query->where('department_id', request('department_id'));
+        })
+        ->when(request('role'), function ($query) {
+            $query->where('role', request('role'));
+        })
+        ->when(request('status'), function ($query) {
+            $query->where('status', request('status'));
+        })
+        ->latest()
+        ->paginate(8)
+        ->withQueryString();
+@endphp
+
     <div class="d-flex justify-content-between align-items-start mb-4">
         <div>
             <h1 class="page-title mb-1">Employee Directory</h1>
@@ -63,9 +81,9 @@
         </div>
 
         <div class="d-flex gap-2">
-            <button class="btn-export d-flex align-items-center gap-2">
-                <i class="bi bi-download"></i> Export
-            </button>
+        <a href="{{ route('employee.export-csv') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
+             <i class="bi bi-download"></i> Export
+        </a>
 
             <a href="{{ route('admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">
                 <i class="bi bi-person-plus"></i> Add Employee
@@ -73,55 +91,57 @@
         </div>
     </div>
 
-    <div class="filter-bar d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+    <form method="GET" action="{{ route('admin.employee.index') }}" class="filter-bar d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
         <div class="d-flex align-items-center gap-3 flex-wrap">
             <span style="font-size:0.82rem; font-weight:600; color:#7F7F7F;">Filter by:</span>
 
             <div style="position:relative;">
-                <select class="filter-select">
-                    <option>All Departments</option>
+                <select name="department_id" class="filter-select" onchange="this.form.submit()">
+                    <option value="">All Departments</option>
 
-                    @isset($departments)
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}">{{ $department->name }}</option>
-                        @endforeach
-                    @endisset
+                    @foreach($departments as $department)
+                        <option value="{{ $department->id }}" {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                            {{ $department->name }}
+                        </option>
+                    @endforeach
                 </select>
                 <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
             </div>
 
             <div style="position:relative;">
-                <select class="filter-select">
-                    <option>All Roles</option>
-                    <option value="admin">Admin</option>
-                    <option value="hr">HR</option>
-                    <option value="employee">Employee</option>
-                    <option value="team_lead">Team Lead</option>
+                <select name="role" class="filter-select" onchange="this.form.submit()">
+                    <option value="">All Roles</option>
+                    <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="hr" {{ request('role') == 'hr' ? 'selected' : '' }}>HR</option>
+                    <option value="employee" {{ request('role') == 'employee' ? 'selected' : '' }}>Employee</option>
+                    <option value="team_lead" {{ request('role') == 'team_lead' ? 'selected' : '' }}>Team Lead</option>
                 </select>
                 <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
             </div>
 
             <div style="position:relative;">
-                <select class="filter-select">
-                    <option>Status: All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                <select name="status" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Status: All</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
                 <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
             </div>
+
+            @if(request('department_id') || request('role') || request('status'))
+                <a href="{{ route('admin.employee.index') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
+                    <i class="bi bi-x-lg"></i> Clear
+                </a>
+            @endif
         </div>
 
         <div class="view-toggle">
-            <button class="view-btn active" id="grid-view"><i class="bi bi-grid"></i></button>
-            <button class="view-btn" id="list-view"><i class="bi bi-list-ul"></i></button>
+            <button type="button" class="view-btn active" id="grid-view"><i class="bi bi-grid"></i></button>
+            <button type="button" class="view-btn" id="list-view"><i class="bi bi-list-ul"></i></button>
         </div>
-    </div>
+    </form>
 
     <div class="row g-3 mb-4">
-
-    @php
-    $employees = \App\Models\Employee::with('department')->latest()->paginate(8);
-@endphp
 
         @forelse($employees as $employee)
             <div class="col-12 col-sm-6 col-xl-3">
@@ -153,9 +173,9 @@
                             {{ strtoupper(substr($employee->name, 0, 1)) }}
                         </div>
 
-                       <a href="{{ route('admin.employee.show', $employee->id) }}" class="link-view">
-    View Profile <i class="bi bi-arrow-right"></i>
-</a>
+                        <a href="{{ route('admin.employee.show', $employee->id) }}" class="link-view">
+                            View Profile <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
