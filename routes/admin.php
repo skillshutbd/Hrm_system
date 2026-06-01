@@ -21,4 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/employee-leave', [SidebarController::class, 'employee_leave'])->name('admin.employee_leave.index');
     Route::get('/admin/employee/create', [EmployeeController::class, 'create'])->name('admin.employee.create');
     Route::post('/admin/employee', [EmployeeController::class, 'store'])->name('admin.employee.store');
+    Route::get('/admin/employee/{employee}', [EmployeeController::class, 'show'])->name('admin.employee.show');
+    Route::get('/admin/employee/{employee}/edit', [EmployeeController::class, 'edit'])->name('admin.employee.edit');
+    Route::put('/admin/employee/{employee}', [EmployeeController::class, 'update'])->name('admin.employee.update');
+    Route::delete('/admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employee.destroy');
 });

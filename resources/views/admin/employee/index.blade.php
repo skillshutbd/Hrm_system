@@ -153,9 +153,9 @@
                             {{ strtoupper(substr($employee->name, 0, 1)) }}
                         </div>
 
-                        <a href="#" class="link-view">
-                            View Profile <i class="bi bi-arrow-right"></i>
-                        </a>
+                       <a href="{{ route('admin.employee.show', $employee->id) }}" class="link-view">
+    View Profile <i class="bi bi-arrow-right"></i>
+</a>
                     </div>
                 </div>
             </div>
