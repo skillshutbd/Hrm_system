@@ -70,9 +70,9 @@
             <!-- <button class="btn btn-outline-custom d-flex align-items-center gap-2">
                 <i class="bi bi-download"></i> Export Audit
             </button> -->
-            <button class="btn btn-brand d-flex align-items-center gap-2">
-                <i class="bi bi-arrow-clockwise"></i> Refresh Data
-            </button>
+         <a href="{{ url()->current() }}" class="btn btn-brand d-flex align-items-center gap-2 text-decoration-none">
+    <i class="bi bi-arrow-clockwise"></i> Refresh Data
+</a>
         </div>
     </div>
 

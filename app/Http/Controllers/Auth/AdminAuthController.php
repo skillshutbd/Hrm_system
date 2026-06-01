@@ -53,7 +53,15 @@ public function login(Request $request)
             'password' => 'required',
         ]);
 
-        $admin = User::where('email', $request->email)->where('role', 'admin')->first();
+        if (Auth::guard('employee')->attempt($request->only('email', 'password'))) {
+            return redirect()->route('employee.dashboard');
+        }
+        elseif (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+            return redirect()->route('admin.dashboard');
+        }
+            $admin = User::where('email', $request->email)->first();
+
+
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
             return back()->withErrors([
@@ -63,6 +71,8 @@ public function login(Request $request)
 
         // Log the admin in
         Auth::login($admin);
+
+        
 
         return redirect()->route('admin.dashboard');
     }

@@ -69,7 +69,7 @@
     </nav>
 
     <div class="sidebar-cta px-3 mb-auto">
-        <a href="#" class="btn btn-brand w-100 py-2 shadow-sm">
+        <a href="{{ route('admin.employee.create') }}" class="btn btn-brand w-100 py-2 shadow-sm">
             <i class="bi bi-plus-lg me-2"></i>New Hire
         </a>
     </div>
@@ -78,7 +78,7 @@
         <hr class="sidebar-divider">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link py-2 {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                <a href="{{ route('profile.edit') }}" class="nav-link py-2 {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                     <i class="bi bi-gear-fill me-3"></i>
                     <span>Settings</span>
                 </a>
