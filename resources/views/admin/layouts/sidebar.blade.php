@@ -84,7 +84,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <form method="POST" action="#">
+                <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
                     <button type="submit" class="nav-link py-2 text-danger border-0 bg-transparent w-100 text-start">
                         <i class="bi bi-box-arrow-left me-3"></i>

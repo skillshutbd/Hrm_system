@@ -132,10 +132,7 @@
             </span>
         </button>
 
-        <button class="btn btn-control" id="btn-help" aria-label="Help">
-            <i class="bi bi-question-circle fs-5"></i>
-        </button>
-
+      
         <div class="vr mx-1 d-none d-sm-block" style="height: 24px;"></div>
 
         <div class="dropdown" id="user-profile-dropdown">
@@ -151,18 +148,14 @@
 
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                 <li>
-                    <a class="dropdown-item py-2" href="#">
+                    <a class="dropdown-item py-2" href="{{ route('admin.profile') }}">
                         <i class="bi bi-person-fill me-2"></i>My Profile
                     </a>
                 </li>
-                <li>
-                    <a class="dropdown-item py-2" href="#">
-                        <i class="bi bi-shield-lock-fill me-2"></i>Security
-                    </a>
-                </li>
+               
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="dropdown-item py-2 text-danger">
                             <i class="bi bi-box-arrow-left me-2"></i>Logout

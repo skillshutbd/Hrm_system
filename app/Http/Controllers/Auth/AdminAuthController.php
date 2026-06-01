@@ -66,4 +66,48 @@ public function login(Request $request)
 
         return redirect()->route('admin.dashboard');
     }
+
+    public function profile()
+    {
+        return view('admin.profile.profile');
+    }
+    public function edit()
+    {
+        $admin = Auth::user();
+
+        return view('admin.profile.edit', compact('admin'));
+    }
+
+    public function update(Request $request)
+    {
+        /** @var User $admin */
+        $admin = Auth::user();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+           
+            'email' => 'required|email|unique:users,email,' . $admin->id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $admin->update($validated);
+
+        return redirect()->route('admin.profile')->with('success', 'Profile updated successfully.');
+    }
+
+   public function logout(Request $request)
+{
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('admin.login');
+}
 }
