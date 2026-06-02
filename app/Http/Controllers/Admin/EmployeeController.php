@@ -23,7 +23,7 @@ class EmployeeController extends Controller
         return view('admin.employee.create');
     }
 
-   public function store(Request $request)
+ public function store(Request $request)
 {
     $validated = $request->validate([
         'name' => 'required|string|max:255',
@@ -46,15 +46,25 @@ class EmployeeController extends Controller
         'status' => 'required|in:active,inactive',
     ]);
 
-   if ($request->hasFile('profile_picture')) {
-    $validated['profile_picture'] = $request->file('profile_picture')->store('employees', 'public');
-}
+    if ($request->hasFile('profile_picture')) {
+        $validated['profile_picture'] = $request->file('profile_picture')->store('employees', 'public');
+    }
 
     if (!empty($validated['password'])) {
         $validated['password'] = Hash::make($validated['password']);
     }
 
     Employee::create($validated);
+
+    // role hr_admin হলে hr_admins table এও copy হবে
+    if (isset($validated['role']) && $validated['role'] === 'hr_admin') {
+        \App\Models\HrAdmin::create([
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => $validated['password'],
+            'role'     => 'hr_admin',
+        ]);
+    }
 
     return redirect()->route('admin.employee.index')->with('success', 'Employee created successfully.');
 }

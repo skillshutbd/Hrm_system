@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRegistrationRequest;
 use App\Models\User;
+use App\Models\Employee;
+use App\Models\HrAdmin;
+use App\Models\Tl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -47,35 +50,37 @@ public function store(){
     }
 
 public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'email'    => 'required|email',
+        'password' => 'required',
+    ]);
 
-        if (Auth::guard('employee')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('employee.dashboard');
-        }
-        elseif (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+    // Super Admin
+    if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+        if (Auth::guard('web')->user()->role === 'super_admin') {
+            $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
-            $admin = User::where('email', $request->email)->first();
+        Auth::guard('web')->logout();
+    }
 
-
-
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return back()->withErrors([
-                'email' => 'The provided credentials are incorrect.',
-            ]);
+    // HR Admin
+    
+    if (Auth::guard('Hr')->attempt($request->only('email', 'password'))) {
+        if (Auth::guard('Hr')->user()->role === 'hr_admin') {
+            $request->session()->regenerate();
+            return redirect()->route('hr_admin.dashboard');
         }
+        Auth::guard('Hr')->logout();
+    }
 
-        // Log the admin in
-        Auth::login($admin);
+    return back()->withErrors([
+        'email' => 'Invalid credentials.',
+    ])->withInput();
+}
 
         
-
-        return redirect()->route('admin.dashboard');
-    }
 
     public function profile()
     {

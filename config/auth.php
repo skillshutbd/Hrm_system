@@ -46,6 +46,14 @@ return [
         'driver' => 'session',
         'provider' => 'employees',
         ],
+        'Hr' => [
+            'driver' => 'session',
+            'provider' => 'hr_admins',
+        ],
+        'TL' => [
+            'driver' => 'session',
+            'provider' => 'tl_admins',
+        ],
     ],
 
     /*
@@ -73,6 +81,14 @@ return [
         'employees' => [
         'driver' => 'eloquent',
         'model' => App\Models\Employee::class,
+    ],
+    'hr_admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\HrAdmin::class,
+    ],
+    'tl' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Tl::class,
     ],
 
         // 'users' => [
