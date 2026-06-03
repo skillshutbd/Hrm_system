@@ -105,6 +105,16 @@
 </style>
 @endpush
 
+
+@php
+    $pendingNotificationsCount = \App\Models\Notification::where('status', 'pending')->count();
+    $recentNotifications = \App\Models\Notification::where('status', 'pending')
+        ->latest()
+        ->take(5)
+        ->get();
+@endphp
+
+
 <header class="app-header py-3 px-4 d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
         <button class="btn btn-outline-secondary d-lg-none me-3" id="sidebar-toggle" aria-label="Toggle Navigation">
@@ -125,12 +135,58 @@
     </div>
 
     <div class="header-controls d-flex align-items-center gap-3">
-        <button class="btn btn-control position-relative" id="btn-notifications" aria-label="Notifications">
-            <i class="bi bi-bell fs-5"></i>
-            <span class="position-absolute top-2 start-75 translate-middle p-1 bg-danger border border-light rounded-circle notification-dot">
-                <span class="visually-hidden">New alerts</span>
+       @php
+    $pendingNotificationsCount = \App\Models\Notification::where('status', 'pending')->count();
+    $recentNotifications = \App\Models\Notification::where('status', 'pending')
+        ->latest()
+        ->take(5)
+        ->get();
+@endphp
+
+<div class="dropdown">
+    <button class="btn btn-control position-relative" id="btn-notifications" data-bs-toggle="dropdown" aria-label="Notifications">
+        <i class="bi bi-bell fs-5"></i>
+        @if($pendingNotificationsCount > 0)
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.6rem;">
+                {{ $pendingNotificationsCount }}
             </span>
-        </button>
+        @endif
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" style="min-width:320px; border-radius:12px;">
+        <li class="px-3 py-2 border-bottom">
+            <span style="font-size:0.82rem; font-weight:700; color:#1A1A1A;">Notifications</span>
+            @if($pendingNotificationsCount > 0)
+                <span class="badge bg-danger ms-2" style="font-size:0.65rem;">{{ $pendingNotificationsCount }} pending</span>
+            @endif
+        </li>
+
+        @forelse($recentNotifications as $notification)
+            <li>
+                <div class="dropdown-item py-2" style="white-space:normal; cursor:default;">
+                    <div style="font-size:0.82rem; color:#1A1A1A;">{{ $notification->message }}</div>
+                    <div style="font-size:0.72rem; color:#B2ADA7; margin-top:2px;">
+                        {{ $notification->created_at->diffForHumans() }}
+                    </div>
+                </div>
+            </li>
+        @empty
+            <li>
+                <div class="dropdown-item py-3 text-center" style="font-size:0.82rem; color:#B2ADA7;">
+                    No notifications
+                </div>
+            </li>
+        @endforelse
+
+        @if($pendingNotificationsCount > 0)
+            <li class="border-top">
+                <a href="{{ route('admin.teamlead.index') }}" class="dropdown-item py-2 text-center" style="font-size:0.78rem; color:#FF5E2B; font-weight:600;">
+                    View All Requests
+                </a>
+            </li>
+        @endif
+    </ul>
+</div>
 
       
         <div class="vr mx-1 d-none d-sm-block" style="height: 24px;"></div>
