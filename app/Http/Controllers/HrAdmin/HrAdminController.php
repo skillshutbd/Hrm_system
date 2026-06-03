@@ -24,7 +24,7 @@ class HrAdminController extends Controller
     public function teamLeadAssignment()
     {
         $employees = Employee::all();
-        return view('hr.teamlead_assignment', compact('employees'));
+        return view('hr.teamlead.index', compact('employees'));
     }
 
 

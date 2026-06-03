@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('hr.layouts.hr')
 
 @section('title', 'Add Employee - Skills Hut Ltd')
 

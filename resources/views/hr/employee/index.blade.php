@@ -87,7 +87,7 @@
      
         
 
-                <a href="{{ route('admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">
+                <a href="{{ route('hr_admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">
                     <i class="bi bi-person-plus"></i> Add Employee
                 </a>
             

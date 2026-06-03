@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('hr.layouts.hr')
 
 @section('title', 'TL Assignment - Skills Hut Ltd')
 
@@ -7,17 +7,7 @@
     .page-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: #1A1A1A; }
     .page-subtitle { font-size: 0.85rem; color: #7F7F7F; }
 
-    .filter-select {
-        border: 1px solid #E2E0DD;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        padding: 9px 36px 9px 14px;
-        background: #fff;
-        color: #1A1A1A;
-        appearance: none;
-        cursor: pointer;
-        min-width: 180px;
-    }
+    .filter-select { border: 1px solid #E2E0DD; border-radius: 8px; font-size: 0.85rem; padding: 9px 36px 9px 14px; background: #fff; color: #1A1A1A; appearance: none; cursor: pointer; min-width: 180px; }
     .filter-select:focus { outline: none; border-color: #FF5E2B; box-shadow: 0 0 0 3px rgba(255,94,43,0.1); }
     .filter-wrap { position: relative; }
     .filter-wrap .bi-chevron-down { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 0.7rem; color: #7F7F7F; pointer-events: none; }
@@ -37,9 +27,6 @@
     .tl-table tbody tr:hover { background: #FAF9F6; }
     .tl-table td { padding: 18px 20px; vertical-align: middle; }
 
-    .badge-pending { background: #FEF3C7; color: #D97706; border-radius: 20px; font-size: 0.75rem; font-weight: 700; padding: 5px 12px; display: inline-flex; align-items: center; gap: 5px; }
-.badge-pending::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #D97706; display: inline-block; }
-
     .emp-avatar { width: 38px; height: 38px; border-radius: 50%; background: #F4F4F0; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: #4A4A4A; flex-shrink: 0; }
     .emp-avatar.tl-avatar { background: #FFF3EE; color: #FF5E2B; }
     .emp-name { font-size: 0.9rem; font-weight: 700; color: #1A1A1A; }
@@ -50,11 +37,15 @@
     .badge-member::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #B2ADA7; display: inline-block; }
     .badge-tl { background: #FFF3EE; color: #FF5E2B; border-radius: 20px; font-size: 0.75rem; font-weight: 700; padding: 5px 12px; display: inline-flex; align-items: center; gap: 5px; }
     .badge-tl::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #FF5E2B; display: inline-block; }
+    .badge-pending { background: #FEF3C7; color: #D97706; border-radius: 20px; font-size: 0.75rem; font-weight: 700; padding: 5px 12px; display: inline-flex; align-items: center; gap: 5px; }
+    .badge-pending::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #D97706; display: inline-block; }
 
     .btn-assign { background: #FF5E2B; color: #fff; border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; }
     .btn-assign:hover { background: #E04B1A; color: #fff; }
     .btn-modify { background: #fff; color: #1A1A1A; border: 1px solid #E2E0DD; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; }
     .btn-modify:hover { background: #FAF9F6; border-color: #FF5E2B; color: #FF5E2B; }
+    .btn-cancel { background: #fff; color: #dc3545; border: 1px solid #dc3545; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; }
+    .btn-cancel:hover { background: #FEF2F2; }
 
     .pagination-wrap { padding: 16px 20px; border-top: 1px solid #E2E0DD; display: flex; justify-content: space-between; align-items: center; }
     .pagination-info { font-size: 0.78rem; color: #7F7F7F; font-family: monospace; }
@@ -80,11 +71,31 @@
 
     $employees = $employeesQuery->latest()->paginate(8)->withQueryString();
 
+    // pending requests এর employee_id গুলো
     $pendingRequests = \App\Models\Notification::where('type', 'tl_assignment_request')
-    ->where('status', 'pending')
-    ->pluck('employee_id')
-    ->toArray();
+        ->where('status', 'pending')
+        ->pluck('employee_id')
+        ->toArray();
+
+    // notification id গুলো cancel এর জন্য
+    $pendingNotifications = \App\Models\Notification::where('type', 'tl_assignment_request')
+        ->where('status', 'pending')
+        ->get()
+        ->keyBy('employee_id');
 @endphp
+
+    {{-- Success / Info Alert --}}
+    @if(session('success'))
+        <div class="alert alert-success py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">
+            <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('info'))
+        <div class="alert alert-warning py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">
+            <i class="bi bi-info-circle me-1"></i> {{ session('info') }}
+        </div>
+    @endif
 
     <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
         <div>
@@ -96,18 +107,15 @@
             <div style="font-size:0.75rem; font-weight:700; color:#7F7F7F; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">
                 Filter by Department
             </div>
-
             <div class="filter-wrap">
                 <select name="department_id" class="filter-select" onchange="this.form.submit()">
                     <option value="">All Departments</option>
-
                     @foreach($departments as $department)
                         <option value="{{ $department->id }}" {{ request('department_id') == $department->id ? 'selected' : '' }}>
                             {{ $department->name }}
                         </option>
                     @endforeach
                 </select>
-
                 <i class="bi bi-chevron-down"></i>
             </div>
         </form>
@@ -123,7 +131,6 @@
                 <div class="kpi-icon"><i class="bi bi-people"></i></div>
             </div>
         </div>
-
         <div class="col-12 col-md-4">
             <div class="kpi-card">
                 <div>
@@ -133,7 +140,6 @@
                 <div class="kpi-icon orange"><i class="bi bi-shield-check"></i></div>
             </div>
         </div>
-
         <div class="col-12 col-md-4">
             <div class="kpi-card">
                 <div>
@@ -156,7 +162,6 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-
             <tbody>
                 @forelse($employees as $employee)
                     <tr>
@@ -165,49 +170,50 @@
                                 <div class="emp-avatar {{ $employee->role === 'team_lead' ? 'tl-avatar' : '' }}">
                                     {{ strtoupper(substr($employee->name, 0, 1)) }}
                                 </div>
-
                                 <div>
                                     <div class="emp-name">{{ $employee->name }}</div>
                                     <div class="emp-id">{{ $employee->employee_id ?? 'N/A' }}</div>
                                 </div>
                             </div>
                         </td>
-
-                        <td>
-                            <span class="emp-designation">{{ $employee->designation ?? 'N/A' }}</span>
-                        </td>
-
-                        <td>
-                            <span class="emp-designation">{{ $employee->department->name ?? 'No Department' }}</span>
-                        </td>
-
+                        <td><span class="emp-designation">{{ $employee->designation ?? 'N/A' }}</span></td>
+                        <td><span class="emp-designation">{{ $employee->department->name ?? 'No Department' }}</span></td>
                         <td>
                             @if($employee->role === 'team_lead')
                                 <span class="badge-tl">Team Lead</span>
+                            @elseif(in_array($employee->id, $pendingRequests))
+                                <span class="badge-pending">Pending</span>
                             @else
                                 <span class="badge-member">Member</span>
                             @endif
                         </td>
-<td>
-    @if(in_array($employee->id, $pendingRequests))
-        <span class="badge-pending">PENDING APPROVAL</span>
-    @else
-        <form action="{{ route('admin.tl-assignment.toggle', $employee->id) }}" method="POST">
-            @csrf
-            @if($employee->role === 'team_lead')
-                <button type="submit" class="btn-modify">REMOVE TL</button>
-            @else
-                <button type="submit" class="btn-assign">ASSIGN AS TL</button>
-            @endif
-        </form>
-    @endif
-</td>
+                        <td>
+                            @if(in_array($employee->id, $pendingRequests))
+                                {{-- Pending — cancel button দেখাবে --}}
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge-pending">AWAITING APPROVAL</span>
+                                    <form action="{{ route('hr_admin.tl-request.cancel', $pendingNotifications[$employee->id]->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-cancel">CANCEL</button>
+                                    </form>
+                                </div>
+                            @elseif($employee->role === 'team_lead')
+                                <form action="{{ route('hr_admin.tl-assignment.toggle', $employee->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn-modify">REMOVE TL</button>
+                                </form>
+                            @else
+                                <form action="{{ route('hr_admin.tl-assignment.toggle', $employee->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn-assign">ASSIGN AS TL</button>
+                                </form>
+                            @endif
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center py-4">
-                            No employees found.
-                        </td>
+                        <td colspan="5" class="text-center py-4">No employees found.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -217,13 +223,8 @@
             <span class="pagination-info">
                 Showing {{ $employees->firstItem() ?? 0 }}-{{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} employees
             </span>
-
-            <div>
-                {{ $employees->links() }}
-            </div>
+            <div>{{ $employees->links() }}</div>
         </div>
     </div>
-
-    
 
 @endsection
