@@ -32,56 +32,74 @@ class EmployeeController extends Controller
         return view($this->getView('employee.index'), compact('employees', 'departments'));
     }
 
-    public function create()
+    public function create() 
     {
         $departments = Department::orderBy('name')->get();
         return view($this->getView('employee.create'), compact('departments'));
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name'                           => 'required|string|max:255',
-            'email'                          => 'required|email|unique:employees,email',
-            'phone'                          => 'nullable|string|max:255',
-            'employee_id'                    => 'nullable|string|max:255|unique:employees,employee_id',
-            'nid'                            => 'required|string|max:255|unique:employees,nid',
-            'photo'                          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'date_of_birth'                  => 'nullable|date',
-            'gender'                         => 'nullable|in:male,female,other',
-            'address'                        => 'nullable|string|max:255',
-            'emergency_contact_name'         => 'nullable|string|max:255',
-            'emergency_contact_phone'        => 'nullable|string|max:255',
-            'emergency_contact_relationship' => 'nullable|string|max:255',
-            'department_id'                  => 'required|exists:departments,id',
-            'designation'                    => 'required|string|max:255',
-            'role'                           => 'nullable|string|max:255',
-            'hire_date'                      => 'nullable|date',
-            'password'                       => 'nullable|string|min:8',
-            'status'                         => 'required|in:active,inactive',
+  public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name'                           => 'required|string|max:255',
+        'email'                          => 'required|email|unique:employees,email',
+        'phone'                          => 'nullable|string|max:255',
+        'employee_id'                    => 'nullable|string|max:255|unique:employees,employee_id',
+        'nid'                            => 'required|string|max:255|unique:employees,nid',
+        'profile_picture'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'date_of_birth'                  => 'nullable|date',
+        'gender'                         => 'nullable|in:male,female,other',
+        'address'                        => 'nullable|string|max:255',
+        'emergency_contact_name'         => 'nullable|string|max:255',
+        'emergency_contact_phone'        => 'nullable|string|max:255',
+        'emergency_contact_relationship' => 'nullable|string|max:255',
+        'department_id'                  => 'required|exists:departments,id',
+        'designation'                    => 'required|string|max:255',
+        'role'                           => 'nullable|string|max:255',
+        'hire_date'                      => 'nullable|date',
+        'password'                       => 'nullable|string|min:8',
+        'status'                         => 'nullable|in:pending,active,inactive',
+    ]);
+
+    if ($request->hasFile('profile_picture')) {
+        $validated['profile_picture'] = $request->file('profile_picture')->store('employees', 'public');
+    }
+
+    if (!empty($validated['password'])) {
+        $validated['password'] = Hash::make($validated['password']);
+    }
+
+    if (auth('Hr')->check()) {
+        $validated['status'] = 'pending';
+    } else {
+        $validated['status'] = $validated['status'] ?? 'active';
+    }
+
+    $employee = Employee::create($validated);
+
+    if (isset($validated['role']) && $validated['role'] === 'hr_admin') {
+        $hrAdmin = \App\Models\HrAdmin::create([
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => $validated['password'],
+            'role'     => 'hr_admin',
         ]);
 
-        if ($request->hasFile('profile_picture')) {
-            $validated['profile_picture'] = $request->file('profile_picture')->store('employees', 'public');
-        }
-
-        if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        Employee::create($validated);
-
-        if (isset($validated['role']) && $validated['role'] === 'hr_admin') {
-            \App\Models\HrAdmin::create([
-                'name'     => $validated['name'],
-                'email'    => $validated['email'],
-                'password' => $validated['password'],
-                'role'     => 'hr_admin',
-            ]);
-        }
-
-        return redirect()->route($this->getRoute('employee.index'))->with('success', 'Employee created successfully.');
+        $hrAdmin->assignRole('hr_admin');
     }
+
+    if (auth('Hr')->check()) {
+        \App\Models\Notification::create([
+            'type'         => 'employee_creation',
+            'employee_id'  => $employee->id,
+            'requested_by' => auth('Hr')->id(),
+            'message'      => auth('Hr')->user()->name . ' has created a new employee: ' . $validated['name'],
+            'status'       => 'pending',
+        ]);
+    }
+
+    return view($this->getView('employee.index'))->with('success', 'Employee created successfully.');
+}
 
     public function show(Employee $employee)
     {

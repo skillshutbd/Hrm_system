@@ -36,9 +36,9 @@
 
     {{-- Breadcrumb --}}
     <div class="breadcrumb-custom">
-        <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+        <a href="{{ route('hr_admin.dashboard') }}">Dashboard</a>
         <i class="bi bi-chevron-right"></i>
-        <a href="{{ route('admin.employee.index') }}">Employee Directory</a>
+        <a href="{{ route('hr_admin.employee.index') }}">Employee Directory</a>
         <i class="bi bi-chevron-right"></i>
         <span>Add Employee</span>
     </div>
@@ -49,12 +49,12 @@
             <h1 class="page-title mb-1">Add Employee</h1>
             <p class="page-subtitle mb-0">Fill in the details to onboard a new team member.</p>
         </div>
-        <a href="{{ route('admin.employee.index') }}" class="btn-cancel d-flex align-items-center gap-2">
+        <a href="{{ route('hr_admin.employee.index') }}" class="btn-cancel d-flex align-items-center gap-2">
             <i class="bi bi-arrow-left"></i> Back
         </a>
     </div>
 
-    <form action="{{ route('admin.employee.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('hr_admin.employee.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row g-4">

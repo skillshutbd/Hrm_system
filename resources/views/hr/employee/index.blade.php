@@ -29,6 +29,7 @@
     .status-badge { position: absolute; top: -8px; right: -8px; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.3px; }
     .status-active { background: #ECFDF5; color: #059669; }
     .status-inactive { background: #F4F4F0; color: #7F7F7F; }
+    .status-pending { background: #FEF3C7; color: #D97706; }
 
     .emp-name { font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; color: #1A1A1A; margin-bottom: 2px; }
     .emp-role { font-size: 0.78rem; font-weight: 600; color: #FF5E2B; margin-bottom: 4px; }
@@ -47,10 +48,26 @@
     .add-label { font-size: 0.85rem; color: #7F7F7F; font-weight: 500; }
 
     .pagination-info { font-size: 0.82rem; color: #7F7F7F; }
-
     .pagination { margin-bottom: 0; }
     .page-link { color: #FF5E2B; border-color: #E2E0DD; }
     .page-item.active .page-link { background-color: #FF5E2B; border-color: #FF5E2B; }
+
+    .pending-panel { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 14px; overflow: hidden; }
+    .pending-panel-header { padding: 14px 18px; border-bottom: 1px solid #FDE68A; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .pending-panel-title { display: flex; align-items: center; gap: 8px; font-weight: 800; color: #92400E; }
+    .pending-count-badge { background: #F59E0B; color: #fff; border-radius: 999px; font-size: 0.72rem; padding: 2px 8px; }
+    .pending-item { display: grid; grid-template-columns: 44px minmax(160px, 1fr) minmax(220px, 1.4fr) auto; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid #FDE68A; }
+    .pending-item:last-child { border-bottom: none; }
+    .pending-avatar { width: 40px; height: 40px; border-radius: 50%; background: #FEF3C7; color: #92400E; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem; }
+    .pending-name { font-size: 0.9rem; font-weight: 800; color: #1A1A1A; }
+    .pending-meta { font-size: 0.76rem; color: #92400E; opacity: 0.75; }
+    .pending-message { font-size: 0.82rem; color: #4A4A4A; }
+    .pending-status { font-size: 0.72rem; font-weight: 800; white-space: nowrap; }
+
+    @media (max-width: 768px) {
+        .pending-item { grid-template-columns: 40px 1fr; }
+        .pending-message, .pending-status { grid-column: 2; }
+    }
 </style>
 @endpush
 
@@ -72,143 +89,200 @@
         ->latest()
         ->paginate(8)
         ->withQueryString();
+
+    $pendingNotifications = \App\Models\Notification::with(['employee.department'])
+        ->where('type', 'employee_creation')
+        ->where('status', 'pending')
+        ->latest()
+        ->get();
 @endphp
 
-    <div class="d-flex justify-content-between align-items-start mb-4">
-        <div>
-            <h1 class="page-title mb-1">Employee Directory</h1>
-            <p class="page-subtitle mb-0">Manage and view all team members across the organization.</p>
-        </div>
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h1 class="page-title mb-1">Employee Directory</h1>
+        <p class="page-subtitle mb-0">Manage and view all team members across the organization.</p>
+    </div>
 
-        <div class="d-flex gap-2">
+    <div class="d-flex gap-2">
         <a href="{{ route('hr_admin.employee.export-csv') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
-             <i class="bi bi-download"></i> Export
+            <i class="bi bi-download"></i> Export
         </a>
-     
-        
 
-                <a href="{{ route('hr_admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">
-                    <i class="bi bi-person-plus"></i> Add Employee
-                </a>
-            
-            
-        </div>
-
+        <a href="{{ route('hr_admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">
+            <i class="bi bi-person-plus"></i> Add Employee
+        </a>
     </div>
+</div>
 
-    <form method="GET" action="{{ route('hr_admin.employee.index') }}" class="filter-bar d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
-        <div class="d-flex align-items-center gap-3 flex-wrap">
-            <span style="font-size:0.82rem; font-weight:600; color:#7F7F7F;">Filter by:</span>
+<form method="GET" action="{{ route('hr_admin.employee.index') }}" class="filter-bar d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+        <span style="font-size:0.82rem; font-weight:600; color:#7F7F7F;">Filter by:</span>
 
-            <div style="position:relative;">
-                <select name="department_id" class="filter-select" onchange="this.form.submit()">
-                    <option value="">All Departments</option>
+        <div style="position:relative;">
+            <select name="department_id" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Departments</option>
 
-                    @foreach($departments as $department)
-                        <option value="{{ $department->id }}" {{ request('department_id') == $department->id ? 'selected' : '' }}>
-                            {{ $department->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
-            </div>
-
-            <div style="position:relative;">
-                <select name="role" class="filter-select" onchange="this.form.submit()">
-                    <option value="">All Roles</option>
-                    <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="hr" {{ request('role') == 'hr' ? 'selected' : '' }}>HR</option>
-                    <option value="employee" {{ request('role') == 'employee' ? 'selected' : '' }}>Employee</option>
-                    <option value="team_lead" {{ request('role') == 'team_lead' ? 'selected' : '' }}>Team Lead</option>
-                </select>
-                <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
-            </div>
-
-            <div style="position:relative;">
-                <select name="status" class="filter-select" onchange="this.form.submit()">
-                    <option value="">Status: All</option>
-                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                </select>
-                <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
-            </div>
-
-            @if(request('department_id') || request('role') || request('status'))
-                <a href="{{ route('hr_admin.employee.index') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
-                    <i class="bi bi-x-lg"></i> Clear
-                </a>
-            @endif
+                @foreach($departments as $department)
+                    <option value="{{ $department->id }}" {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                        {{ $department->name }}
+                    </option>
+                @endforeach
+            </select>
+            <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
         </div>
 
-        <div class="view-toggle">
-            <button type="button" class="view-btn active" id="grid-view"><i class="bi bi-grid"></i></button>
-            <button type="button" class="view-btn" id="list-view"><i class="bi bi-list-ul"></i></button>
+        <div style="position:relative;">
+            <select name="role" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Roles</option>
+                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                <option value="hr_admin" {{ request('role') == 'hr_admin' ? 'selected' : '' }}>HR Admin</option>
+                <option value="employee" {{ request('role') == 'employee' ? 'selected' : '' }}>Employee</option>
+                <option value="team_lead" {{ request('role') == 'team_lead' ? 'selected' : '' }}>Team Lead</option>
+            </select>
+            <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
         </div>
-    </form>
 
-    <div class="row g-3 mb-4">
+        <div style="position:relative;">
+            <select name="status" class="filter-select" onchange="this.form.submit()">
+                <option value="">Status: All</option>
+                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+            </select>
+            <i class="bi bi-chevron-down" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;color:#7F7F7F;pointer-events:none;"></i>
+        </div>
 
-        @forelse($employees as $employee)
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="emp-card">
-                    <div class="emp-photo-wrap">
-                        @if($employee->profile_picture)
-                            <img src="{{ asset('storage/' . $employee->profile_picture) }}" class="emp-photo" alt="{{ $employee->name }}">
-                        @else
-                            <img src="{{ asset('images/admin_avatar.png') }}" class="emp-photo" alt="{{ $employee->name }}">
-                        @endif
-
-                        <span class="status-badge {{ $employee->status === 'active' ? 'status-active' : 'status-inactive' }}">
-                            {{ strtoupper($employee->status) }}
-                        </span>
-                    </div>
-
-                    <div class="emp-name">{{ $employee->name }}</div>
-                    <div class="emp-role">{{ $employee->designation ?? 'N/A' }}</div>
-
-                    <div class="emp-dept">
-                        <i class="bi bi-building" style="font-size:0.7rem;"></i>
-                        {{ $employee->department->name ?? 'No Department' }}
-                    </div>
-
-                    <hr class="emp-divider">
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="emp-avatar-initials">
-                            {{ strtoupper(substr($employee->name, 0, 1)) }}
-                        </div>
-
-                        <a href="{{ route('hr_admin.employee.show', $employee->id) }}" class="link-view">
-                            View Profile <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="col-12">
-                <div class="emp-card text-center">
-                    <p class="mb-0">No employees found.</p>
-                </div>
-            </div>
-        @endforelse
-
-        <div class="col-12 col-sm-6 col-xl-3">
-            <a href="{{ route('hr_admin.employee.create') }}" class="emp-card-add">
-                <div class="add-icon"><i class="bi bi-plus-lg"></i></div>
-                <div class="add-label">Add New Employee</div>
+        @if(request('department_id') || request('role') || request('status'))
+            <a href="{{ route('hr_admin.employee.index') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
+                <i class="bi bi-x-lg"></i> Clear
             </a>
-        </div>
-
+        @endif
     </div>
 
-    <div class="d-flex justify-content-between align-items-center">
-        <span class="pagination-info">
-            Showing {{ $employees->firstItem() ?? 0 }} to {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} employees
-        </span>
-
-        <div>
-            {{ $employees->links() }}
-        </div>
+    <div class="view-toggle">
+        <button type="button" class="view-btn active" id="grid-view"><i class="bi bi-grid"></i></button>
+        <button type="button" class="view-btn" id="list-view"><i class="bi bi-list-ul"></i></button>
     </div>
+</form>
+
+{{-- Pending Approvals Panel --}}
+@if($pendingNotifications->isNotEmpty())
+    <div class="pending-panel mb-4">
+        <div class="pending-panel-header">
+            <div class="pending-panel-title">
+                <i class="bi bi-hourglass-split"></i>
+                Pending Employee Approvals
+                <span class="pending-count-badge">{{ $pendingNotifications->count() }}</span>
+            </div>
+
+            <span style="font-size:0.78rem; color:#92400E; opacity:.7;">
+                Waiting for admin approval
+            </span>
+        </div>
+
+        @foreach($pendingNotifications as $notification)
+            @php $emp = $notification->employee; @endphp
+
+            <div class="pending-item">
+                <div class="pending-avatar">
+                    {{ strtoupper(substr($emp->name ?? '?', 0, 2)) }}
+                </div>
+
+                <div class="pending-info">
+                    <div class="pending-name">{{ $emp->name ?? 'Unknown' }}</div>
+                    <div class="pending-meta">
+                        {{ $emp->designation ?? 'N/A' }}
+                        @if($emp?->department)
+                            &nbsp;·&nbsp; {{ $emp->department->name }}
+                        @endif
+                        &nbsp;·&nbsp;
+                        <i class="bi bi-clock" style="font-size:.7rem;"></i>
+                        {{ $notification->created_at->diffForHumans() }}
+                    </div>
+                </div>
+
+                <div class="pending-message">
+                    <span>{{ $notification->message }}</span>
+                </div>
+
+                <div class="pending-status" style="color:
+                    @if(($emp->status ?? '') === 'active') #059669
+                    @elseif(($emp->status ?? '') === 'pending') #D97706
+                    @else #7F7F7F
+                    @endif;">
+                    {{ strtoupper(str_replace('_', ' ', $emp->status ?? 'N/A')) }}
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endif
+
+<div class="row g-3 mb-4">
+    @forelse($employees as $employee)
+    
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="emp-card">
+                <div class="emp-photo-wrap">
+                    @if($employee->profile_picture)
+                        <img src="{{ asset('storage/' . $employee->profile_picture) }}" class="emp-photo" alt="{{ $employee->name }}">
+                    @else
+                        <img src="{{ asset('images/admin_avatar.png') }}" class="emp-photo" alt="{{ $employee->name }}">
+                    @endif
+
+                    <span class="status-badge
+                        {{ $employee->status === 'active' ? 'status-active' : '' }}
+                        {{ $employee->status === 'inactive' ? 'status-inactive' : '' }}
+                        {{ $employee->status === 'pending' ? 'status-pending' : '' }}">
+                        {{ strtoupper($employee->status) }}
+                    </span>
+                </div>
+
+                
+                <div class="emp-name">{{ $employee->name }}</div>
+                <div class="emp-role">{{ $employee->designation ?? 'N/A' }}</div>
+
+                <div class="emp-dept">
+                    <i class="bi bi-building" style="font-size:0.7rem;"></i>
+                    {{ $employee->department->name ?? 'No Department' }}
+                </div>
+
+                <hr class="emp-divider">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="emp-avatar-initials">
+                        {{ strtoupper(substr($employee->name, 0, 1)) }}
+                    </div>
+
+                    <a href="{{ route('hr_admin.employee.show', $employee->id) }}" class="link-view">
+                        View Profile <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="col-12">
+            <div class="emp-card text-center">
+                <p class="mb-0">No employees found.</p>
+            </div>
+        </div>
+    @endforelse
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <a href="{{ route('hr_admin.employee.create') }}" class="emp-card-add">
+            <div class="add-icon"><i class="bi bi-plus-lg"></i></div>
+            <div class="add-label">Add New Employee</div>
+        </a>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center">
+    <span class="pagination-info">
+        Showing {{ $employees->firstItem() ?? 0 }} to {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} employees
+    </span>
+
+    <div>
+        {{ $employees->links() }}
+    </div>
+</div>
 
 @endsection
