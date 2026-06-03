@@ -13,11 +13,15 @@ Route::post('/hr_admin/logout', [AdminAuthController::class, 'logout'])->name('h
 
 Route::get('/hr_admin/employee-directory', [HrAdminController::class, 'employeeDirectory'])->name('hr_admin.employee_directory');
 Route::get('/hr_admin/employee/create',[EmployeeController::class,'create'])->name('hr_admin.employee.create');
+Route::get('/hr_admin/employee',[EmployeeController::class,'index'])->name('hr_admin.employee.index');
 Route::post('/hr_admin/employee',[EmployeeController::class,'store'])->name('hr_admin.employee.store');
 Route::get('/hr_admin/employee/{employee}', [EmployeeController::class, 'show'])->name('hr_admin.employee.show');
 Route::get('/hr_admin/employee/{employee}/edit', [EmployeeController::class, 'edit'])->name('hr_admin.employee.edit');
 Route::put('/hr_admin/employee/{employee}', [EmployeeController::class, 'update'])->name('hr_admin.employee.update');
 Route::delete('/hr_admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('hr_admin.employee.destroy');
+
+Route::get('/employee/export-csv', [EmployeeController::class, 'exportCsv'])->name('hr_admin.employee.export-csv');
+
 
 // Team Lead Assignment Route for HR Admin
 Route::get('/hr_admin/teamlead-assignment', [HrAdminController::class, 'teamLeadAssignment'])->name('hr_admin.teamlead_assignment');

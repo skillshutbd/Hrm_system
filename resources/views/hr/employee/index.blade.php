@@ -81,7 +81,7 @@
         </div>
 
         <div class="d-flex gap-2">
-        <a href="{{ route('employee.export-csv') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
+        <a href="{{ route('hr_admin.employee.export-csv') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
              <i class="bi bi-download"></i> Export
         </a>
      
@@ -96,7 +96,7 @@
 
     </div>
 
-    <form method="GET" action="{{ route('admin.employee.index') }}" class="filter-bar d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+    <form method="GET" action="{{ route('hr_admin.employee.index') }}" class="filter-bar d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
         <div class="d-flex align-items-center gap-3 flex-wrap">
             <span style="font-size:0.82rem; font-weight:600; color:#7F7F7F;">Filter by:</span>
 
@@ -134,7 +134,7 @@
             </div>
 
             @if(request('department_id') || request('role') || request('status'))
-                <a href="{{ route('admin.employee.index') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
+                <a href="{{ route('hr_admin.employee.index') }}" class="btn-export d-flex align-items-center gap-2 text-decoration-none">
                     <i class="bi bi-x-lg"></i> Clear
                 </a>
             @endif
@@ -178,7 +178,7 @@
                             {{ strtoupper(substr($employee->name, 0, 1)) }}
                         </div>
 
-                        <a href="{{ route('admin.employee.show', $employee->id) }}" class="link-view">
+                        <a href="{{ route('hr_admin.employee.show', $employee->id) }}" class="link-view">
                             View Profile <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
@@ -193,7 +193,7 @@
         @endforelse
 
         <div class="col-12 col-sm-6 col-xl-3">
-            <a href="{{ route('admin.employee.create') }}" class="emp-card-add">
+            <a href="{{ route('hr_admin.employee.create') }}" class="emp-card-add">
                 <div class="add-icon"><i class="bi bi-plus-lg"></i></div>
                 <div class="add-label">Add New Employee</div>
             </a>
