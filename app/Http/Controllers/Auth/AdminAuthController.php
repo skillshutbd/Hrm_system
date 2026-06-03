@@ -58,7 +58,7 @@ public function login(Request $request)
 
     // Super Admin
     if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
-        if (Auth::guard('web')->user()->role === 'super_admin') {
+        if (Auth::guard('web')->user()->role === 'admin') {
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
@@ -118,7 +118,12 @@ public function login(Request $request)
 
    public function logout(Request $request)
 {
-    Auth::logout();
+
+if (Auth::guard('web')->check()) {
+        Auth::guard('web')->logout();
+    } elseif (Auth::guard('Hr')->check()) {
+        Auth::guard('Hr')->logout();
+    }
 
     $request->session()->invalidate();
     $request->session()->regenerateToken();

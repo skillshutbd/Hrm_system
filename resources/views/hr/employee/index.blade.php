@@ -85,14 +85,12 @@
              <i class="bi bi-download"></i> Export
         </a>
      
-           @if(
-    ($adminUser && $adminUser->role === 'admin') ||
-    ($hrUser && $hrUser->role === 'hr_admin')
-)
+        
+
                 <a href="{{ route('admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">
                     <i class="bi bi-person-plus"></i> Add Employee
                 </a>
-            @endif
+            
             
         </div>
 
