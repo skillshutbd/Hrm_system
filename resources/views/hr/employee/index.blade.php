@@ -219,6 +219,7 @@
 
 <div class="row g-3 mb-4">
     @forelse($employees as $employee)
+    @if($employee->status === 'active')  {{-- শুধু active দেখাবে --}}
     
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="emp-card">
@@ -229,15 +230,10 @@
                         <img src="{{ asset('images/admin_avatar.png') }}" class="emp-photo" alt="{{ $employee->name }}">
                     @endif
 
-                    <span class="status-badge
-                        {{ $employee->status === 'active' ? 'status-active' : '' }}
-                        {{ $employee->status === 'inactive' ? 'status-inactive' : '' }}
-                        {{ $employee->status === 'pending' ? 'status-pending' : '' }}">
-                        {{ strtoupper($employee->status) }}
-                    </span>
+                    <span class="status-badge status-active">ACTIVE</span>
+                    {{-- উপরে duplicate badge মুছে দিন --}}
                 </div>
 
-                
                 <div class="emp-name">{{ $employee->name }}</div>
                 <div class="emp-role">{{ $employee->designation ?? 'N/A' }}</div>
 
@@ -252,20 +248,22 @@
                     <div class="emp-avatar-initials">
                         {{ strtoupper(substr($employee->name, 0, 1)) }}
                     </div>
-
                     <a href="{{ route('hr_admin.employee.show', $employee->id) }}" class="link-view">
                         View Profile <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
             </div>
         </div>
-    @empty
-        <div class="col-12">
-            <div class="emp-card text-center">
-                <p class="mb-0">No employees found.</p>
-            </div>
+        
+    @endif 
+@empty
+    <div class="col-12">
+        <div class="emp-card text-center" style="border: 2px dashed #C0BAB4;">
+            <div class="add-icon"><i class="bi bi-emoji-frown" style="color:#7F7F7F;"></i></div>
+            <div class="add-label" style="color:#7F7F7F;">No employees found.</div>
         </div>
-    @endforelse
+    </div>
+@endforelse
 
     <div class="col-12 col-sm-6 col-xl-3">
         <a href="{{ route('hr_admin.employee.create') }}" class="emp-card-add">

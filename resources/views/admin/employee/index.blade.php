@@ -314,6 +314,7 @@
 <div class="row g-3 mb-4" id="employee-grid">
 
     @forelse($employees as $employee)
+     @if($employee->status === 'active')
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="emp-card">
 
@@ -324,13 +325,7 @@
                              : asset('images/admin_avatar.png') }}"
                      class="emp-photo" alt="{{ $employee->name }}">
 
-                <span class="status-badge
-                    @if($employee->status === 'active')           status-active
-                    @elseif($employee->status === 'pending_approval') status-pending
-                    @else                                             status-inactive
-                    @endif">
-                    {{ strtoupper(str_replace('_',' ',$employee->status)) }}
-                </span>
+                 <span class="status-badge status-active">ACTIVE</span>
             </div>
 
             {{-- Details --}}
@@ -354,6 +349,7 @@
 
         </div>
     </div>
+        @endif
     @empty
     <div class="col-12">
         <div class="emp-card text-center py-5">
@@ -361,7 +357,9 @@
             <p class="mb-0 mt-2" style="color:#7F7F7F;">No employees found.</p>
         </div>
     </div>
+    
     @endforelse
+  
 
     {{-- Add new card --}}
     <div class="col-12 col-sm-6 col-xl-3">
