@@ -226,4 +226,25 @@ class EmployeeController extends Controller
 
     return back()->with('success', 'TL request cancelled.');
 }
+
+public function approveTlRequest(int $id)
+{
+    $notification = \App\Models\Notification::findOrFail($id);
+
+    // Employee role update
+    Employee::findOrFail($notification->employee_id)->update(['role' => 'team_lead']);
+
+    // Notification status update
+    $notification->update(['status' => 'approved', 'read_at' => now()]);
+
+    return back()->with('success', 'TL request approved.');
+}
+
+public function rejectTlRequest(int $id)
+{
+    $notification = \App\Models\Notification::findOrFail($id);
+    $notification->update(['status' => 'rejected', 'read_at' => now()]);
+
+    return back()->with('success', 'TL request rejected.');
+}
 }

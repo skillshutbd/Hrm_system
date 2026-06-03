@@ -44,7 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/tl-assignment/{employee}/toggle', [EmployeeController::class, 'toggleTeamLead'])
     ->name('admin.tl-assignment.toggle');
 
-    
+    Route::PUT('/tl-assignment/{id}/approve', [EmployeeController::class, 'approveTlRequest'])->name('admin.tl-assignment.approve');
+    Route::PUT('/tl-assignment/{id}/reject', [EmployeeController::class, 'rejectTlRequest'])->name('admin.tl-assignment.reject');
 
 
 });
