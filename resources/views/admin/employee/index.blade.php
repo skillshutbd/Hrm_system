@@ -229,14 +229,14 @@
 
         {{-- Approve / Reject --}}
         <div class="pending-actions">
-            <form method="POST" action="#">
-                @csrf @method('PATCH')
+            <form method="POST" action="{{ route('admin.employee.approve', $emp->id) }}">
+                @csrf @method('put')
                 <button type="submit" class="btn-approve">
                     <i class="bi bi-check-lg"></i> Approve
                 </button>
             </form>
-            <form method="POST" action="#">
-                @csrf @method('PATCH')
+            <form method="POST" action="{{ route('admin.employee.reject', $emp->id) }}">
+                @csrf @method('put')
                 <button type="submit" class="btn-reject">
                     <i class="bi bi-x-lg"></i> Reject
                 </button>

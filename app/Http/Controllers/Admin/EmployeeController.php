@@ -267,4 +267,28 @@ public function rejectTlRequest(int $id)
 
     return back()->with('success', 'TL request rejected.');
 }
+
+    public function approve(Employee $employee)
+    {
+         $employee->update(['status' => 'active']);
+
+    \App\Models\Notification::where('employee_id', $employee->id)
+        ->where('type', 'employee_creation')
+        ->where('status', 'pending')
+        ->update(['status' => 'approved', 'read_at' => now()]);
+
+    return back()->with('success', $employee->name . ' approved successfully.');
+    }
+
+    public function reject(Employee $employee)
+    {
+         $employee->update(['status' => 'inactive']);
+
+    \App\Models\Notification::where('employee_id', $employee->id)
+        ->where('type', 'employee_creation')
+        ->where('status', 'pending')
+        ->update(['status' => 'rejected', 'read_at' => now()]);
+
+    return back()->with('success', $employee->name . ' rejected.');
+    }
 }
