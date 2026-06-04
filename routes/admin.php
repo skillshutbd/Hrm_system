@@ -5,14 +5,15 @@ use App\Http\Controllers\Admin\SidebarController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Auth\AdminAuthController;
+ use App\Http\Controllers\ProfileController;
 
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [SidebarController::class, 'dashbooard'])->name('admin.dashboard.index');
    
   Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-  Route::get('admin/profile', [AdminAuthController::class, 'profile'])->name('admin.profile');
-  Route::get('admin/profile/edit', [AdminAuthController::class, 'edit'])->name('profile.edit');
+  Route::get('admin/profile', [ProfileController::class, 'profile'])->name('admin.profile');
+  Route::get('admin/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
   Route::put('admin/profile', [AdminAuthController::class, 'update'])->name('profile.update');
 
 

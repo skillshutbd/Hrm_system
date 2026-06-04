@@ -280,30 +280,7 @@ public function rejectTlRequest(int $id)
     }
     
 
-    // public function EmployeeCreationApproval(int $id, string $action)
-    // {
-    //     $employee = Employee::findOrFail($id);
-    //         if ($action === 'approve') {
-    //             $employee->update(['status' => 'active']);
-        
-    //             \App\Models\Notification::where('employee_id', $employee->id)
-    //                 ->where('type', 'employee_creation')
-    //                 ->where('status', 'pending')
-    //                 ->update(['status' => 'approved', 'read_at' => now()]);
-        
-    //             return back()->with('success', $employee->name . ' approved successfully.');
-    //         } elseif ($action === 'reject') {
-    //             $employee->update(['status' => 'inactive']);
-        
-    //             \App\Models\Notification::where('employee_id', $employee->id)
-    //                 ->where('type', 'employee_creation')
-    //                 ->where('status', 'pending')
-    //                 ->update(['status' => 'rejected', 'read_at' => now()]);
-        
-    //             return back()->with('success', $employee->name . ' rejected.');
-    //         }
-    //         return back()->with('error', 'Invalid action.');
-    // }
+  
 
     public function approve(Employee $employee)
     {

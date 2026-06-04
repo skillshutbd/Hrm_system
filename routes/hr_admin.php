@@ -4,9 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\HrAdmin\HrAdminController; 
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/hr_admin/dashboard', [HrAdminController::class, 'dashboard'])->name('hr_admin.dashboard');
+ Route::get('/hr_admin/profile', [ProfileController::class, 'profile'])->name('hr_admin.profile');
+  Route::get('/hr_admin/profile/edit', [ProfileController::class, 'edit'])->name('hr_profile.edit');
+  Route::put('/hr_admin/profile', [ProfileController::class, 'update'])->name('hr_profile.update');
 Route::post('/hr_admin/logout', [AdminAuthController::class, 'logout'])->name('hr_admin.logout');
 
 // Employee Management Routes for HR Admin

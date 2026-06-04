@@ -148,7 +148,7 @@
 
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                 <li>
-                    <a class="dropdown-item py-2" href="{{ route('admin.profile') }}">
+                    <a class="dropdown-item py-2" href="{{ route('hr_admin.profile') }}">
                         <i class="bi bi-person-fill me-2"></i>My Profile
                     </a>
                 </li>
