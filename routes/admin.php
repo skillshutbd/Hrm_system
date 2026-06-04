@@ -51,5 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::PUT('/tl-assignment/{id}/approve', [EmployeeController::class, 'approveTlRequest'])->name('admin.tl-assignment.approve');
     Route::PUT('/tl-assignment/{id}/reject', [EmployeeController::class, 'rejectTlRequest'])->name('admin.tl-assignment.reject');
 
-
+//notification routes
+Route::get('/employee/{employee}/creation', [EmployeeController::class, 'EmployeeCreationIndex'])->name('admin.employee.creation_index');
+Route::get('/employee/{employee}/request-view', [EmployeeController::class, 'EmployeeCreationView'])->name('admin.employee.creation_view');
+    Route::get('/admin/notifications', [App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('admin.notifications.index');
+    Route::put('/admin/notifications/{id}/mark-as-read', [App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('admin.notifications.markAsRead');
 });

@@ -180,8 +180,8 @@
 
         @if($pendingNotificationsCount > 0)
             <li class="border-top">
-                <a href="{{ route('admin.teamlead.index') }}" class="dropdown-item py-2 text-center" style="font-size:0.78rem; color:#FF5E2B; font-weight:600;">
-                    View All Requests
+                <a href="{{ route('admin.notifications.index') }}" class="dropdown-item py-2 text-center" style="font-size:0.78rem; color:#FF5E2B; font-weight:600;">
+                    View All Notifications
                 </a>
             </li>
         @endif
