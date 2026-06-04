@@ -142,7 +142,7 @@
                     <div class="profile-role">HR Admin</div>
                 </div>
                 <div class="profile-avatar-container">
-                    <img src="{{ asset('images/admin_avatar.png') }}" alt="Admin Avatar" class="profile-avatar border border-2 border-brand">
+                    <img src="{{ asset('images/avatar.png') }}" alt="Admin Avatar" class="profile-avatar border border-2 border-brand">
                 </div>
             </button>
 
