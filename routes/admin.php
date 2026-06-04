@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/employee/{employee}', [EmployeeController::class, 'show'])->name('admin.employee.show');
     Route::get('/admin/employee/{employee}/edit', [EmployeeController::class, 'edit'])->name('admin.employee.edit');
     Route::put('/admin/employee/{employee}', [EmployeeController::class, 'update'])->name('admin.employee.update');
+// Route এ এভাবে রাখো
+Route::delete('/admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employee.destroy');
     Route::put('/admin/employee/{employee}/approve', [EmployeeController::class, 'approve'])->name('admin.employee.approve');
     Route::put('/admin/employee/{employee}/reject', [EmployeeController::class, 'reject'])->name('admin.employee.reject');
 

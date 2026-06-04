@@ -143,6 +143,17 @@
         <a href="{{ route('admin.employee.edit', $employee->id) }}" class="btn-edit d-flex align-items-center gap-2">
             <i class="bi bi-pencil-square"></i> Edit
         </a>
+
+         <form action="{{ route('admin.employee.destroy', $employee->id) }}" 
+          method="POST" 
+          onsubmit="return confirm('Are you sure you want to delete this employee?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" 
+                style="background:#DC2626;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:0.88rem;padding:10px 18px;cursor:pointer;">
+            <i class="bi bi-trash"></i> Delete
+        </button>
+    </form>
     </div>
 </div>
 
@@ -288,7 +299,16 @@
                 </div>
             </div>
         </div>
+
+
     </div>
+    {{-- Remove Profile Picture --}}
+    
+   
+    
+
+
+
 </div>
 
 @endsection

@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -151,8 +152,12 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
-        $employee->delete();
-        return redirect()->route($this->getRoute('employee.index'))->with('success', 'Employee deleted successfully.');
+        DB::table('notifications')->where('employee_id', $employee->id)->delete();
+    
+    $employee->delete();
+    
+    return redirect()->route($this->getRoute('employee.index'))
+        ->with('success', 'Employee deleted successfully.');
     }
 
     public function exportCsv()
