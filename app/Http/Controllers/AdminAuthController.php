@@ -75,13 +75,29 @@ public function login(Request $request)
         Auth::guard('Hr')->logout();
     }
 
+    //team lead
+
     if (Auth::guard('tl')->attempt($request->only('email', 'password'))) {
         if (Auth::guard('tl')->user()->role === 'team_lead') {
             $request->session()->regenerate();
             return redirect()->route('team_lead.dashboard');
         }
         Auth::guard('tl')->logout();
+          if (Auth::guard('employee')->attempt($request->only('email', 'password'))) {
+        if (Auth::guard('employee')->user()->role === 'employee') {
+            $request->session()->regenerate();
+            return redirect()->route('employee.dashboard');
+        }
+        Auth::guard('employee')->logout();
     }
+    
+        }
+
+        //employee
+  
+
+    
+  
 
 
     return back()->withErrors([
@@ -134,6 +150,8 @@ if (Auth::guard('web')->check()) {
         Auth::guard('Hr')->logout();
     }elseif (Auth::guard('tl')->check()){
         Auth::guard('tl')->logout();
+    }elseif(Auth::guard('employee')->check()){
+        Auth::guard('employee')->logout();
     }
 
     $request->session()->invalidate();

@@ -99,6 +99,18 @@ class EmployeeController extends Controller
 
         $teamLead->assignRole('team_lead');
     }
+   if (isset($validated['role']) && $validated['role'] === 'employee') {
+   $employee= \App\Models\EmployeeUser::create([
+        'employee_id'   => $employee->id,
+        'name'          => $validated['name'],
+        'email'         => $validated['email'],
+        'password'      => $validated['password'],
+        'role'          => 'employee',
+        'department_id' => $validated['department_id'],
+    ]);
+
+      $employee->assignRole('employee');
+}
 
     
 

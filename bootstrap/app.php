@@ -22,6 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')
             ->prefix('team_lead')
              ->group(base_path('routes/team_lead.php'));
+            Route::middleware('web')
+            ->prefix('employee')
+             ->group(base_path('routes/employee.php'));
             
         }
 

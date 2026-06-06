@@ -38,23 +38,23 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-         'employee' => [
-        'driver' => 'session',
-        'provider' => 'employees',
-        ],
-        'Hr' => [
-            'driver' => 'session',
-            'provider' => 'hr_admins',
-        ],
-        'tl' => [
-            'driver' => 'session',
-            'provider' => 'tl_admins',
-        ],
+    'web' => [
+        'driver'   => 'session',
+        'provider' => 'users',
     ],
+    'employee' => [
+        'driver'   => 'session',
+        'provider' => 'employees',
+    ],
+    'Hr' => [
+        'driver'   => 'session',
+        'provider' => 'hr_admins',
+    ],
+    'tl' => [
+        'driver'   => 'session',
+        'provider' => 'tl_admins',
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -73,29 +73,29 @@ return [
     |
     */
 
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
-        ],
-        'employees' => [
+   'providers' => [
+    'users' => [
         'driver' => 'eloquent',
-        'model' => App\Models\Employee::class,
+        'model'  => env('AUTH_MODEL', User::class),
+    ],
+    'employees' => [
+        'driver' => 'eloquent',
+        'model'  => App\Models\EmployeeUser::class,
     ],
     'hr_admins' => [
         'driver' => 'eloquent',
-        'model' => App\Models\HrAdmin::class,
+        'model'  => App\Models\HrAdmin::class,
     ],
     'tl_admins' => [
         'driver' => 'eloquent',
-        'model' => App\Models\Tl::class,
+        'model'  => App\Models\Tl::class,
     ],
-
+],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
+    
 
     /*
     |--------------------------------------------------------------------------
