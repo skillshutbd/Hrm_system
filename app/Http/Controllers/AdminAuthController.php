@@ -75,6 +75,15 @@ public function login(Request $request)
         Auth::guard('Hr')->logout();
     }
 
+    if (Auth::guard('tl')->attempt($request->only('email', 'password'))) {
+        if (Auth::guard('tl')->user()->role === 'team_lead') {
+            $request->session()->regenerate();
+            return redirect()->route('team_lead.dashboard');
+        }
+        Auth::guard('tl')->logout();
+    }
+
+
     return back()->withErrors([
         'email' => 'Invalid credentials.',
     ])->withInput();
@@ -130,4 +139,7 @@ if (Auth::guard('web')->check()) {
 
     return redirect()->route('admin.login');
 }
+
+
+
 }

@@ -50,7 +50,7 @@ return [
             'driver' => 'session',
             'provider' => 'hr_admins',
         ],
-        'TL' => [
+        'tl' => [
             'driver' => 'session',
             'provider' => 'tl_admins',
         ],
@@ -86,7 +86,7 @@ return [
         'driver' => 'eloquent',
         'model' => App\Models\HrAdmin::class,
     ],
-    'tl' => [
+    'tl_admins' => [
         'driver' => 'eloquent',
         'model' => App\Models\Tl::class,
     ],

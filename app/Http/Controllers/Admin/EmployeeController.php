@@ -88,6 +88,19 @@ class EmployeeController extends Controller
 
         $hrAdmin->assignRole('hr_admin');
     }
+    if (isset($validated['role']) && $validated['role'] === 'team_lead') {
+        $teamLead = \App\Models\Tl::create([
+              'employee_id' => $employee->id,
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => $validated['password'],
+            'role'     => 'team_lead',
+        ]);
+
+        $teamLead->assignRole('team_lead');
+    }
+
+    
 
     if (auth('Hr')->check()) {
         \App\Models\Notification::create([
