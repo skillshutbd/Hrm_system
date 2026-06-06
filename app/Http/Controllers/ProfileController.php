@@ -4,35 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\HrAdmin;
+use App\Models\Tl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-
-
     private function getAuthUser()
     {
-        return auth('Hr')->check()
-            ? auth('Hr')->user()
-            : Auth::user();
+        if (auth('Hr')->check()) return auth('Hr')->user();
+        if (auth('tl')->check()) return auth('tl')->user();
+        return Auth::user();
     }
 
     private function getView(string $view): string
     {
-        if (auth('Hr')->check()) {
-            return 'hr.' . $view;
-        }
+        if (auth('Hr')->check()) return 'hr.' . $view;
+        if (auth('tl')->check()) return 'team_lead.' . $view;
         return 'admin.' . $view;
     }
 
     private function getRoute(string $route): string
     {
-        if (auth('Hr')->check()) {
-            return 'hr.' . $route;
-        }
+        if (auth('Hr')->check()) return 'hr_admin.' . $route;
+        if (auth('tl')->check()) return 'tl.' . $route;
         return 'admin.' . $route;
+    }
+
+    private function getTable(): string
+    {
+        if (auth('Hr')->check()) return 'hr_admins';
+        if (auth('tl')->check()) return 'team_leads';
+        return 'users';
     }
 
     public function profile()
@@ -48,32 +52,30 @@ class ProfileController extends Controller
     }
 
     public function update(Request $request)
-{
-    $admin = $this->getAuthUser();
+    {
+        $admin = $this->getAuthUser();
+        $table = $this->getTable();
 
-    // HR হলে hr_admins table, Admin হলে users table
-    $table = auth('Hr')->check() ? 'hr_admins' : 'users';
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:' . $table . ',email,' . $admin->id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
 
-    $validated = $request->validate([
-        'name'     => 'required|string|max:255',
-        'email'    => 'required|email|unique:' . $table . ',email,' . $admin->id,
-        'password' => 'nullable|string|min:8|confirmed',
-    ]);
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
-    if (!empty($validated['password'])) {
-        $validated['password'] = Hash::make($validated['password']);
-    } else {
-        unset($validated['password']);
+        if (auth('Hr')->check()) {
+            HrAdmin::where('id', $admin->id)->update($validated);
+        } elseif (auth('tl')->check()) {
+            Tl::where('id', $admin->id)->update($validated);
+        } else {
+            User::where('id', $admin->id)->update($validated);
+        }
+
+        return redirect()->route($this->getRoute('profile'))->with('success', 'Profile updated successfully.');
     }
-
- if (auth('Hr')->check()) {
-    HrAdmin::where('id', $admin->id)->update($validated);
-} else {
-    User::where('id', $admin->id)->update($validated);
-}
-
-    
-     return redirect()->route('hr_admin.profile')->with('success', 'Profile updated successfully.')
-        ->with('success', 'Profile updated successfully.');
-}
 }

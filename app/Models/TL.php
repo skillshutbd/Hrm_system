@@ -30,4 +30,9 @@ class Tl extends Authenticatable
     {
         return $this->belongsTo(Employee::class);
     }
+
+    public function department()
+    {
+        return $this -> hasOneThrough(Department::class,Employee::class,id,id,employee_id,departmetn_id);
+    }
 }

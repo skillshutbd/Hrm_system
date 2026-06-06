@@ -148,14 +148,14 @@
 
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                 <li> 
-                    <a class="dropdown-item py-2" href="{{ route('hr_admin.profile') }}">
+                    <a class="dropdown-item py-2" href="{{ route('team_lead.profile') }}">
                         <i class="bi bi-person-fill me-2"></i>My Profile
                     </a>
                 </li>
                
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{route('team_lead.logout')}}">
                         @csrf
                         <button type="submit" class="dropdown-item py-2 text-danger">
                             <i class="bi bi-box-arrow-left me-2"></i>Logout
