@@ -26,7 +26,7 @@ class EmployeeController extends Controller
         return 'admin.' . $route;
     }
 
-    
+   
 
     public function index()
     {

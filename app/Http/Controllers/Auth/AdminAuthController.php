@@ -142,6 +142,11 @@ if (Auth::guard('web')->check()) {
         Auth::guard('web')->logout();
     } elseif (Auth::guard('Hr')->check()) {
         Auth::guard('Hr')->logout();
+    }elseif(Auth::guard('tl')->check()){
+        Auth::guard('tl')->check();
+    }elseif(Auth::guard('employee')->check()){
+        Auth::guard('employee')->logout();
+        
     }
 
     $request->session()->invalidate();
