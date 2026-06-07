@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Auth\AdminAuthController;
  use App\Http\Controllers\ProfileController;
+ use App\Http\Controllers\Admin\LeaveTypeController;
 
 
 Route::middleware('auth')->group(function () {
@@ -60,3 +61,15 @@ Route::get('/employee/{employee}/request-view', [EmployeeController::class, 'Emp
     Route::get('/admin/notifications', [App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('admin.notifications.index');
     Route::put('/admin/notifications/{id}/mark-as-read', [App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('admin.notifications.markAsRead');
 });
+
+
+//leave
+Route::get('/admin/leave_index',[LeaveTypeController::class,'index'])->name('admin.leave.index');
+
+Route::get('/admin/leave_create',[LeaveTypeController::class,'create'])->name('admin.leave.create');
+Route::get('/admin/leave_edit',[LeaveTypeController::class,'edit'])->name('admin.leave.edit');
+
+Route::post('/admin/leave_store',[LeaveTypeController::class,'store'])->name('admin.leave.store');
+Route::PUT('/admin/leave_update',[LeaveTypeController::class,'update'])->name('admin.leave.update');
+Route::delete('/admin/leave/{leaveType}', [LeaveTypeController::class, 'destroy'])->name('admin.leave.destroy');
+

@@ -34,7 +34,7 @@ class SidebarController extends Controller
 
     public function employee_leave()
     {
-        return view('admin.leave.index');
+        return view('admin.leave.request-directory');
     }
 
 

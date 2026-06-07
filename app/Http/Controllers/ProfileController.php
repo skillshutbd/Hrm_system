@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\User;
 use App\Models\HrAdmin;
 use App\Models\Tl;
@@ -15,6 +16,7 @@ class ProfileController extends Controller
     {
         if (auth('Hr')->check()) return auth('Hr')->user();
         if (auth('tl')->check()) return auth('tl')->user();
+        if(auth('employee')->check()) return auth('employee')->user();
         return Auth::user();
     }
 
@@ -22,6 +24,7 @@ class ProfileController extends Controller
     {
         if (auth('Hr')->check()) return 'hr.' . $view;
         if (auth('tl')->check()) return 'team_lead.' . $view;
+        if (auth('employee')->check()) return 'employee.' . $view;
         return 'admin.' . $view;
     }
 
@@ -29,6 +32,7 @@ class ProfileController extends Controller
     {
         if (auth('Hr')->check()) return 'hr_admin.' . $route;
         if (auth('tl')->check()) return 'tl.' . $route;
+        if (auth('employee')->check()) return 'employee.' . $route;
         return 'admin.' . $route;
     }
 
@@ -36,6 +40,7 @@ class ProfileController extends Controller
     {
         if (auth('Hr')->check()) return 'hr_admins';
         if (auth('tl')->check()) return 'team_leads';
+        if (auth('employee')->check()) return 'employee';
         return 'users';
     }
 
@@ -72,7 +77,9 @@ class ProfileController extends Controller
             HrAdmin::where('id', $admin->id)->update($validated);
         } elseif (auth('tl')->check()) {
             Tl::where('id', $admin->id)->update($validated);
-        } else {
+        } elseif (auth('employee')->check()) {
+            Employee::where('id', $admin->id)->update($validated);
+        }else{
             User::where('id', $admin->id)->update($validated);
         }
 

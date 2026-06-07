@@ -12,7 +12,7 @@
         <ul class="nav flex-column">
 
             <li class="nav-item">
-                <a href="{{ route('hr_admin.dashboard') }}" class="nav-link {{ request()->routeIs('hr_admin.dashboard') ? 'active' : '' }}">
+                <a href="{{route('employee.dashboard')}}" class="nav-link {{ request()->routeIs('employee.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-grid-1x2-fill me-3"></i>
                     <span>Dashboard</span>
                 </a>

@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('employee.layouts.employee')
 
 @section('title', 'Edit Profile - Skills Hut Ltd')
 
@@ -98,7 +98,7 @@
             <p class="page-subtitle mb-0">Update your account information and password.</p>
         </div>
 
-        <a href="{{ route('admin.profile') }}" class="btn-back d-flex align-items-center gap-2">
+        <a href="{{ route('employee.profile') }}" class="btn-back d-flex align-items-center gap-2">
             <i class="bi bi-arrow-left"></i> Back
         </a>
     </div>

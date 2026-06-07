@@ -522,7 +522,7 @@
             <span class="cta-icon"><i class="bi bi-send-fill"></i></span>
             <div class="cta-title">Planning a getaway?</div>
             <div class="cta-sub">Request your leave now to ensure timely approvals and smooth project handovers.</div>
-            <a href="#" class="btn-submit-request">
+            <a href="{{route('employee.leave.create')}}" class="btn-submit-request">
                 <i class="bi bi-plus-circle"></i> Submit New Request
             </a>
         </div>

@@ -53,11 +53,27 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('admin.employee_leave.index') }}" class="nav-link {{ request()->routeIs('admin.employee_leave.*') ? 'active' : '' }}">
-                    <i class="bi bi-calendar-event-fill me-3"></i>
-                    <span>Leave Requests</span>
+    <a class="nav-link d-flex justify-content-between align-items-center {{ request()->routeIs('admin.employee_leave.*') || request()->routeIs('admin.leave.*') ? 'active' : '' }}"
+       data-bs-toggle="collapse" href="#leaveMenu" role="button"
+       aria-expanded="{{ request()->routeIs('admin.employee_leave.*') || request()->routeIs('admin.leave.*') ? 'true' : 'false' }}">
+        <span><i class="bi bi-calendar-event-fill me-3"></i>Leave Management</span>
+        <i class="bi bi-chevron-down" style="font-size:0.7rem;"></i>
+    </a>
+    <div class="collapse {{ request()->routeIs('admin.employee_leave.*') || request()->routeIs('admin.leave.*') ? 'show' : '' }}" id="leaveMenu">
+        <ul class="nav flex-column ms-4 mt-1">
+            <li class="nav-item">
+                <a href="{{ route('admin.employee_leave.index') }}" class="nav-link sub-link {{ request()->routeIs('admin.employee_leave.*') ? 'active' : '' }}">
+                    <i class="bi bi-list-check me-2"></i> Leave Requests
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.leave.index') }}" class="nav-link sub-link {{ request()->routeIs('admin.leave.*') ? 'active' : '' }}">
+                    <i class="bi bi-gear me-2"></i> Leave Types
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
 
             <!-- <li class="nav-item">
                 <a href="{{ route('admin.employee_activity.index') }}" class="nav-link {{ request()->routeIs('admin.employee_activity.*') ? 'active' : '' }}">
