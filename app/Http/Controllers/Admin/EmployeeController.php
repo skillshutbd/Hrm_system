@@ -26,6 +26,8 @@ class EmployeeController extends Controller
         return 'admin.' . $route;
     }
 
+    
+
     public function index()
     {
         $employees = Employee::with('department')->latest()->paginate(8);

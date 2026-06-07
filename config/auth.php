@@ -80,7 +80,7 @@ return [
     ],
     'employees' => [
         'driver' => 'eloquent',
-        'model'  => App\Models\EmployeeUser::class,
+        'model'  => App\Models\Employee::class,
     ],
     'hr_admins' => [
         'driver' => 'eloquent',

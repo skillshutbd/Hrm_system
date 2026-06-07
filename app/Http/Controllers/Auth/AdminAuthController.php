@@ -84,6 +84,16 @@ public function login(Request $request)
         Auth::guard('tl')->logout();
     }
 
+     if (Auth::guard('employee')->attempt($request->only('email', 'password'))) {
+        if (Auth::guard('employee')->user()->role === 'employee') {
+            $request->session()->regenerate();
+            return redirect()->route('employee.dashboard');
+        }
+        Auth::guard('employee')->logout();
+    }
+
+
+
     return back()->withErrors([
         'email' => 'Invalid credentials.',
     ])->withInput();
