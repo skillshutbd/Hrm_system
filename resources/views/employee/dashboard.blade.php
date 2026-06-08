@@ -391,9 +391,9 @@
                             </svg>
                             <div class="stat-icon green"><i class="bi bi-calendar3"></i></div>
                             <div class="stat-label">Annual Leave Balance</div>
-                            <div class="stat-number">
-                                {{ $annualBalance ?? 18 }}<span>/{{ $annualTotal ?? 24 }} days</span>
-                            </div>
+<div class="stat-number">
+ {{ $annual->days_allowed ?? 0 }}<span> days</span>
+</div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -404,9 +404,9 @@
                             </svg>
                             <div class="stat-icon red"><i class="bi bi-bandaid"></i></div>
                             <div class="stat-label">Sick Leave Taken</div>
-                            <div class="stat-number">
-                                {{ $sickTaken ?? '03' }}<span> days</span>
-                            </div>
+                          <div class="stat-number">
+    {{ $sick->days_allowed ?? 0 }}<span> days</span>
+</div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -418,8 +418,8 @@
                             <div class="stat-icon blue"><i class="bi bi-person-check"></i></div>
                             <div class="stat-label">Casual Leave Taken</div>
                             <div class="stat-number">
-                                {{ $casualTaken ?? '02' }}<span> days</span>
-                            </div>
+    {{ $casual->days_allowed ?? 0 }}<span> days</span>
+</div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -428,7 +428,7 @@
                             <div class="stat-icon orange"><i class="bi bi-calendar2-check"></i></div>
                             <div class="stat-label">Remaining Leaves</div>
                             <div class="stat-number">
-                                {{ $remainingLeaves ?? 22 }}<span> total</span>
+                                {{ $remainingLeaves ?? 0 }}<span> total</span>
                             </div>
                         </div>
                     </div>

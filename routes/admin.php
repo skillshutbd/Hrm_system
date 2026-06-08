@@ -70,6 +70,6 @@ Route::get('/admin/leave_create',[LeaveTypeController::class,'create'])->name('a
 Route::get('/admin/{leaveType}/edit',[LeaveTypeController::class,'edit'])->name('admin.leave.edit');
 
 Route::post('/admin/leave_store',[LeaveTypeController::class,'store'])->name('admin.leave.store');
-Route::PUT('/admin/leave_update',[LeaveTypeController::class,'update'])->name('admin.leave.update');
+Route::PUT('/admin/leave_update/{leaveType}',[LeaveTypeController::class,'update'])->name('admin.leave.update');
 Route::delete('/admin/leave/{leaveType}', [LeaveTypeController::class, 'destroy'])->name('admin.leave.destroy');
 
