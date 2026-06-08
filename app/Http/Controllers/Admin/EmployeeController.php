@@ -111,7 +111,6 @@ class EmployeeController extends Controller
         'department_id' => $validated['department_id'],
     ]);
 
-      $employee->assignRole('employee');
 }
 
     
