@@ -67,7 +67,7 @@ Route::get('/employee/{employee}/request-view', [EmployeeController::class, 'Emp
 Route::get('/admin/leave_index',[LeaveTypeController::class,'index'])->name('admin.leave.index');
 
 Route::get('/admin/leave_create',[LeaveTypeController::class,'create'])->name('admin.leave.create');
-Route::get('/admin/leave_edit',[LeaveTypeController::class,'edit'])->name('admin.leave.edit');
+Route::get('/admin/{leaveType}/edit',[LeaveTypeController::class,'edit'])->name('admin.leave.edit');
 
 Route::post('/admin/leave_store',[LeaveTypeController::class,'store'])->name('admin.leave.store');
 Route::PUT('/admin/leave_update',[LeaveTypeController::class,'update'])->name('admin.leave.update');
