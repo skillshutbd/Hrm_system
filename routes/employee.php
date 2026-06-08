@@ -19,6 +19,7 @@ Route::post('/employee/logout', [AdminAuthController::class, 'logout'])->name('e
 //Leave
 
 Route::get('/employee/leave',[LeaveController::class,'create'])->name('employee.leave.create');
+Route::post('/employee/leave_request',[LeaveController::class,'store'])->name('employee.leave_request.store');
 });
 
 

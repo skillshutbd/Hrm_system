@@ -230,7 +230,7 @@
 
 {{-- Form --}}
 <div class="form-card">
-    <form action="#" method="POST" enctype="multipart/form-data">
+   <form action="{{ route('employee.leave_request.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         {{-- Leave Type + Balance --}}
@@ -242,13 +242,13 @@
                         required onchange="updateBalance(this)">
                     <option value="" disabled selected>Select leave type</option>
                     @foreach($leaveTypes ?? [] as $type)
-                        <option value="{{ $type->id }}"
-                                data-available="{{ $type->pivot->remaining_days ?? $type->max_days ?? 0 }}"
-                                data-used="{{ $type->pivot->used_days ?? 0 }}"
-                                data-pending="{{ $type->pivot->pending_days ?? 0 }}"
-                                {{ old('leave_type_id') == $type->id ? 'selected' : '' }}>
-                            {{ $type->name }}
-                        </option>
+                       <option value="{{ $type->id }}"
+        data-available="{{ $type->days_allowed ?? 0 }}"
+        data-used="0"
+        data-pending="0"
+        {{ old('leave_type_id') == $type->id ? 'selected' : '' }}>
+    {{ $type->name }}
+</option>
                     @endforeach
                 </select>
                 @error('leave_type_id')
@@ -260,7 +260,7 @@
                 <div class="balance-bar" id="balanceBar">
                     <div class="balance-item">
                         <div class="balance-item-label">Available</div>
-                        <div class="balance-item-value" id="balAvailable">—</div>
+                        <div class="balance-item-value" id="balAvailable">  {{ $remainingLeaves ?? 0 }}<span> total</span></div>
                     </div>
                     <div class="balance-item">
                         <div class="balance-item-label">Used</div>
