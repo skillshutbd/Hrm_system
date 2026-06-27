@@ -24,6 +24,6 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
+        return redirect()->route('admin.dashboard.index');
     })->name('admin.dashboard');
 });

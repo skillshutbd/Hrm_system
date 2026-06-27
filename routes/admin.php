@@ -73,3 +73,7 @@ Route::post('/admin/leave_store',[LeaveTypeController::class,'store'])->name('ad
 Route::PUT('/admin/leave_update/{leaveType}',[LeaveTypeController::class,'update'])->name('admin.leave.update');
 Route::delete('/admin/leave/{leaveType}', [LeaveTypeController::class, 'destroy'])->name('admin.leave.destroy');
 
+
+//admin approval
+Route::patch('/leave/{leave}/approve', [SidebarController::class, 'approveLeave'])->name('admin.leave.approve');
+Route::patch('/leave/{leave}/reject',  [SidebarController::class, 'rejectLeave'])->name('admin.leave.reject');
