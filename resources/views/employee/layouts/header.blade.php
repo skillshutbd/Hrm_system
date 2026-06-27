@@ -125,12 +125,18 @@
     </div>
 
     <div class="header-controls d-flex align-items-center gap-3">
-        <button class="btn btn-control position-relative" id="btn-notifications" aria-label="Notifications">
-            <i class="bi bi-bell fs-5"></i>
-            <span class="position-absolute top-2 start-75 translate-middle p-1 bg-danger border border-light rounded-circle notification-dot">
-                <span class="visually-hidden">New alerts</span>
-            </span>
-        </button>
+     <button class="btn btn-control position-relative"
+        id="btn-notifications" aria-label="Notifications">
+    <i class="bi bi-bell fs-5"></i>
+
+    @if(isset($unreadCount) && $unreadCount > 0)
+        <span class="position-absolute top-2 start-75 translate-middle
+                     badge rounded-pill bg-danger"
+              style="font-size:0.6rem; padding:3px 5px;">
+            {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+        </span>
+    @endif
+</button>
 
       
         <div class="vr mx-1 d-none d-sm-block" style="height: 24px;"></div>

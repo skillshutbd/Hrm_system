@@ -7,6 +7,7 @@ use App\Models\Tl;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Leave;
+use App\Models\LeaveNotification;
 use Illuminate\Http\Request;
 
 class TeamLeadController extends Controller
@@ -26,25 +27,37 @@ class TeamLeadController extends Controller
             ->latest()
             ->paginate(5);
 
-        $totalMembers    = $members->count();
-        $activeOnLeave   = $members->where('status', 'on_leave')->count();
-        $pendingCount    = $leaveRequests->total();
+        $totalMembers  = $members->count();
+        $activeOnLeave = $members->where('status', 'on_leave')->count();
+        $pendingCount  = $leaveRequests->total();
+
+        // Unread notifications for this TL
+        $tlUnreadNotifications = LeaveNotification::where('recipient_type', 'tl')
+            ->where('recipient_id', $tl->id)
+            ->whereNull('read_at')
+            ->latest()
+            ->get();
+
+        $tlUnreadCount = $tlUnreadNotifications->count();
+
 
         return view('team_lead.dashboard', compact(
             'leaveRequests',
             'members',
             'totalMembers',
             'activeOnLeave',
-            'pendingCount'
+            'pendingCount',
+            'tlUnreadNotifications',
+            'tlUnreadCount'
         ));
     }
 
     public function memberIndex()
     {
-        $tl           = auth('tl')->user();
+        $tl           = auth('Tl')->user();
         $departmentId = $tl->employee->department_id ?? null;
 
-        $members    = Employee::where('department_id', $departmentId)
+        $members = Employee::where('department_id', $departmentId)
             ->where('role', '!=', 'team_lead')
             ->latest()
             ->get();
@@ -54,7 +67,7 @@ class TeamLeadController extends Controller
         return view('team_lead.members.index', compact('members', 'department'));
     }
 
-     public function recommend(Request $request, Leave $leave)
+    public function recommend(Request $request, Leave $leave)
     {
         $request->validate([
             'tl_note' => 'required|string|max:500',
@@ -65,10 +78,23 @@ class TeamLeadController extends Controller
             'tl_note'   => $request->tl_note,
         ]);
 
+        // HR কে notification পাঠাও — এখন HR এর final approval এর জন্য রেডি
+        $hrAdmin = \App\Models\HrAdmin::first();
+
+        if ($hrAdmin) {
+            LeaveNotification::create([
+                'leave_id'       => $leave->id,
+                'recipient_type' => 'hr',
+                'recipient_id'   => $hrAdmin->id,
+                'type'           => 'leave_recommended',
+                'message'        => ($leave->employee->name ?? 'An employee') . '\'s leave has been recommended by TL and awaits your approval.',
+            ]);
+        }
+
         return back()->with('success', 'Leave recommended successfully.');
     }
 
-     public function notRecommend(Request $request, Leave $leave)
+    public function notRecommend(Request $request, Leave $leave)
     {
         $request->validate([
             'tl_note' => 'required|string|max:500',
@@ -77,6 +103,7 @@ class TeamLeadController extends Controller
         $leave->update([
             'tl_status' => 'not_recommended',
             'tl_note'   => $request->tl_note,
+            'status'    => 'rejected', // TL declined → auto reject, HR এর কাছে যাবে না
         ]);
 
         return back()->with('success', 'Leave declined.');
@@ -87,4 +114,40 @@ class TeamLeadController extends Controller
         $leave->load(['employee', 'leaveType']);
         return view('team_lead.leave.show', compact('leave'));
     }
+
+    public function markNotificationRead($id)
+{
+    $notification = \App\Models\LeaveNotification::find($id);
+
+    if ($notification) {
+        $notification->update(['read_at' => now()]);
+    }
+
+    return response()->json(['success' => true]);
+}
+
+public function markAllNotificationsRead()
+{
+    $tl = auth('tl')->user();
+
+    \App\Models\LeaveNotification::where('recipient_type', 'tl')
+        ->where('recipient_id', $tl->id)
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
+
+    return back()->with('success', 'All notifications marked as read.');
+}
+
+public function notificationsIndex()
+{
+    $tl = auth('tl')->user();
+
+    $notifications = \App\Models\LeaveNotification::where('recipient_type', 'tl')
+        ->where('recipient_id', $tl->id)
+        ->with('leave.employee')
+        ->latest()
+        ->paginate(15);
+
+    return view('team_lead.notifications.index', compact('notifications'));
+}
 }

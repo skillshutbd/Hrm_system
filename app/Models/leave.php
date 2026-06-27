@@ -21,4 +21,13 @@ public function leaveType() {
 public function employee() {
     return $this->belongsTo(Employee::class);
 }
+
+
+
+
+
+public function notifications()
+{
+    return $this->hasMany(LeaveNotification::class);
+}
 }

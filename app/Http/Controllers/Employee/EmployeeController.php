@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\LeaveType;
 use App\Models\Leave;
+use App\Models\LeaveNotification;
 
 
 class EmployeeController extends Controller{
@@ -57,15 +58,24 @@ class EmployeeController extends Controller{
     // HR Manager
     $hrManager = \App\Models\HrAdmin::first();
 
-    return view('employee.dashboard', compact(
-        'leaveTypes',
-        'annual', 'sick', 'casual',
-        'annualBalance', 'annualUsed',
-        'sickUsed', 'casualUsed',
-        'remainingLeaves',
-        'recentLeaves',
-        'hrManager'
-    ));
+      $unreadNotifications = LeaveNotification::where('recipient_type', 'employee')
+        ->where('recipient_id', $employee->id)
+        ->whereNull('read_at')
+        ->latest()
+        ->get();
+
+    $unreadCount = $unreadNotifications->count();
+return view('employee.dashboard', compact(
+    'leaveTypes',
+    'annual', 'sick', 'casual',
+    'annualBalance', 'annualUsed',
+    'sickUsed', 'casualUsed',
+    'remainingLeaves',
+    'recentLeaves',
+    'hrManager',
+    'unreadNotifications',
+    'unreadCount'
+));
 }
 }
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamLead\TeamLeadController; 
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TL\TlNotificationController;
 
 Route::get('/teamleads/dashboard',[TeamLeadController::class,'dashboard'])->name('team_lead.dashboard');
 Route::get('/teamleads/members',[TeamLeadController::class,'memberIndex'])->name('team_lead.memberIndex');
@@ -18,3 +19,19 @@ Route::get('/teamlead/profile',[ProfileController::class,'profile'])-> name('tea
   Route::patch('/leave/{leave}/recommend',     [TeamLeadController::class, 'recommend'])    ->name('tl.leave.recommend');
 Route::patch('/leave/{leave}/not-recommend', [TeamLeadController::class, 'notRecommend']) ->name('tl.leave.not-recommend');
 Route::get('/leave/{leave}',                 [TeamLeadController::class, 'show'])         ->name('tl.leave.show');
+
+// routes এ team_lead group এর ভেতরে
+// Route::post('notifications/{id}/read',
+//     ['App\Http\Controllers\TeamLead\TlNotificationController', 'markRead'])
+//     ->name('team_lead.notifications.mark-all-read');
+
+Route::patch('/team_lead/notifications/{id}/read', [TlNotificationController::class, 'markRead'])
+    ->name('team_lead.notifications.read');
+
+Route::post('notifications/mark-all-read',
+    ['App\Http\Controllers\TeamLead\TlNotificationController', 'markAllRead'])
+    ->name('team_lead.notifications.mark-all-read');
+
+Route::get('notifications',
+    ['App\Http\Controllers\TeamLead\TlNotificationController', 'index'])
+    ->name('team_lead.notifications.index');
