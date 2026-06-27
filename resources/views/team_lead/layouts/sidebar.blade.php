@@ -6,7 +6,7 @@
         </div>
         <div class="brand-text ms-3">
             <h2 class="brand-title mb-0">Skills Hut Ltd</h2>
-            <span class="brand-subtitle text-uppercase">TEAM LEARD</span>
+            <span class="brand-subtitle text-uppercase">TEAM LEAD</span>
         </div>
     </div>
 

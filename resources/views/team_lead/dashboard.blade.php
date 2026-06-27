@@ -197,11 +197,11 @@
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <button class="btn-recommend"
-                                        onclick="openNoteModal({{ $leave->id }}, 'recommend')">
+                                        onclick='openNoteModal({{ $leave->id }}, "recommend")'>
                                     Recommend
                                 </button>
                                 <button class="btn-decline"
-                                        onclick="openNoteModal({{ $leave->id }}, 'not-recommend')">
+                                        onclick='openNoteModal({{ $leave->id }}, "not-recommend")'>
                                     Decline
                                 </button>
                                 <a href="{{ route('tl.leave.show', $leave->id) }}" class="btn-view">
@@ -278,12 +278,12 @@ function openNoteModal(leaveId, action) {
     const btn   = document.getElementById('modalSubmitBtn');
 
     if (action === 'recommend') {
-        form.action          = `/tl/leave/${leaveId}/recommend`;
+         form.action          = `/team_lead/leave/${leaveId}/recommend`;
         title.textContent    = 'Recommend Leave';
         btn.textContent      = 'Recommend';
         btn.style.background = '#FF5E2B';
     } else {
-        form.action          = `/tl/leave/${leaveId}/not-recommend`;
+        form.action          = `/team_lead/leave/${leaveId}/not-recommend`;
         title.textContent    = 'Decline Leave';
         btn.textContent      = 'Decline';
         btn.style.background = '#DC2626';

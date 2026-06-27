@@ -151,7 +151,7 @@
                         <td>
                             <div class="d-flex gap-1">
                                 <form method="POST"
-                                      action="{{ route('hr.leave.approve', $leave->id) }}">
+                                      action="#">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn-approve">Approve</button>

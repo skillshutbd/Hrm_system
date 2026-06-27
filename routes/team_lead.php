@@ -15,6 +15,6 @@ Route::get('/teamlead/profile',[ProfileController::class,'profile'])-> name('tea
 
 
 
-  Route::patch('/tl/leave/{leave}/recommend',     [TeamLeadController::class, 'recommend'])    ->name('tl.leave.recommend');
-Route::patch('/tl/leave/{leave}/not-recommend', [TeamLeadController::class, 'notRecommend']) ->name('tl.leave.not-recommend');
-Route::get('/tl/leave/{leave}',                 [TeamLeadController::class, 'show'])         ->name('tl.leave.show');
+  Route::patch('/leave/{leave}/recommend',     [TeamLeadController::class, 'recommend'])    ->name('tl.leave.recommend');
+Route::patch('/leave/{leave}/not-recommend', [TeamLeadController::class, 'notRecommend']) ->name('tl.leave.not-recommend');
+Route::get('/leave/{leave}',                 [TeamLeadController::class, 'show'])         ->name('tl.leave.show');

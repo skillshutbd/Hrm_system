@@ -51,4 +51,8 @@ class HrAdminController extends Controller
         $employees = Employee::all();
         return view('hr.teamlead.index', compact('employees'));
     }
+
+    public function leaveRequest(){
+        
+    }
 }
