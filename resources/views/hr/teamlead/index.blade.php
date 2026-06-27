@@ -1,4 +1,4 @@
-@extends('teamlead.layouts.tl')
+@extends('hr.layouts.hr')
 
 @section('title', 'TL Assignment - Skills Hut Ltd')
 

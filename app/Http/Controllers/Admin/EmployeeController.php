@@ -239,10 +239,17 @@ class EmployeeController extends Controller
     }
 
     public function toggleTeamLead(Employee $employee)
-    {
+{
+    if (auth('Hr')->check()) {
+        $existing = \App\Models\Notification::where('type', 'tl_assignment_request')
+            ->where('employee_id', $employee->id)
+            ->where('status', 'pending')
+            ->first();
 
-        if (auth('Hr')->check()) {
-        // HR থেকে request — admin কে notification পাঠাবে
+        if ($existing) {
+            return back()->with('info', 'Request already pending for this employee.');
+        }
+
         \App\Models\Notification::create([
             'type'         => 'tl_assignment_request',
             'employee_id'  => $employee->id,
@@ -251,25 +258,22 @@ class EmployeeController extends Controller
             'status'       => 'pending',
         ]);
 
-         $existing = \App\Models\Notification::where('type', 'tl_assignment_request')
-        ->where('employee_id', $employee->id)
-        ->where('status', 'pending')
-        ->first();
-
-    if ($existing) {
-        return back()->with('info', 'Request already pending for this employee.');
+        return back()->with('success', 'Request sent to Admin for approval.');
     }
 
-            return back()->with('success', 'Employee role updated successfully.');
-        }
-        $employee->update([
-            'role' => $employee->role === 'team_lead' ? 'employee' : 'team_lead',
-        ]);
+    // Admin সরাসরি toggle করছে
+    $makeTeamLead = $employee->role !== 'team_lead';
 
-        return back()->with('success', 'Employee role updated successfully.');
-    }
+    $employee->update([
+        'role' => $makeTeamLead ? 'team_lead' : 'employee',
+    ]);
 
-    public function cancelTlRequest(int $id)
+    $this->syncTeamLeadRecord($employee, $makeTeamLead);
+
+    return back()->with('success', 'Employee role updated successfully.');
+}
+
+public function cancelTlRequest(int $id)
 {
     \App\Models\Notification::where('id', $id)
         ->where('status', 'pending')
@@ -281,11 +285,11 @@ class EmployeeController extends Controller
 public function approveTlRequest(int $id)
 {
     $notification = \App\Models\Notification::findOrFail($id);
+    $employee = Employee::findOrFail($notification->employee_id);
 
-    // Employee role update
-    Employee::findOrFail($notification->employee_id)->update(['role' => 'team_lead']);
+    $employee->update(['role' => 'team_lead']);
+    $this->syncTeamLeadRecord($employee, true);
 
-    // Notification status update
     $notification->update(['status' => 'approved', 'read_at' => now()]);
 
     return back()->with('success', 'TL request approved.');
@@ -297,6 +301,23 @@ public function rejectTlRequest(int $id)
     $notification->update(['status' => 'rejected', 'read_at' => now()]);
 
     return back()->with('success', 'TL request rejected.');
+}
+
+private function syncTeamLeadRecord(Employee $employee, bool $makeTeamLead)
+{
+    if ($makeTeamLead) {
+        \App\Models\Tl::updateOrCreate(
+            ['employee_id' => $employee->id],
+            [
+                'name'     => $employee->name,
+                'email'    => $employee->email,
+                'password' => $employee->password,
+                'role'     => 'team_lead',
+            ]
+        );
+    } else {
+        \App\Models\Tl::where('employee_id', $employee->id)->delete();
+    }
 }
     public function EmployeeCreationIndex(int $id)
         {
