@@ -23,5 +23,14 @@ Route::post('/employee/leave_request',[LeaveController::class,'store'])->name('e
 });
 
 
+Route::patch('/employee/notifications/{id}/read', [EmployeeController::class, 'markNotificationRead'])
+    ->name('employee.notifications.read');
+
+Route::patch('/employee/notifications/mark-all-read', [EmployeeController::class, 'markAllNotificationsRead'])
+    ->name('employee.notifications.mark-all-read');
+
+Route::get('/employee/notifications', [EmployeeController::class, 'notificationsIndex'])
+    ->name('employee.notifications.index');
+
 
 

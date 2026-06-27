@@ -77,5 +77,42 @@ return view('employee.dashboard', compact(
     'unreadCount'
 ));
 }
+
+public function notificationsIndex()
+{
+    $employee = auth('employee')->user();
+
+    $notifications = LeaveNotification::where('recipient_type', 'employee')
+        ->where('recipient_id', $employee->id)
+        ->with('leave.leaveType')
+        ->latest()
+        ->paginate(15);
+
+    return view('employee.notifications.index', compact('notifications'));
 }
+
+public function markNotificationRead($id)
+{
+    $notification = LeaveNotification::find($id);
+
+    if ($notification) {
+        $notification->update(['read_at' => now()]);
+    }
+
+    return response()->json(['success' => true]);
+}
+
+public function markAllNotificationsRead()
+{
+    $employee = auth('employee')->user();
+
+    LeaveNotification::where('recipient_type', 'employee')
+        ->where('recipient_id', $employee->id)
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
+
+    return back()->with('success', 'All notifications marked as read.');
+}
+}
+
 
