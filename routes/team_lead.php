@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamLead\TeamLeadController; 
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TL\TlNotificationController;
+use App\Http\Controllers\TeamLead\TlNotificationController;
 
 Route::get('/teamleads/dashboard',[TeamLeadController::class,'dashboard'])->name('team_lead.dashboard');
 Route::get('/teamleads/members',[TeamLeadController::class,'memberIndex'])->name('team_lead.memberIndex');
@@ -25,13 +25,12 @@ Route::get('/leave/{leave}',                 [TeamLeadController::class, 'show']
 //     ['App\Http\Controllers\TeamLead\TlNotificationController', 'markRead'])
 //     ->name('team_lead.notifications.mark-all-read');
 
-Route::patch('/team_lead/notifications/{id}/read', [TlNotificationController::class, 'markRead'])
+Route::patch('/team_lead/notifications/{id}/read', [TeamLeadController::class, 'markNotificationRead'])
     ->name('team_lead.notifications.read');
-
-Route::post('notifications/mark-all-read',
-    ['App\Http\Controllers\TeamLead\TlNotificationController', 'markAllRead'])
+ 
+Route::patch('/team_lead/notifications/mark-all-read', [TeamLeadController::class, 'markAllNotificationsRead'])
     ->name('team_lead.notifications.mark-all-read');
-
-Route::get('notifications',
-    ['App\Http\Controllers\TeamLead\TlNotificationController', 'index'])
+ 
+Route::get('/team_lead/notifications', [TeamLeadController::class, 'notificationsIndex'])
     ->name('team_lead.notifications.index');
+ 
