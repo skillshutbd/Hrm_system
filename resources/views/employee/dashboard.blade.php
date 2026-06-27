@@ -324,6 +324,12 @@
 
 @section('content')
 
+  @if(session('success'))
+    <div class="alert alert-success py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">
+        <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+    </div>
+  @endif
+
 {{-- Welcome --}}
 <div class="mb-4">
     <div class="welcome-title">Welcome back, {{ auth('employee')->user()->name ?? 'Employee' }}</div>
@@ -382,44 +388,32 @@
 
             {{-- Stat cards --}}
             <div class="col-md-8">
-                <div class="row g-3 h-100">
+                <div class="row g-3">
                     <div class="col-6">
                         <div class="stat-card">
-                            <svg class="stat-sparkline" width="60" height="30" viewBox="0 0 60 30">
-                                <polyline points="0,25 15,15 30,20 45,8 60,12"
-                                    fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
                             <div class="stat-icon green"><i class="bi bi-calendar3"></i></div>
                             <div class="stat-label">Annual Leave Balance</div>
-<div class="stat-number">
- {{ $annual->days_allowed ?? 0 }}<span> days</span>
-</div>
+                            <div class="stat-number">
+                                {{ $annualBalance ?? 0 }}<span> days</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="stat-card">
-                            <svg class="stat-sparkline" width="60" height="30" viewBox="0 0 60 30">
-                                <polyline points="0,10 15,18 30,12 45,22 60,15"
-                                    fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
                             <div class="stat-icon red"><i class="bi bi-bandaid"></i></div>
                             <div class="stat-label">Sick Leave Taken</div>
-                          <div class="stat-number">
-    {{ $sick->days_allowed ?? 0 }}<span> days</span>
-</div>
+                            <div class="stat-number">
+                                {{ $sickUsed ?? 0 }}<span> days</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="stat-card">
-                            <svg class="stat-sparkline" width="60" height="30" viewBox="0 0 60 30">
-                                <polyline points="0,20 20,15 40,18 60,10"
-                                    fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
                             <div class="stat-icon blue"><i class="bi bi-person-check"></i></div>
                             <div class="stat-label">Casual Leave Taken</div>
                             <div class="stat-number">
-    {{ $casual->days_allowed ?? 0 }}<span> days</span>
-</div>
+                                {{ $casualUsed ?? 0 }}<span> days</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -434,6 +428,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         {{-- Recent Leave History --}}
@@ -512,6 +507,7 @@
                 </tbody>
             </table>
         </div>
+
     </div>
 
     {{-- Right column --}}
@@ -522,7 +518,7 @@
             <span class="cta-icon"><i class="bi bi-send-fill"></i></span>
             <div class="cta-title">Planning a getaway?</div>
             <div class="cta-sub">Request your leave now to ensure timely approvals and smooth project handovers.</div>
-            <a href="{{route('employee.leave.create')}}" class="btn-submit-request">
+            <a href="{{ route('employee.leave.create') }}" class="btn-submit-request">
                 <i class="bi bi-plus-circle"></i> Submit New Request
             </a>
         </div>
@@ -551,6 +547,7 @@
         </div>
 
     </div>
+
 </div>
 
 @endsection
