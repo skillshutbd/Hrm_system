@@ -7,7 +7,7 @@ use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Leave;
 use Illuminate\Http\Request;
-
+use App\Models\LeaveNotification;
 class HrAdminController extends Controller
 {
     public function dashboard()
@@ -52,21 +52,70 @@ class HrAdminController extends Controller
         return view('hr.teamlead.index', compact('employees'));
     }
 
-    public function approve(Leave $leave)
-    {
-        $leave->update([
-            'status' => 'approved',
-        ]);
+   public function approve(Leave $leave)
+{
+    $leave->update(['status' => 'approved']);
 
-        return redirect()->back();
+    LeaveNotification::create([
+        'leave_id'       => $leave->id,
+        'recipient_type' => 'employee',
+        'recipient_id'   => $leave->employee_id,
+        'type'           => 'hr_approved',
+        'message'        => 'Your leave request has been approved by HR.',
+    ]);
+
+    return redirect()->back()->with('success', 'Leave approved.');
+}
+
+public function reject(Leave $leave)
+{
+    $leave->update(['status' => 'rejected']);
+
+    LeaveNotification::create([
+        'leave_id'       => $leave->id,
+        'recipient_type' => 'employee',
+        'recipient_id'   => $leave->employee_id,
+        'type'           => 'hr_rejected',
+        'message'        => 'Your leave request has been rejected by HR.',
+    ]);
+
+    return redirect()->back()->with('success', 'Leave rejected.');
+}
+
+
+public function notificationsIndex()
+{
+    $hr = auth('Hr')->user();
+
+    $notifications = LeaveNotification::where('recipient_type', 'hr')
+        ->where('recipient_id', $hr->id)
+        ->with('leave.employee')
+        ->latest()
+        ->paginate(15);
+
+    return view('hr.notifications.index', compact('notifications'));
+}
+
+public function markNotificationRead($id)
+{
+    $notification = LeaveNotification::find($id);
+
+    if ($notification) {
+        $notification->update(['read_at' => now()]);
     }
 
-    public function reject(Leave $leave)
-    {
-        $leave->update([
-            'status' => 'rejected',
-        ]);
+    return response()->json(['success' => true]);
+}
 
-        return redirect()->back();
-    }
+public function markAllNotificationsRead()
+{
+    $hr = auth('Hr')->user();
+
+    LeaveNotification::where('recipient_type', 'hr')
+        ->where('recipient_id', $hr->id)
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
+
+    return back()->with('success', 'All notifications marked as read.');
+}
 }

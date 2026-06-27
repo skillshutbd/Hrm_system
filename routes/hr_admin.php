@@ -37,3 +37,13 @@ Route::post('/hr_admin/tl-assignment/{employee}/toggle', [EmployeeController::cl
 // Hr approval
 Route::patch('/leave/{leave}/approve', [HrAdminController::class, 'approve'])->name('hr.leave.approve');
 Route::patch('/leave/{leave}/reject',  [HrAdminController::class, 'reject'])->name('hr.leave.reject');
+
+// HR Notifications
+Route::patch('/hr_admin/notifications/{id}/read', [HrAdminController::class, 'markNotificationRead'])
+    ->name('hr_admin.notifications.read');
+
+Route::patch('/hr_admin/notifications/mark-all-read', [HrAdminController::class, 'markAllNotificationsRead'])
+    ->name('hr_admin.notifications.mark-all-read');
+
+Route::get('/hr_admin/notifications', [HrAdminController::class, 'notificationsIndex'])
+    ->name('hr_admin.notifications.index');
