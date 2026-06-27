@@ -52,7 +52,21 @@ class HrAdminController extends Controller
         return view('hr.teamlead.index', compact('employees'));
     }
 
-    public function leaveRequest(){
-        
+    public function approve(Leave $leave)
+    {
+        $leave->update([
+            'status' => 'approved',
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function reject(Leave $leave)
+    {
+        $leave->update([
+            'status' => 'rejected',
+        ]);
+
+        return redirect()->back();
     }
 }

@@ -151,7 +151,7 @@
                         <td>
                             <div class="d-flex gap-1">
                                 <form method="POST"
-                                      action="#">
+                                      action="{{ route('hr.leave.approve', $leave->id) }}">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn-approve">Approve</button>
@@ -259,7 +259,7 @@
 @push('scripts')
 <script>
 function openRejectModal(leaveId) {
-    document.getElementById('rejectForm').action = `/hr/leave/${leaveId}/reject`;
+    document.getElementById('rejectForm').action = `/hr_admin/leave/${leaveId}/reject`;
     new bootstrap.Modal(document.getElementById('rejectModal')).show();
 }
 </script>

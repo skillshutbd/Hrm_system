@@ -33,3 +33,7 @@ Route::post('/hr_admin/tl-assignment/{employee}/toggle', [EmployeeController::cl
     ->name('hr_admin.tl-assignment.toggle');
     Route::delete('/hr_admin/tl-request/{id}/cancel', [EmployeeController::class, 'cancelTlRequest'])->name('hr_admin.tl-request.cancel');
 
+
+// Hr approval
+Route::patch('/leave/{leave}/approve', [HrAdminController::class, 'approve'])->name('hr.leave.approve');
+Route::patch('/leave/{leave}/reject',  [HrAdminController::class, 'reject'])->name('hr.leave.reject');
