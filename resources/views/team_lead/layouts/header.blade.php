@@ -143,6 +143,21 @@
 
 <header class="app-header py-3 px-4 d-flex align-items-center justify-content-between">
 
+ <div class="d-flex align-items-center justify-content-between w-100">
+    {{-- Left: Toggle + Welcome --}}
+    <div class="d-flex align-items-center">
+        <button class="btn btn-outline-secondary d-lg-none me-3" id="sidebar-toggle" aria-label="Toggle Navigation">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div class="topbar-welcome d-none d-sm-block">
+            <div class="welcome-text">
+                Welcome back, <strong>{{ auth()->user()->name ?? 'Team Lead' }}</strong> 👋
+            </div>
+          
+        </div>
+    </div>
+
     {{-- ── Left: Toggle + Search ── --}}
     <div class="d-flex align-items-center">
         <button class="btn btn-outline-secondary d-lg-none me-3"
@@ -150,13 +165,7 @@
             <i class="bi bi-list"></i>
         </button>
 
-        <form action="#" method="GET" class="header-search">
-            <i class="bi bi-search search-icon"></i>
-            <input type="text" name="query"
-                   class="form-control form-control-search"
-                   value="{{ request('query') }}"
-                   placeholder="Search employees, departments...">
-        </form>
+       
     </div>
 
     {{-- ── Right: Controls ── --}}

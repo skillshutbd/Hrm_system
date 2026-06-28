@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Leave;
+use App\Models\LeaveType;
 use Illuminate\Http\Request;
 
 class SidebarController extends Controller
@@ -244,5 +245,50 @@ public function employee_activity()
     public function Employee() { return view('admin.employee.index'); }
     public function TeamLead() { return view('admin.teamlead.index'); }
 
-    public function employee_leave() { return view('admin.leave.request-directory'); }
+ public function employee_leave()
+{
+    $query = Leave::with(['employee.department', 'leaveType'])->latest();
+
+    // Filters
+    if (request('leave_type_id')) {
+        $query->where('leave_type_id', request('leave_type_id'));
+    }
+
+    if (request('status') && request('status') !== 'all') {
+        $query->where('status', request('status'));
+    }
+
+    if (request('from') && request('to')) {
+        $query->whereDate('from_date', '>=', request('from'))
+              ->whereDate('to_date', '<=', request('to'));
+    }
+
+    $leaves = $query->paginate(10)->withQueryString();
+
+    // KPI
+    $pendingCount = Leave::where('status', 'pending')->count();
+
+    $approvedTodayCount = Leave::where('status', 'approved')
+        ->whereDate('updated_at', today())
+        ->count();
+
+    $onLeaveTodayCount = Leave::where('status', 'approved')
+        ->whereDate('from_date', '<=', today())
+        ->whereDate('to_date', '>=', today())
+        ->count();
+
+    // Currently on leave (today)
+    $staffOnLeave = Leave::with('employee')
+        ->where('status', 'approved')
+        ->whereDate('from_date', '<=', today())
+        ->whereDate('to_date', '>=', today())
+        ->get();
+
+    $leaveTypes = LeaveType::where('is_active', 1)->get();
+
+    return view('admin.leave.request-directory', compact(
+        'leaves', 'pendingCount', 'approvedTodayCount', 'onLeaveTodayCount',
+        'staffOnLeave', 'leaveTypes'
+    ));
+}
 }

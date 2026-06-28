@@ -103,6 +103,37 @@
         color: #FF5E2B;
     }
 
+    /* ✅ Welcome Message Styles */
+    .topbar-welcome {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.3;
+    }
+
+    .topbar-welcome .welcome-text {
+        font-size: 0.92rem;
+        color: #1A1A1A;
+        font-weight: 500;
+    }
+
+    .topbar-welcome .welcome-text strong {
+        color: #FF5E2B;
+        font-weight: 700;
+    }
+
+    .topbar-welcome .welcome-date {
+        font-size: 0.78rem;
+        color: #7F7F7F;
+        display: flex;
+        align-items: center;
+        margin-top: 2px;
+    }
+
+    .topbar-welcome .welcome-date i {
+        color: #FF5E2B;
+        font-size: 0.82rem;
+    }
+
     /* ── Notification Dropdown ───────────────────── */
     .notif-dropdown {
         width: 360px;
@@ -217,21 +248,33 @@
 @endphp
 
 <header class="app-header py-3 px-4 d-flex align-items-center justify-content-between">
+    {{-- Left: Toggle + Welcome --}}
     <div class="d-flex align-items-center">
         <button class="btn btn-outline-secondary d-lg-none me-3" id="sidebar-toggle" aria-label="Toggle Navigation">
             <i class="bi bi-list"></i>
         </button>
 
-        <form action="#" method="GET" class="header-search">
-            <i class="bi bi-search search-icon"></i>
-            <input
-                type="text"
-                name="query"
-                class="form-control form-control-search"
-                id="dashboard-search"
-                value="{{ request('query') }}"
-                placeholder="Search employees, departments...">
-        </form>
+        {{-- ✅ Welcome Message --}}
+        <div class="topbar-welcome d-none d-sm-block">
+            <div class="welcome-text">
+                @php
+                    $hour = \Carbon\Carbon::now()->hour;
+                    $greeting = match(true) {
+                        $hour < 12 => 'Good Morning',
+                        $hour < 17 => 'Good Afternoon',
+                        default    => 'Good Evening',
+                    };
+                @endphp
+                {{ $greeting }}, <strong>{{ $employeeAuth->name ?? 'Employee' }}</strong> 👋
+            </div>
+            <div class="welcome-date">
+                <i class="bi bi-calendar3 me-1"></i>
+                <span id="currentDate"></span>
+                <span class="mx-2 text-muted">•</span>
+                <i class="bi bi-clock me-1"></i>
+                <span id="currentTime"></span>
+            </div>
+        </div>
     </div>
 
     <div class="header-controls d-flex align-items-center gap-3">
@@ -312,12 +355,15 @@
         <div class="dropdown" id="user-profile-dropdown">
             <button class="btn btn-profile d-flex align-items-center gap-2 text-start p-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="profile-info text-end d-none d-sm-block">
-                    <div class="profile-name">{{ Auth::guard('employee')->user()->name }}</div>
+                    <div class="profile-name">{{ $employeeAuth->name }}</div>
                     <div class="profile-role">Employee</div>
                 </div>
                 <div class="profile-avatar-container">
-                    <img src="{{ asset('images/avatar.png') }}" alt="Admin Avatar" class="profile-avatar border border-2 border-brand">
-                </div>
+    <img src="{{ asset('images/avatar.png') }}" 
+         alt="Employee Avatar" 
+         class="profile-avatar"
+         style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #FF5E2B;">
+</div>
             </button>
 
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
@@ -343,6 +389,31 @@
 
 @push('scripts')
 <script>
+// ✅ Live Date & Time
+function updateDateTime() {
+    const now = new Date();
+
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', dateOptions);
+
+    const timeStr = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
+
+    const dateEl = document.getElementById('currentDate');
+    const timeEl = document.getElementById('currentTime');
+
+    if (dateEl) dateEl.textContent = dateStr;
+    if (timeEl) timeEl.textContent = timeStr;
+}
+
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+// ✅ Notification Mark as Read
 function markEmployeeNotifRead(notifId, element) {
     fetch(`/employee/notifications/${notifId}/read`, {
         method: 'PATCH',

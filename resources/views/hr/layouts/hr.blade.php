@@ -66,34 +66,47 @@
         .sidebar-brand {
     display: flex;
     align-items: center;
-    padding: 0 8px 20px;
+   
     border-bottom: 1px solid rgba(255,255,255,0.08);
-    margin-bottom: 8px;
+   padding: 10px 15px;      /* reduced top padding (was 15px) */
+    margin-top: -65px;    
 }
 
 .brand-logo {
-    width: 36px;
-    height: 36px;
-    background: #FF5E2B;
-    border-radius: 8px;
+    width: 120px;
+    height: 120px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 }
 
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+    border: none;
+}
+
 .brand-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #BDBDBD;
+    font-size: 1rem;        /* smaller title */
+    font-weight: 600;
     line-height: 1.2;
 }
 
 .brand-subtitle {
-    font-size: 0.65rem;
-    color: #8F8F8F;
-    letter-spacing: 1px;
+    font-size: 0.7rem;      /* smaller subtitle */
+    letter-spacing: 0.5px;
+    color: #888;
+}
+
+.sidebar-nav {
+    padding-top: 0;
+    margin-top: -20px !important;
+    list-style: none;
+    padding-left: 0;
 }
 
 .sidebar-nav .nav-link {
@@ -105,18 +118,32 @@
     display: flex;
     align-items: center;
     transition: all 0.2s;
-    margin-bottom: 2px;
+    margin-bottom: 4px;  /* keeps gap between items */
 }
 
+/* ✅ HOVER - Orange Highlight */
 .sidebar-nav .nav-link:hover {
-    color: #DADADA;
-    background: rgba(255,255,255,0.07);
+    background: rgba(255, 94, 43, 0.1);
+    color: #FF5E2B;
+    transform: translateX(2px);
 }
 
-.sidebar-nav .nav-link.active {
-    color: #FFFFFF;
-    background: #FF5E2B;
+.sidebar-nav .nav-link:hover i {
+    color: #FF5E2B;
 }
+
+/* ✅ ACTIVE - Strong Orange */
+.sidebar-nav .nav-link.active {
+    background: #FF5E2B;
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 94, 43, 0.25);
+}
+
+.sidebar-nav .nav-link.active i {
+    color: #FFFFFF;
+}
+
 
 .sidebar-nav .nav-link i {
     font-size: 1rem;
@@ -150,8 +177,8 @@
     transition: all 0.2s;
     margin-bottom: 2px;
 }
-.sidebar-nav .sub-link:hover {  background: rgba(255,255,255,0.07); }
-.sidebar-nav .sub-link.active { color: #fff; background: rgba(255,94,43,0.5); }
+/* .sidebar-nav .sub-link:hover {  background: rgba(255,255,255,0.07); }
+.sidebar-nav .sub-link.active { color: #fff; background: rgba(255,94,43,0.5); } */
 
 .sidebar-bottom .nav-link:hover {
     color: #DADADA;
@@ -192,6 +219,36 @@
     padding: 14px 32px;
     text-align: center;
     color: #7F7F7F;
+}
+
+.topbar-welcome {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.topbar-welcome .welcome-text {
+    font-size: 0.92rem;
+    color: #1A1A1A;
+    font-weight: 500;
+}
+
+.topbar-welcome .welcome-text strong {
+    color: #FF5E2B;
+    font-weight: 700;
+}
+
+.topbar-welcome  {
+    font-size: 0.78rem;
+    color: #7F7F7F;
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.topbar-welcome  {
+    color: #FF5E2B;
+    font-size: 0.82rem;
 }
     </style>
 

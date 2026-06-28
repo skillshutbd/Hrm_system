@@ -121,15 +121,29 @@
     margin-bottom: 4px;  /* keeps gap between items */
 }
 
+/* ✅ HOVER - Orange Highlight */
 .sidebar-nav .nav-link:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
+    background: rgba(255, 94, 43, 0.1);
+    color: #FF5E2B;
+    transform: translateX(2px);
 }
 
-.sidebar-nav .nav-link.active {
-    color: #FFFFFF;
-    background: #FF5E2B;
+.sidebar-nav .nav-link:hover i {
+    color: #FF5E2B;
 }
+
+/* ✅ ACTIVE - Strong Orange */
+.sidebar-nav .nav-link.active {
+    background: #FF5E2B;
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 94, 43, 0.25);
+}
+
+.sidebar-nav .nav-link.active i {
+    color: #FFFFFF;
+}
+
 
 .sidebar-nav .nav-link i {
     font-size: 1rem;
@@ -163,8 +177,8 @@
     transition: all 0.2s;
     margin-bottom: 2px;
 }
-.sidebar-nav .sub-link:hover {  background: rgba(255,255,255,0.07); }
-.sidebar-nav .sub-link.active { color: #fff; background: rgba(255,94,43,0.5); }
+/* .sidebar-nav .sub-link:hover {  background: rgba(255,255,255,0.07); }
+.sidebar-nav .sub-link.active { color: #fff; background: rgba(255,94,43,0.5); } */
 
 .sidebar-bottom .nav-link:hover {
     color: #DADADA;
@@ -205,6 +219,36 @@
     padding: 14px 32px;
     text-align: center;
     color: #7F7F7F;
+}
+
+.topbar-welcome {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.topbar-welcome .welcome-text {
+    font-size: 0.92rem;
+    color: #1A1A1A;
+    font-weight: 500;
+}
+
+.topbar-welcome .welcome-text strong {
+    color: #FF5E2B;
+    font-weight: 700;
+}
+
+.topbar-welcome  {
+    font-size: 0.78rem;
+    color: #7F7F7F;
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.topbar-welcome  {
+    color: #FF5E2B;
+    font-size: 0.82rem;
 }
     </style>
 

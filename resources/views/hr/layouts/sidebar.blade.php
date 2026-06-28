@@ -2,12 +2,9 @@
 
     <div class="sidebar-brand">
         <div class="brand-logo">
-            <i class="bi bi-grid-fill text-white fs-4"></i>
+            <img src="{{ asset('images/logo.png') }}" alt="Skills Hut Logo">
         </div>
-        <div class="brand-text ms-3">
-            <h2 class="brand-title mb-0">Skills Hut Ltd</h2>
-            <span class="brand-subtitle text-uppercase">HRM</span>
-        </div>
+        
     </div>
 
     <nav class="sidebar-nav my-4">
@@ -51,7 +48,7 @@
             
 
             <li class="nav-item">
-                <a href="{{ route('admin.employee_leave.index') }}" class="nav-link {{ request()->routeIs('admin.employee_leave.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('hr_admin.employee_leave.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event-fill me-3"></i>
                     <span>Leave Requests</span>
                 </a>

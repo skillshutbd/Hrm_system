@@ -54,7 +54,7 @@ class TeamLeadController extends Controller
 
     public function memberIndex()
     {
-        $tl           = auth('Tl')->user();
+        $tl           = auth('tl')->user();
         $departmentId = $tl->employee->department_id ?? null;
 
         $members = Employee::where('department_id', $departmentId)

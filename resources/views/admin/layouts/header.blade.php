@@ -116,23 +116,26 @@
 
 
 <header class="app-header py-3 px-4 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between w-100">
+    {{-- Left: Toggle + Welcome --}}
     <div class="d-flex align-items-center">
         <button class="btn btn-outline-secondary d-lg-none me-3" id="sidebar-toggle" aria-label="Toggle Navigation">
             <i class="bi bi-list"></i>
         </button>
 
-        <form action="#" method="GET" class="header-search">
-            <i class="bi bi-search search-icon"></i>
-            <input
-                type="text"
-                name="query"
-                class="form-control form-control-search"
-                id="dashboard-search"
-                value="{{ request('query') }}"
-                placeholder="Search employees, departments..."
-            >
-        </form>
+        <div class="topbar-welcome d-none d-sm-block">
+            <div class="welcome-text">
+                Welcome back, <strong>{{ auth()->user()->name ?? 'Admin' }}</strong> 👋
+            </div>
+          
+        </div>
     </div>
+
+    {{-- Right side (existing icons/profile can go here) --}}
+    <div class="d-flex align-items-center gap-2">
+        {{-- your existing right-side content --}}
+    </div>
+</div>
 
     <div class="header-controls d-flex align-items-center gap-3">
        @php

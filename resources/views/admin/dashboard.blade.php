@@ -109,41 +109,10 @@
         </div>
     </div>
 
-    {{-- Leave Approval Workflow --}}
-    <!-- <div class="workflow-card mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <div class="section-title">Leave Approval Workflow</div>
-                <div style="font-size:0.82rem; color:#7F7F7F;">Three-tier verification architecture</div>
-            </div>
-            <span class="workflow-badge">PHASE 1 ACTIVE</span>
-        </div>
-        <div class="d-flex align-items-stretch gap-2">
-            <div class="workflow-step">
-                <div class="workflow-step-icon"><i class="bi bi-person"></i></div>
-                <div class="workflow-step-title">1. Employee Request</div>
-                <div class="workflow-step-desc">Submits leave application through dedicated portal</div>
-            </div>
-            <div class="workflow-connector"><i class="bi bi-chevron-right"></i></div>
-            <div class="workflow-step active">
-                <div class="step-badge">{{ $pendingLeaves->count() }}</div>
-                <div class="workflow-step-icon"><i class="bi bi-people"></i></div>
-                <div class="workflow-step-title">2. Team Lead Review</div>
-                <div class="workflow-step-desc">First-line operational approval & resource check</div>
-            </div>
-            <div class="workflow-connector"><i class="bi bi-chevron-right"></i></div>
-            <div class="workflow-step">
-                <div class="workflow-step-icon"><i class="bi bi-shield-check"></i></div>
-                <div class="workflow-step-title">3. HR Admin Final</div>
-                <div class="workflow-step-desc">Policy compliance check & final system record</div>
-            </div>
-        </div>
-    </div> -->
-
     {{-- Approval Queue + Activity Log --}}
     <div class="row g-4 mb-4">
 
-        {{-- Final Approval Queue (HR এর কাজ — Admin ও করতে পারবে যদি HR মিস করে) --}}
+        {{-- Final Approval Queue --}}
         <div class="col-12 col-lg-7">
             <div class="section-card h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -214,39 +183,38 @@
         </div>
 
         {{-- System Activity Log --}}
-     <div class="col-12 col-lg-5">
-    <div class="section-card h-100">
-        <div class="section-title mb-3">System Activity Log</div>
+        <div class="col-12 col-lg-5">
+            <div class="section-card h-100">
+                <div class="section-title mb-3">System Activity Log</div>
 
-        @forelse($recentLeaveActivity as $activity)
-            <div class="activity-item">
-                <strong>{{ $activity->title }}</strong>
-                <p>
-                    {{ $activity->desc }}
-                    @if($activity->approver === 'hr_admin')
-                        <span class="badge-by-hr ms-1">by HR</span>
-                    @elseif($activity->approver === 'super_admin')
-                        <span class="badge-by-admin ms-1">by Admin</span>
-                    @endif
-                </p>
-                <span class="time">{{ $activity->created_at->diffForHumans() }}</span>
+                @forelse($recentLeaveActivity as $activity)
+                    <div class="activity-item">
+                        <strong>{{ $activity->title }}</strong>
+                        <p>
+                            {{ $activity->desc }}
+                            @if($activity->approver === 'hr_admin')
+                                <span class="badge-by-hr ms-1">by HR</span>
+                            @elseif($activity->approver === 'super_admin')
+                                <span class="badge-by-admin ms-1">by Admin</span>
+                            @endif
+                        </p>
+                        <span class="time">{{ $activity->created_at->diffForHumans() }}</span>
+                    </div>
+                @empty
+                    <div class="text-center py-4" style="color:#B2ADA7; font-size:0.85rem;">
+                        No recent activity.
+                    </div>
+                @endforelse
+
+                <div class="mt-3">
+                    <a href="{{ route('admin.employee_activity.index') }}" class="btn btn-outline-custom w-100 text-decoration-none d-block text-center" style="font-size:0.82rem;">
+                        View Full Audit Log
+                    </a>
+                </div>
             </div>
-        @empty
-            <div class="text-center py-4" style="color:#B2ADA7; font-size:0.85rem;">
-                No recent activity.
-            </div>
-        @endforelse
-
-        <div class="mt-3">
-            <a href="{{route('admin.employee_activity.index')}}" class="btn btn-outline-custom w-100 text-decoration-none d-block text-center" style="font-size:0.82rem;">
-                View Full Audit Log
-            </a>
-        </div>
-    </div>
-</div>
         </div>
 
-    </div>
+    </div> {{-- ✅ FIXED: removed extra </div> that was here --}}
 
     {{-- Recently Approved by HR --}}
     <div class="section-card">
@@ -266,7 +234,7 @@
                     <th>Employee</th>
                     <th>Leave Type</th>
                     <th>Period</th>
-                  
+                    {{-- ✅ FIXED: removed empty <th> that was here --}}
                 </tr>
             </thead>
             <tbody>
@@ -283,7 +251,6 @@
                         {{ \Carbon\Carbon::parse($leave->from_date)->format('M d') }} -
                         {{ \Carbon\Carbon::parse($leave->to_date)->format('M d') }}
                     </td>
-                
                 </tr>
                 @endforeach
             </tbody>
