@@ -1,13 +1,13 @@
 <aside class="app-sidebar" id="sidebar">
 
-    <div class="sidebar-brand">
+   <div class="sidebar-brand">
         <div class="brand-logo">
-            <i class="bi bi-grid-fill text-white fs-4"></i>
+            <img src="{{ asset('images/logo.png') }}" alt="Skills Hut Logo">
         </div>
-        <div class="brand-text ms-3">
+        <!-- <div class="brand-text ms-3">
             <h2 class="brand-title mb-0">Skills Hut Ltd</h2>
-            <span class="brand-subtitle text-uppercase">Phase 1 HRM</span>
-        </div>
+            <span class="brand-subtitle text-uppercase">Super Admin</span>
+        </div> -->
     </div>
 
     <nav class="sidebar-nav my-4">

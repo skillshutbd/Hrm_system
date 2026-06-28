@@ -66,34 +66,47 @@
         .sidebar-brand {
     display: flex;
     align-items: center;
-    padding: 0 8px 20px;
+   
     border-bottom: 1px solid rgba(255,255,255,0.08);
-    margin-bottom: 8px;
+   padding: 10px 15px;      /* reduced top padding (was 15px) */
+    margin-top: -65px;    
 }
 
 .brand-logo {
-    width: 36px;
-    height: 36px;
-    background: #FF5E2B;
-    border-radius: 8px;
+    width: 120px;
+    height: 120px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 }
 
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+    border: none;
+}
+
 .brand-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #BDBDBD;
+    font-size: 1rem;        /* smaller title */
+    font-weight: 600;
     line-height: 1.2;
 }
 
 .brand-subtitle {
-    font-size: 0.65rem;
-    color: #8F8F8F;
-    letter-spacing: 1px;
+    font-size: 0.7rem;      /* smaller subtitle */
+    letter-spacing: 0.5px;
+    color: #888;
+}
+
+.sidebar-nav {
+    padding-top: 0;
+    margin-top: -20px !important;
+    list-style: none;
+    padding-left: 0;
 }
 
 .sidebar-nav .nav-link {
@@ -105,12 +118,12 @@
     display: flex;
     align-items: center;
     transition: all 0.2s;
-    margin-bottom: 2px;
+    margin-bottom: 4px;  /* keeps gap between items */
 }
 
 .sidebar-nav .nav-link:hover {
-    color: #DADADA;
-    background: rgba(255,255,255,0.07);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
 }
 
 .sidebar-nav .nav-link.active {
