@@ -137,9 +137,10 @@ class SidebarController extends Controller
         return back()->with('success', 'Leave rejected by Admin.');
     }
 
-       public function employee_activity()
+public function employee_activity()
 {
-    // Leave সংক্রান্ত activity
+    $filter = request('filter', 'all');
+
     $leaveActivities = Leave::with('employee')
         ->whereIn('status', ['approved', 'rejected'])
         ->orWhere('tl_status', 'recommended')
@@ -181,14 +182,12 @@ class SidebarController extends Controller
             ];
         });
 
-    // TL Assignment + Employee Creation activity
     $generalActivities = \App\Models\Notification::get()
         ->map(function ($notif) {
             $titleMap = [
                 'tl_assignment_request' => 'Team Lead Assignment',
                 'employee_creation'     => 'New Employee',
             ];
-
             $iconMap = [
                 'pending'  => 'bi-hourglass-split',
                 'approved' => 'bi-check-circle-fill',
@@ -206,35 +205,38 @@ class SidebarController extends Controller
             ];
         });
 
-    //  merge  date sort
-    $allActivities = $leaveActivities
-        ->concat($generalActivities)
-        ->sortByDesc('created_at')
-        ->values();
+    $allActivities = $leaveActivities->concat($generalActivities)->sortByDesc('created_at')->values();
 
-    // Manual pagination 
+    // Filter apply করো
+    $filteredActivities = match($filter) {
+        'leave'      => $allActivities->where('category', 'leave')->values(),
+        'assignment' => $allActivities->where('category', 'tl_assignment_request')->values(),
+        'employee'   => $allActivities->where('category', 'employee_creation')->values(),
+        default      => $allActivities,
+    };
+
     $perPage     = 15;
     $currentPage = request()->get('page', 1);
     $activities  = new \Illuminate\Pagination\LengthAwarePaginator(
-        $allActivities->forPage($currentPage, $perPage),
-        $allActivities->count(),
+        $filteredActivities->forPage($currentPage, $perPage),
+        $filteredActivities->count(),
         $perPage,
         $currentPage,
         ['path' => request()->url(), 'query' => request()->query()]
     );
 
-    // KPI counts
-    $totalActivities   = $allActivities->count();
-    $leaveCount        = $leaveActivities->count();
-    $assignmentCount   = $generalActivities->where('category', 'tl_assignment_request')->count();
-    $employeeAddCount  = $generalActivities->where('category', 'employee_creation')->count();
+    $totalActivities  = $allActivities->count();
+    $leaveCount       = $leaveActivities->count();
+    $assignmentCount  = $generalActivities->where('category', 'tl_assignment_request')->count();
+    $employeeAddCount = $generalActivities->where('category', 'employee_creation')->count();
 
     return view('admin.employee_activity.index', compact(
         'activities',
         'totalActivities',
         'leaveCount',
         'assignmentCount',
-        'employeeAddCount'
+        'employeeAddCount',
+        'filter'
     ));
 }
 
