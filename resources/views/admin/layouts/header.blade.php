@@ -123,12 +123,19 @@
             <i class="bi bi-list"></i>
         </button>
 
-        <div class="topbar-welcome d-none d-sm-block">
-            <div class="welcome-text">
-                Welcome back, <strong>{{ auth()->user()->name ?? 'Admin' }}</strong> 👋
-            </div>
+         <div class="welcome-text">
+                @php
+                    $hour = \Carbon\Carbon::now()->hour;
+                    $greeting = match(true) {
+                        $hour < 12 => 'Good Morning',
+                        $hour < 17 => 'Good Afternoon',
+                        default    => 'Good Evening',
+                    };
+                @endphp
+                {{ $greeting }}, <strong>{{ $employeeAuth->name ?? 'Super Admin' }}</strong> 👋
           
         </div>
+        
     </div>
 
     {{-- Right side (existing icons/profile can go here) --}}
