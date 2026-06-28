@@ -110,7 +110,7 @@
     </div>
 
     {{-- Leave Approval Workflow --}}
-    <div class="workflow-card mb-4">
+    <!-- <div class="workflow-card mb-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <div class="section-title">Leave Approval Workflow</div>
@@ -138,7 +138,7 @@
                 <div class="workflow-step-desc">Policy compliance check & final system record</div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     {{-- Approval Queue + Activity Log --}}
     <div class="row g-4 mb-4">
@@ -214,46 +214,36 @@
         </div>
 
         {{-- System Activity Log --}}
-        <div class="col-12 col-lg-5">
-            <div class="section-card h-100">
-                <div class="section-title mb-3">System Activity Log</div>
+     <div class="col-12 col-lg-5">
+    <div class="section-card h-100">
+        <div class="section-title mb-3">System Activity Log</div>
 
-                @forelse($recentLeaveActivity as $leave)
-                    <div class="activity-item">
-                        <strong>{{ $leave->employee->name ?? 'Employee' }}:</strong>
-                        <p>
-                            @if($leave->status === 'approved')
-                                Leave request approved
-                                @if($leave->approver_type === 'hr_admin')
-                                    <span class="badge-by-hr ms-1">by HR</span>
-                                @elseif($leave->approver_type === 'super_admin')
-                                    <span class="badge-by-admin ms-1">by Admin</span>
-                                @endif
-                            @elseif($leave->status === 'rejected')
-                                Leave request rejected
-                                @if($leave->approver_type === 'hr_admin')
-                                    <span class="badge-by-hr ms-1">by HR</span>
-                                @elseif($leave->approver_type === 'super_admin')
-                                    <span class="badge-by-admin ms-1">by Admin</span>
-                                @endif
-                            @elseif($leave->tl_status === 'recommended')
-                                Recommended by Team Lead, awaiting final approval.
-                            @endif
-                        </p>
-                        <span class="time">{{ $leave->updated_at->diffForHumans() }}</span>
-                    </div>
-                @empty
-                    <div class="text-center py-4" style="color:#B2ADA7; font-size:0.85rem;">
-                        No recent activity.
-                    </div>
-                @endforelse
-
-                <div class="mt-3">
-                    <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-custom w-100 text-decoration-none d-block text-center" style="font-size:0.82rem;">
-                        View Full Audit Log
-                    </a>
-                </div>
+        @forelse($recentLeaveActivity as $activity)
+            <div class="activity-item">
+                <strong>{{ $activity->title }}</strong>
+                <p>
+                    {{ $activity->desc }}
+                    @if($activity->approver === 'hr_admin')
+                        <span class="badge-by-hr ms-1">by HR</span>
+                    @elseif($activity->approver === 'super_admin')
+                        <span class="badge-by-admin ms-1">by Admin</span>
+                    @endif
+                </p>
+                <span class="time">{{ $activity->created_at->diffForHumans() }}</span>
             </div>
+        @empty
+            <div class="text-center py-4" style="color:#B2ADA7; font-size:0.85rem;">
+                No recent activity.
+            </div>
+        @endforelse
+
+        <div class="mt-3">
+            <a href="{{route('admin.employee_activity.index')}}" class="btn btn-outline-custom w-100 text-decoration-none d-block text-center" style="font-size:0.82rem;">
+                View Full Audit Log
+            </a>
+        </div>
+    </div>
+</div>
         </div>
 
     </div>
@@ -276,7 +266,7 @@
                     <th>Employee</th>
                     <th>Leave Type</th>
                     <th>Period</th>
-                    <th>Approved By</th>
+                  
                 </tr>
             </thead>
             <tbody>
@@ -293,15 +283,7 @@
                         {{ \Carbon\Carbon::parse($leave->from_date)->format('M d') }} -
                         {{ \Carbon\Carbon::parse($leave->to_date)->format('M d') }}
                     </td>
-                    <td>
-                        @if($leave->approver_type === 'hr_admin')
-                            <span class="badge-by-hr">HR Admin</span>
-                        @elseif($leave->approver_type === 'super_admin')
-                            <span class="badge-by-admin">Super Admin</span>
-                        @else
-                            <span class="badge-by-hr">—</span>
-                        @endif
-                    </td>
+                
                 </tr>
                 @endforeach
             </tbody>
