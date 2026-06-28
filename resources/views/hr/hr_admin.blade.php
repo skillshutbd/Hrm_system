@@ -208,11 +208,11 @@
                 No recent activity.
             </div>
             @endforelse
-            <div class="mt-3">
-                <button class="btn btn-outline-custom w-100" style="font-size:0.82rem;">
-                    View Full Audit Log
-                </button>
-            </div>
+           <div class="mt-3">
+                    <a href="{{ route('hr_admin.employee_activity.index') }}" class="btn btn-outline-custom w-100 text-decoration-none d-block text-center" style="font-size:0.82rem;">
+                        View Full Audit Log
+                    </a>
+                </div>
         </div>
     </div>
 

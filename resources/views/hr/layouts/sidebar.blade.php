@@ -48,7 +48,7 @@
             
 
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->routeIs('hr_admin.employee_leave.*') ? 'active' : '' }}">
+                <a href="{{route('hr_admin.employee_leave.index')}}" class="nav-link {{ request()->routeIs('hr_admin.employee_leave.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event-fill me-3"></i>
                     <span>Leave Requests</span>
                 </a>

@@ -24,8 +24,12 @@ Route::get('/hr_admin/employee/{employee}/edit', [EmployeeController::class, 'ed
 Route::put('/hr_admin/employee/{employee}', [EmployeeController::class, 'update'])->name('hr_admin.employee.update');
 Route::delete('/hr_admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('hr_admin.employee.destroy');
 
+
+
 Route::get('/employee/export-csv', [EmployeeController::class, 'exportCsv'])->name('hr_admin.employee.export-csv');
 
+
+ Route::get('/hr_admin/employee-leave', [HrAdminController::class, 'employee_leave'])->name('hr_admin.employee_leave.index');
 
 // Team Lead Assignment Route for HR Admin
 Route::get('/hr_admin/teamlead-assignment', [HrAdminController::class, 'teamLeadAssignment'])->name('hr_admin.teamlead_assignment');
@@ -47,3 +51,5 @@ Route::patch('/hr_admin/notifications/mark-all-read', [HrAdminController::class,
 
 Route::get('/hr_admin/notifications', [HrAdminController::class, 'notificationsIndex'])
     ->name('hr_admin.notifications.index');
+
+        Route::get('/hr_admin/employee-activity', [HrAdminController::class, 'employee_activity'])->name('hr_admin.employee_activity.index');
