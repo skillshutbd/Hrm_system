@@ -94,6 +94,16 @@ class HrAdminController extends Controller
     ));
 }
 
+public function show_leave(Leave $leave)
+{
+    $leave->load([
+        'employee.department',
+        'leaveType',
+    ]);
+
+    return view('hr.leave.show', compact('leave'));
+}
+
 public function exportLeaveCsv()
 {
     $query = Leave::with(['employee.department', 'leaveType'])->latest();

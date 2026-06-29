@@ -63,20 +63,23 @@ class LeaveController extends Controller
 
     public function store(Request $request)
     {
+
+     
         $validated = $request->validate([
-            'leave_type_id' => 'required|exists:leave_type,id',
+         'leave_type_id' => 'required|exists:leave_types,id',
             'from_date'     => 'required|date',
             'to_date'       => 'required|date|after_or_equal:from_date',
            'reason' => [
                     'required',
                     'string',
                     'max:1000',
-                    function ($attribute, $value, $fail) {
-                        $wordCount = count(array_filter(explode(' ', trim($value))));
-                        if ($wordCount < 3) {
-                            $fail('The reason must contain at least 3 words.');
-                        }
-                    },
+                   function ($attribute, $value, $fail) {
+    $wordCount = str_word_count(trim($value));
+    if ($wordCount > 3) {
+        $fail('The reason must not exceed 3 words.');
+    }
+},
+
                 ],
             'attachment'    => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);

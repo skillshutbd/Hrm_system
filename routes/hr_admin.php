@@ -30,7 +30,8 @@ Route::get('/employee/export-csv', [EmployeeController::class, 'exportCsv'])->na
 
 
  Route::get('/hr_admin/employee-leave', [HrAdminController::class, 'employee_leave'])->name('hr_admin.employee_leave.index');
-
+Route::get('/leave/{leave}', [HrAdminController::class, 'show_leave'])
+    ->name('hr.leave.show');
 
  Route::get('/leave/export-csv', [HrAdminController::class, 'exportLeaveCsv'])->name('hr_admin.leave.export-csv');
 // Team Lead Assignment Route for HR Admin

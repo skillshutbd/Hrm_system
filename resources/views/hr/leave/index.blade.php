@@ -61,6 +61,23 @@
     .staff-name { font-size: 0.85rem; font-weight: 700; color: #fff; }
     .staff-status { font-size: 0.72rem; color: rgba(255,255,255,0.65); }
     .staff-icon { color: rgba(255,255,255,0.7); font-size: 1rem; }
+
+    .btn-view {
+    background: #EFF6FF;
+    color: #2563EB;
+    border: 1px solid #BFDBFE;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all .15s;
+    white-space: nowrap;
+}
+.btn-view:hover { background: #2563EB; color: #fff; border-color: #2563EB; }
 </style>
 @endpush
 
@@ -211,7 +228,14 @@
                                 </button>
                             @endif
 
+                             {{-- View Button --}}
+        <a href="{{ route('hr.leave.show', $leave->id) }}"
+           class="btn-view">
+            <i class="bi bi-eye"></i> View
+        </a>
+
                         </div>
+                          
                     </td>
                 </tr>
                 @empty

@@ -7,6 +7,10 @@
         
     </div>
 
+    <button class="sidebar-close-btn" type="button" aria-label="Close Menu">
+    <i class="bi bi-x-lg"></i>
+</button>
+
     <nav class="sidebar-nav my-4">
         <ul class="nav flex-column">
 
