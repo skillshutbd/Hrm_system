@@ -19,7 +19,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('admin.employee_leave.index') }}" class="nav-link {{ request()->routeIs('admin.employee_leave.*') ? 'active' : '' }}">
+                <a href="{{route('employee.leave.history')}}" class="nav-link {{ request()->routeIs('employee_leave.history*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event-fill"></i>
                     <span>Leave Requests</span>
                 </a>

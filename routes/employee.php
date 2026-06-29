@@ -21,7 +21,7 @@ Route::post('/employee/logout', [AdminAuthController::class, 'logout'])->name('e
 Route::get('/employee/leave',[LeaveController::class,'create'])->name('employee.leave.create');
 Route::post('/employee/leave_request',[LeaveController::class,'store'])->name('employee.leave_request.store');
 });
-
+Route::get('/leave/notifications', [EmployeeController::class, 'notificationsIndex'])->name('employee.notifications.index');
 
 Route::patch('/employee/notifications/{id}/read', [EmployeeController::class, 'markNotificationRead'])
     ->name('employee.notifications.read');
