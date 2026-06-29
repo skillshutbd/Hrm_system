@@ -599,60 +599,93 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
     <script>
-        // Mobile Sidebar Toggle Functionality
-        (function() {
-            const overlay = document.getElementById('sidebarOverlay');
-            const body = document.body;
+    // Mobile Sidebar Toggle Functionality
+    (function() {
+        const overlay = document.getElementById('sidebarOverlay');
+        const body = document.body;
+        let isAnimating = false; // flag to prevent immediate close
 
-            function openSidebar() {
-                body.classList.add('sidebar-open');
-            }
+        function openSidebar() {
+            if (window.innerWidth >= 768) return;
+            body.classList.add('sidebar-open');
+            // Prevent overlay click for a short time after opening
+            isAnimating = true;
+            setTimeout(function() {
+                isAnimating = false;
+            }, 300);
+        }
 
-            function closeSidebar() {
-                body.classList.remove('sidebar-open');
-            }
+        function closeSidebar() {
+            body.classList.remove('sidebar-open');
+        }
 
-            // Hamburger button click (in header)
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.mobile-sidebar-toggle')) {
-                    e.stopPropagation();
-                    if (body.classList.contains('sidebar-open')) {
-                        closeSidebar();
-                    } else {
-                        openSidebar();
-                    }
+        // Hamburger button click (in header)
+        document.addEventListener('click', function(e) {
+            const hamburger = e.target.closest('.mobile-sidebar-toggle');
+            const closeBtn = e.target.closest('.sidebar-close-btn');
+
+            if (hamburger) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                if (body.classList.contains('sidebar-open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
                 }
+                return false;
+            }
 
-                // Close button click (inside sidebar)
-                if (e.target.closest('.sidebar-close-btn')) {
+            if (closeBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                closeSidebar();
+                return false;
+            }
+        }, true); // capture phase
+
+        // Overlay click - only close if sidebar is actually open AND not animating
+        if (overlay) {
+            overlay.addEventListener('click', function(e) {
+                if (isAnimating) {
                     e.stopPropagation();
+                    return;
+                }
+                if (body.classList.contains('sidebar-open')) {
                     closeSidebar();
                 }
             });
+        }
 
-            // Close on overlay click
-            if (overlay) {
-                overlay.addEventListener('click', closeSidebar);
+        // Prevent clicks inside sidebar from closing it
+        document.addEventListener('click', function(e) {
+            if (body.classList.contains('sidebar-open') && window.innerWidth < 768) {
+                // If click is inside sidebar, do nothing
+                if (e.target.closest('.app-sidebar')) {
+                    e.stopPropagation();
+                }
             }
+        }, true);
 
-            // Close sidebar when clicking any nav link on mobile
-            document.querySelectorAll('.sidebar-nav .nav-link, .sidebar-nav .sub-link, .sidebar-bottom .nav-link').forEach(function(link) {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth < 768) {
-                        closeSidebar();
-                    }
-                });
-            });
-
-            // Auto close sidebar if window resized to desktop
-            window.addEventListener('resize', function() {
-                if (window.innerWidth >= 768) {
+        // Close sidebar when clicking any nav link on mobile
+        document.querySelectorAll('.sidebar-nav .nav-link, .sidebar-nav .sub-link, .sidebar-bottom .nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
                     closeSidebar();
                 }
             });
-        })();
-    </script>
+        });
 
+        // Auto close sidebar if window resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                closeSidebar();
+            }
+        });
+    })();
+</script>
     @stack('scripts')
 </body>
 </html>
