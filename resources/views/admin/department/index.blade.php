@@ -35,6 +35,246 @@
     .btn-page { border: 1px solid #E2E0DD; background: #fff; color: #1A1A1A; border-radius: 6px; padding: 6px 16px; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
     .btn-page:hover { background: #FF5E2B; color: #fff; border-color: #FF5E2B; }
     .btn-page:disabled { color: #C0BAB4; cursor: not-allowed; }
+
+    /* ============================================
+       RESPONSIVE STYLES
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .page-title {
+            font-size: 1.7rem;
+        }
+
+        .kpi-card {
+            padding: 16px 20px;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+        }
+
+        .insight-card {
+            padding: 16px 20px;
+        }
+
+        .insight-text {
+            font-size: 1rem;
+        }
+
+        .dept-table thead th {
+            padding: 12px 16px;
+            font-size: 0.7rem;
+        }
+
+        .dept-table td {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+        }
+
+        .dept-name {
+            font-size: 0.88rem;
+        }
+    }
+
+    /* ===== Mobile (≤767px) ===== */
+    @media (max-width: 767.98px) {
+        .page-title {
+            font-size: 1.4rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.82rem;
+        }
+
+        /* Header - stack vertically */
+        .d-flex.justify-content-between.align-items-start.mb-4 {
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch !important;
+        }
+
+        .btn-add {
+            width: 100%;
+            justify-content: center;
+            font-size: 0.85rem;
+            padding: 10px 16px;
+        }
+
+        /* KPI Cards - 2 column on mobile */
+        .row.g-3.mb-4 > .col-12.col-md-4 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        .kpi-card {
+            padding: 14px 16px;
+        }
+
+        .kpi-label {
+            font-size: 0.68rem;
+            margin-bottom: 4px;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+        }
+
+        .insight-card {
+            padding: 14px 16px;
+        }
+
+        .insight-label {
+            font-size: 0.68rem;
+            margin-bottom: 6px;
+        }
+
+        .insight-text {
+            font-size: 0.92rem;
+        }
+
+        /* Table - horizontal scroll */
+        .dept-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .dept-table {
+            min-width: 600px;
+        }
+
+        .dept-table thead th {
+            padding: 10px 12px;
+            font-size: 0.68rem;
+            white-space: nowrap;
+        }
+
+        .dept-table td {
+            padding: 12px 12px;
+            font-size: 0.82rem;
+        }
+
+        .dept-name {
+            font-size: 0.85rem;
+            gap: 8px;
+        }
+
+        .dept-accent {
+            width: 2px;
+            height: 18px;
+        }
+
+        .badge-active,
+        .badge-inactive {
+            font-size: 0.68rem;
+            padding: 2px 8px;
+        }
+
+        .btn-action {
+            font-size: 0.95rem;
+            padding: 3px 6px;
+        }
+
+        .pagination-wrap {
+            padding: 12px 16px;
+            flex-direction: column;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .pagination-info {
+            font-size: 0.72rem;
+            text-align: center;
+        }
+    }
+
+    /* ===== Small Mobile (≤575px) ===== */
+    @media (max-width: 575.98px) {
+        .page-title {
+            font-size: 1.2rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.78rem;
+        }
+
+        /* KPI Cards - single column on very small screens */
+        .row.g-3.mb-4 > .col-12.col-md-4 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .kpi-card {
+            padding: 12px 14px;
+        }
+
+        .kpi-value {
+            font-size: 1.4rem;
+        }
+
+        .insight-card {
+            padding: 12px 14px;
+        }
+
+        .insight-text {
+            font-size: 0.88rem;
+        }
+
+        .dept-table {
+            min-width: 550px;
+        }
+
+        .dept-table thead th {
+            padding: 8px 10px;
+            font-size: 0.65rem;
+        }
+
+        .dept-table td {
+            padding: 10px 10px;
+            font-size: 0.78rem;
+        }
+
+        .dept-name {
+            font-size: 0.82rem;
+        }
+
+        .btn-add {
+            font-size: 0.82rem;
+            padding: 9px 14px;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-title {
+            font-size: 1.05rem;
+        }
+
+        .kpi-value {
+            font-size: 1.25rem;
+        }
+
+        .kpi-label {
+            font-size: 0.65rem;
+        }
+
+        .insight-text {
+            font-size: 0.82rem;
+        }
+
+        .dept-table {
+            min-width: 500px;
+        }
+
+        .dept-name {
+            font-size: 0.78rem;
+            gap: 6px;
+        }
+
+        .dept-accent {
+            height: 16px;
+        }
+    }
 </style>
 @endpush
 
