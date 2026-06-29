@@ -10,6 +10,9 @@
     {{-- Main Navigation --}}
     <nav class="sidebar-nav">
         <ul class="nav flex-column">
+<button class="sidebar-close-btn" type="button" aria-label="Close Menu">
+    <i class="bi bi-x-lg"></i>
+</button>
 
             <li class="nav-item">
                 <a href="{{ route('team_lead.dashboard') }}" class="nav-link {{ request()->routeIs('team_lead.dashboard') ? 'active' : '' }}">

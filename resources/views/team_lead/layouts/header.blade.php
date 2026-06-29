@@ -142,14 +142,15 @@
 @endphp
 
 <header class="app-header py-3 px-4 d-flex align-items-center justify-content-between">
+    {{-- Mobile Hamburger Button (only visible on mobile) --}}
+<button class="mobile-sidebar-toggle" id="mobileSidebarToggle" type="button" aria-label="Toggle Menu">
+    <i class="bi bi-list"></i>
+</button>
 
  <div class="d-flex align-items-center justify-content-between w-100">
     {{-- Left: Toggle + Welcome --}}
     <div class="d-flex align-items-center">
-        <button class="btn btn-outline-secondary d-lg-none me-3" id="sidebar-toggle" aria-label="Toggle Navigation">
-            <i class="bi bi-list"></i>
-        </button>
-
+       
         <div class="topbar-welcome d-none d-sm-block">
             <div class="welcome-text">
                 Welcome back, <strong>{{ auth()->user()->name ?? 'Team Lead' }}</strong> 👋
@@ -160,10 +161,7 @@
 
     {{-- ── Left: Toggle + Search ── --}}
     <div class="d-flex align-items-center">
-        <button class="btn btn-outline-secondary d-lg-none me-3"
-                id="sidebar-toggle" aria-label="Toggle Navigation">
-            <i class="bi bi-list"></i>
-        </button>
+      
 
        
     </div>
