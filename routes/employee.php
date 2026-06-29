@@ -32,5 +32,7 @@ Route::patch('/employee/notifications/mark-all-read', [EmployeeController::class
 Route::get('/employee/notifications', [EmployeeController::class, 'notificationsIndex'])
     ->name('employee.notifications.index');
 
+    Route::get('/leave/history', [EmployeeController::class, 'leave_history'])->name('employee.leave.history');
+
 
 

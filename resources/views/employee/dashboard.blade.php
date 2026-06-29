@@ -435,7 +435,7 @@
         <div class="history-card">
             <div class="d-flex justify-content-between align-items-center">
                 <span class="history-title">Recent Leave History</span>
-                <a href="#" class="view-all-link">View All History</a>
+                <a href="{{route('employee.leave.history')}}" class="view-all-link">View All History</a>
             </div>
 
             <table class="history-table">

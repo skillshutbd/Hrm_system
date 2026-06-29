@@ -67,7 +67,17 @@ class LeaveController extends Controller
             'leave_type_id' => 'required|exists:leave_type,id',
             'from_date'     => 'required|date',
             'to_date'       => 'required|date|after_or_equal:from_date',
-            'reason'        => 'required|string|max:1000',
+           'reason' => [
+                    'required',
+                    'string',
+                    'max:1000',
+                    function ($attribute, $value, $fail) {
+                        $wordCount = count(array_filter(explode(' ', trim($value))));
+                        if ($wordCount < 3) {
+                            $fail('The reason must contain at least 3 words.');
+                        }
+                    },
+                ],
             'attachment'    => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 

@@ -113,6 +113,42 @@ public function markAllNotificationsRead()
 
     return back()->with('success', 'All notifications marked as read.');
 }
+
+
+public function leave_history()
+{
+    $employee = auth('employee')->user();
+
+    $query = Leave::where('employee_id', $employee->id)
+        ->with('leaveType')
+        ->latest();
+
+    // Filter by status
+    $filter = request('filter', 'all');
+
+    if ($filter === 'pending') {
+        $query->where('status', 'pending');
+    } elseif ($filter === 'approved') {
+        $query->where('status', 'approved');
+    } elseif ($filter === 'rejected') {
+        $query->where('status', 'rejected');
+    }
+
+    $leaves = $query->paginate(10)->withQueryString();
+
+    // KPI counts
+    $baseQuery = Leave::where('employee_id', $employee->id);
+
+    $totalCount    = (clone $baseQuery)->count();
+    $pendingCount  = (clone $baseQuery)->where('status', 'pending')->count();
+    $approvedCount = (clone $baseQuery)->where('status', 'approved')->count();
+    $rejectedCount = (clone $baseQuery)->where('status', 'rejected')->count();
+
+    return view('employee.history.index', compact(
+        'leaves', 'filter',
+        'totalCount', 'pendingCount', 'approvedCount', 'rejectedCount'
+    ));
+}
 }
 
 
