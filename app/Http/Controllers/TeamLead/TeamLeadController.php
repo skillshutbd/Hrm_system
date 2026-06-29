@@ -66,6 +66,42 @@ class TeamLeadController extends Controller
 
         return view('team_lead.members.index', compact('members', 'department'));
     }
+  public function recommend_index()
+{
+    $tl           = auth('tl')->user();
+    $departmentId = $tl->employee->department_id ?? null;
+
+    $query = Leave::with(['employee.department', 'leaveType'])
+        ->whereHas('employee', function ($q) use ($departmentId) {
+            $q->where('department_id', $departmentId);
+        });
+
+    // Filter
+    $filter = request('filter', 'pending');
+
+    if ($filter === 'pending') {
+        $query->where('tl_status', 'pending');
+    } elseif ($filter === 'recommended') {
+        $query->where('tl_status', 'recommended');
+    } elseif ($filter === 'declined') {
+        $query->where('tl_status', 'not_recommended');
+    }
+
+    $leaves = $query->latest()->paginate(10)->withQueryString();
+
+    // KPI counts
+    $baseQuery = Leave::whereHas('employee', function ($q) use ($departmentId) {
+        $q->where('department_id', $departmentId);
+    });
+
+    $pendingCount    = (clone $baseQuery)->where('tl_status', 'pending')->count();
+    $recommendedCount = (clone $baseQuery)->where('tl_status', 'recommended')->count();
+    $declinedCount   = (clone $baseQuery)->where('tl_status', 'not_recommended')->count();
+
+    return view('team_lead.recommend.index', compact(
+        'leaves', 'filter', 'pendingCount', 'recommendedCount', 'declinedCount'
+    ));
+}
 
     public function recommend(Request $request, Leave $leave)
     {

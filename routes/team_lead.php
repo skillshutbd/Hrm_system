@@ -14,7 +14,7 @@ Route::post('/teamlead/logout',[AdminAuthController::class,'logout'])->name('tea
 
 Route::get('/teamlead/profile',[ProfileController::class,'profile'])-> name('team_lead.profile');
 
-
+Route::get('/team_lead/recommend_index',[TeamLeadController::class,'recommend_index'])-> name('team_lead.index');
 
   Route::patch('/leave/{leave}/recommend',     [TeamLeadController::class, 'recommend'])    ->name('tl.leave.recommend');
 Route::patch('/leave/{leave}/not-recommend', [TeamLeadController::class, 'notRecommend']) ->name('tl.leave.not-recommend');

@@ -26,7 +26,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{ route('admin.employee_leave.index') }}" class="nav-link {{ request()->routeIs('admin.employee_leave.*') ? 'active' : '' }}">
+                <a href="{{ route('team_lead.index') }}" class="nav-link {{ request()->routeIs('team_lead.index.*') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event-fill"></i>
                     <span>Leave Recommendation</span>
                 </a>
