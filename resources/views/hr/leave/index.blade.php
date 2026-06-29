@@ -139,9 +139,9 @@
             @endif
         </div>
 
-        <button type="button" class="btn-export" onclick="window.print()">
-            <i class="bi bi-download"></i> Export
-        </button>
+      <a href="{{ route('hr_admin.leave.export-csv', request()->query()) }}" class="btn-export">
+    <i class="bi bi-download"></i> Export
+</a>
     </form>
 
     {{-- Table --}}

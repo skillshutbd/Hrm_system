@@ -94,6 +94,80 @@ class HrAdminController extends Controller
     ));
 }
 
+public function exportLeaveCsv()
+{
+    $query = Leave::with(['employee.department', 'leaveType'])->latest();
+
+    if (request('leave_type_id')) {
+        $query->where('leave_type_id', request('leave_type_id'));
+    }
+
+    if (request('status') && request('status') !== 'all') {
+        $query->where('status', request('status'));
+    }
+
+    if (request('from') && request('to')) {
+        $query->whereDate('from_date', '>=', request('from'))
+              ->whereDate('to_date', '<=', request('to'));
+    }
+
+    $leaves = $query->get();
+
+    $fileName = 'leave_requests_' . now()->format('Y-m-d_His') . '.csv';
+
+    $headers = [
+        'Content-Type'        => 'text/csv; charset=UTF-8',
+        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        'Pragma'              => 'no-cache',
+        'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+        'Expires'             => '0',
+    ];
+
+    $callback = function () use ($leaves) {
+        $file = fopen('php://output', 'w');
+        fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM, Excel friendly
+
+        fputcsv($file, [
+            'Employee Name',
+            'Designation',
+            'Department',
+            'Leave Type',
+            'From Date',
+            'To Date',
+            'Duration (Days)',
+            'Reason',
+            'TL Status',
+            'TL Note',
+            'Final Status',
+            'HR Note',
+            'Submitted At',
+        ]);
+
+        foreach ($leaves as $leave) {
+            fputcsv($file, [
+                $leave->employee->name ?? '',
+                $leave->employee->designation ?? '',
+                $leave->employee->department->name ?? '',
+                $leave->leaveType->name ?? '',
+                \Carbon\Carbon::parse($leave->from_date)->format('Y-m-d'),
+                \Carbon\Carbon::parse($leave->to_date)->format('Y-m-d'),
+                $leave->duration,
+                $leave->reason,
+                $leave->tl_status,
+                $leave->tl_note,
+                $leave->status,
+                $leave->hr_note,
+                optional($leave->created_at)->format('Y-m-d H:i:s'),
+            ]);
+        }
+
+        fclose($file);
+    };
+
+    return response()->streamDownload($callback, $fileName, $headers);
+}
+
+
 
 
     public function teamLeadAssignment()

@@ -43,7 +43,7 @@ Route::delete('/admin/employee/{employee}', [EmployeeController::class, 'destroy
 
     
 // export আগে
-    Route::get('/employee/export-csv', [EmployeeController::class, 'exportCsv'])->name('employee.export-csv');
+Route::get('/leave/export-csv', [SidebarController::class, 'exportLeaveCsv'])->name('admin.leave.export-csv');
     Route::get('/employee/{employee}', [EmployeeController::class, 'show'])->name('employee.show');
     Route::delete('/admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employee.destroy');
 
