@@ -49,6 +49,242 @@
     .activity-item strong { font-size: 0.85rem; color: #1A1A1A; }
     .activity-item p { font-size: 0.82rem; color: #4A4A4A; margin: 2px 0 0; }
     .activity-item .time { font-size: 0.75rem; color: #B2ADA7; }
+
+    /* ============================================
+       RESPONSIVE STYLES (Mobile + Tablet)
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .section-card {
+            padding: 20px;
+        }
+
+        .table th {
+            font-size: 0.7rem;
+            padding: 8px 10px;
+        }
+
+        .table td {
+            padding: 12px 10px;
+            font-size: 0.82rem;
+        }
+
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            font-size: 0.75rem;
+        }
+
+        .btn-approve,
+        .btn-reject {
+            font-size: 0.75rem;
+            padding: 5px 10px;
+        }
+
+        .badge-recommended,
+        .badge-skipped {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+        }
+    }
+
+    /* ===== Mobile (≤767px) ===== */
+    @media (max-width: 767.98px) {
+        .page-title {
+            font-size: 1.3rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.82rem;
+        }
+
+        .btn-brand {
+            font-size: 0.82rem;
+            padding: 8px 16px;
+        }
+
+        /* KPI Cards - reduced padding */
+        .kpi-card .card-body {
+            padding: 16px !important;
+        }
+
+        .kpi-label {
+            font-size: 0.7rem;
+        }
+
+        .kpi-value {
+            font-size: 1.6rem;
+        }
+
+        /* Section cards - reduced padding */
+        .section-card {
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .section-title {
+            font-size: 0.92rem;
+        }
+
+        /* Table wrapper for horizontal scroll */
+        .section-card .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Tables - compact on mobile */
+        .table {
+            min-width: 500px;
+        }
+
+        .table th {
+            font-size: 0.68rem;
+            padding: 8px 8px;
+            white-space: nowrap;
+        }
+
+        .table td {
+            padding: 10px 8px;
+            font-size: 0.78rem;
+        }
+
+        .avatar-circle {
+            width: 30px;
+            height: 30px;
+            font-size: 0.7rem;
+        }
+
+        /* Badges - smaller on mobile */
+        .badge-recommended,
+        .badge-skipped,
+        .badge-approved {
+            font-size: 0.68rem;
+            padding: 3px 7px;
+        }
+
+        .badge-by-hr,
+        .badge-by-admin {
+            font-size: 0.62rem;
+            padding: 2px 6px;
+        }
+
+        /* Action buttons - stack vertically on mobile */
+        .btn-approve,
+        .btn-reject {
+            font-size: 0.72rem;
+            padding: 5px 10px;
+        }
+
+        /* Activity items - compact */
+        .activity-item {
+            padding: 10px 0;
+        }
+
+        .activity-item strong {
+            font-size: 0.82rem;
+        }
+
+        .activity-item p {
+            font-size: 0.78rem;
+        }
+
+        .activity-item .time {
+            font-size: 0.72rem;
+        }
+
+        /* Modal fullscreen on mobile */
+        .modal-dialog {
+            margin: 0;
+            max-width: 100%;
+            height: 100vh;
+        }
+
+        .modal-content {
+            border-radius: 0 !important;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .modal-header,
+        .modal-footer {
+            padding: 14px 16px;
+        }
+
+        .btn-outline-custom {
+            font-size: 0.82rem;
+            padding: 8px 16px;
+        }
+    }
+
+    /* ===== Small Mobile (≤575px) ===== */
+    @media (max-width: 575.98px) {
+        .page-title {
+            font-size: 1.15rem;
+        }
+
+        .kpi-value {
+            font-size: 1.4rem;
+        }
+
+        .section-card {
+            padding: 14px;
+        }
+
+        .section-title {
+            font-size: 0.88rem;
+        }
+
+        .table {
+            min-width: 450px;
+        }
+
+        .avatar-circle {
+            width: 28px;
+            height: 28px;
+            font-size: 0.68rem;
+        }
+
+        .btn-approve {
+            font-size: 0.68rem;
+            padding: 4px 8px;
+        }
+
+        .btn-reject {
+            font-size: 0.68rem;
+            padding: 4px 8px;
+        }
+
+        .link-brand {
+            font-size: 0.78rem;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-title {
+            font-size: 1.05rem;
+        }
+
+        .kpi-value {
+            font-size: 1.25rem;
+        }
+
+        .kpi-label {
+            font-size: 0.65rem;
+        }
+
+        .btn-brand {
+            font-size: 0.78rem;
+            padding: 7px 12px;
+        }
+    }
 </style>
 @endpush
 
@@ -66,42 +302,42 @@
             <h1 class="page-title mb-1">Admin Dashboard</h1>
             <p class="page-subtitle text-muted mb-0">Skills Hut Ltd</p>
         </div>
-        <div class="d-flex gap-2">
-            <a href="{{ url()->current() }}" class="btn btn-brand d-flex align-items-center gap-2 text-decoration-none">
+        <div class="d-flex gap-2 w-100 w-sm-auto">
+            <a href="{{ url()->current() }}" class="btn btn-brand d-flex align-items-center gap-2 text-decoration-none flex-grow-1 flex-sm-grow-0">
                 <i class="bi bi-arrow-clockwise"></i> Refresh Data
             </a>
         </div>
     </div>
 
     {{-- KPI Cards --}}
-    <div class="row g-4 mb-4">
-        <div class="col-12 col-md-6 col-xl-3">
+    <div class="row g-3 g-md-4 mb-4">
+        <div class="col-6 col-md-6 col-xl-3">
             <div class="card kpi-card border-0 shadow-sm h-100">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div class="card-body p-3 p-md-4 d-flex flex-column justify-content-between">
                     <span class="kpi-label text-uppercase text-muted fw-semibold d-block mb-2">Total Workforce</span>
                     <h3 class="kpi-value mb-2">{{ $totalEmployees }}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3">
+        <div class="col-6 col-md-6 col-xl-3">
             <div class="card kpi-card border-0 shadow-sm h-100">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div class="card-body p-3 p-md-4 d-flex flex-column justify-content-between">
                     <span class="kpi-label text-uppercase text-muted fw-semibold d-block mb-2">Departments</span>
                     <h3 class="kpi-value mb-2">{{ $totalDepartments }}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3">
+        <div class="col-6 col-md-6 col-xl-3">
             <div class="card kpi-card border-0 shadow-sm h-100">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div class="card-body p-3 p-md-4 d-flex flex-column justify-content-between">
                     <span class="kpi-label text-uppercase text-muted fw-semibold d-block mb-2">Team Leads</span>
                     <h3 class="kpi-value mb-2">{{ $totalTeamLeads }}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3">
+        <div class="col-6 col-md-6 col-xl-3">
             <div class="card kpi-card border-0 shadow-sm h-100">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div class="card-body p-3 p-md-4 d-flex flex-column justify-content-between">
                     <span class="kpi-label text-uppercase text-muted fw-semibold d-block mb-2">Pending Approvals</span>
                     <h3 class="kpi-value mb-2" style="color:#D97706;">{{ $pendingLeaves->count() }}</h3>
                 </div>
@@ -110,12 +346,12 @@
     </div>
 
     {{-- Approval Queue + Activity Log --}}
-    <div class="row g-4 mb-4">
+    <div class="row g-3 g-md-4 mb-4">
 
         {{-- Final Approval Queue --}}
         <div class="col-12 col-lg-7">
             <div class="section-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
                     <div class="section-title">Final Approval Queue</div>
                     <a href="{{ route('admin.employee_leave.index') }}" class="link-brand">View All Requests</a>
                 </div>
@@ -126,6 +362,7 @@
                         <p style="font-size:0.88rem;">No pending approvals. HR is on top of things.</p>
                     </div>
                 @else
+                <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>
                         <tr>
@@ -141,9 +378,9 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="avatar-circle">{{ strtoupper(substr($leave->employee->name ?? '?', 0, 2)) }}</div>
-                                    <div>
-                                        <div style="font-weight:600;">{{ $leave->employee->name ?? 'Unknown' }}</div>
-                                        <div style="font-size:0.75rem; color:#7F7F7F;">
+                                    <div style="min-width:0;">
+                                        <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px;">{{ $leave->employee->name ?? 'Unknown' }}</div>
+                                        <div style="font-size:0.75rem; color:#7F7F7F; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px;">
                                             {{ $leave->employee->designation ?? '' }}
                                             @if($leave->employee?->department) • {{ $leave->employee->department->name }} @endif
                                         </div>
@@ -152,19 +389,19 @@
                             </td>
                             <td>
                                 @if($leave->tl_status === 'recommended')
-                                    <span class="badge-recommended"><i class="bi bi-check-circle me-1"></i>Recommended by TL</span>
+                                    <span class="badge-recommended"><i class="bi bi-check-circle me-1"></i>Recommended</span>
                                 @elseif($leave->tl_status === 'skipped')
-                                    <span class="badge-skipped"><i class="bi bi-skip-forward me-1"></i>TL Skipped (on leave)</span>
+                                    <span class="badge-skipped"><i class="bi bi-skip-forward me-1"></i>TL Skipped</span>
                                 @else
                                     <span class="badge-recommended">{{ ucfirst($leave->tl_status) }}</span>
                                 @endif
                             </td>
-                            <td style="font-size:0.82rem;">
+                            <td style="font-size:0.82rem; white-space:nowrap;">
                                 {{ \Carbon\Carbon::parse($leave->from_date)->format('M d') }} -
                                 {{ \Carbon\Carbon::parse($leave->to_date)->format('M d') }}
                             </td>
                             <td>
-                                <div class="d-flex gap-1">
+                                <div class="d-flex gap-1 flex-wrap">
                                     <form method="POST" action="{{ route('admin.leave.approve', $leave->id) }}">
                                         @csrf @method('PATCH')
                                         <button type="submit" class="btn-approve">APPROVE</button>
@@ -178,6 +415,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
                 @endif
             </div>
         </div>
@@ -214,11 +452,11 @@
             </div>
         </div>
 
-    </div> {{-- ✅ FIXED: removed extra </div> that was here --}}
+    </div>
 
     {{-- Recently Approved by HR --}}
     <div class="section-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
             <div class="section-title">Recently Approved Leaves</div>
             <span style="font-size:0.78rem; color:#7F7F7F;">Visibility into both HR and Admin approvals</span>
         </div>
@@ -228,13 +466,13 @@
                 No leaves approved yet.
             </div>
         @else
+        <div class="table-responsive">
         <table class="table mb-0">
             <thead>
                 <tr>
                     <th>Employee</th>
                     <th>Leave Type</th>
                     <th>Period</th>
-                    {{-- ✅ FIXED: removed empty <th> that was here --}}
                 </tr>
             </thead>
             <tbody>
@@ -243,11 +481,11 @@
                     <td>
                         <div class="d-flex align-items-center gap-2">
                             <div class="avatar-circle">{{ strtoupper(substr($leave->employee->name ?? '?', 0, 2)) }}</div>
-                            <div style="font-weight:600;">{{ $leave->employee->name ?? 'Unknown' }}</div>
+                            <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:140px;">{{ $leave->employee->name ?? 'Unknown' }}</div>
                         </div>
                     </td>
                     <td>{{ $leave->leaveType->name ?? '—' }}</td>
-                    <td style="font-size:0.82rem;">
+                    <td style="font-size:0.82rem; white-space:nowrap;">
                         {{ \Carbon\Carbon::parse($leave->from_date)->format('M d') }} -
                         {{ \Carbon\Carbon::parse($leave->to_date)->format('M d') }}
                     </td>
@@ -255,12 +493,13 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
         @endif
     </div>
 
     {{-- Admin Reject Modal --}}
     <div class="modal fade" id="adminRejectModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content" style="border-radius:14px;border:1px solid #E2E0DD;">
                 <div class="modal-header" style="border-bottom:1px solid #F4F4F0;">
                     <h6 class="modal-title" style="font-family:'Outfit',sans-serif;font-weight:700;">Reject Leave Request</h6>

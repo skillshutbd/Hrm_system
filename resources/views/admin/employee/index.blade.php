@@ -162,7 +162,7 @@
         <p class="page-subtitle mb-0">Manage and view all team members across the organization.</p>
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ route('employee.export-csv') }}" class="btn-export d-flex align-items-center gap-2">
+        <a href="{{ route('admin.leave.export-csv') }}" class="btn-export d-flex align-items-center gap-2">
             <i class="bi bi-download"></i> Export
         </a>
         <a href="{{ route('admin.employee.create') }}" class="btn-add-emp d-flex align-items-center gap-2">

@@ -117,11 +117,12 @@
 
 <header class="app-header py-3 px-4 d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center justify-content-between w-100">
+         <button class="mobile-sidebar-toggle" type="button" aria-label="Toggle Menu">
+           <i class="bi bi-list"></i>
+        </button>
     {{-- Left: Toggle + Welcome --}}
     <div class="d-flex align-items-center">
-        <button class="btn btn-outline-secondary d-lg-none me-3" id="sidebar-toggle" aria-label="Toggle Navigation">
-            <i class="bi bi-list"></i>
-        </button>
+       
 
          <div class="welcome-text">
                 @php
