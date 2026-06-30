@@ -402,4 +402,14 @@ public function exportLeaveCsv()
 
     return response()->streamDownload($callback, $fileName, $headers);
 }
+
+public function show_leave(Leave $leave)
+{
+    $leave->load([
+        'employee.department',
+        'leaveType',
+    ]);
+
+    return view('admin.leave.show', compact('leave'));
+}
 }

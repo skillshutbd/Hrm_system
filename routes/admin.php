@@ -47,6 +47,10 @@ Route::get('/leave/export-csv', [SidebarController::class, 'exportLeaveCsv'])->n
     Route::get('/employee/{employee}', [EmployeeController::class, 'show'])->name('employee.show');
     Route::delete('/admin/employee/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employee.destroy');
 
+    Route::get('/leave/{leave}', [SidebarController::class, 'show_leave'])
+    ->name('admin.leave.show');
+
+
 // Team Lead Assignment Routes    
 
     Route::post('/tl-assignment/{employee}/toggle', [EmployeeController::class, 'toggleTeamLead'])

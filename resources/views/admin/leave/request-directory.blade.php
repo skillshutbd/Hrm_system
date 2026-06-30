@@ -414,6 +414,108 @@
             padding: 4px 7px;
         }
     }
+
+    /* ── Action Dropdown ─────────────────────────── */
+.action-dropdown-btn {
+    background: #fff;
+    border: 1px solid #E2E0DD;
+    color: #7F7F7F;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 1rem;
+    transition: all 0.15s;
+    box-shadow: none;
+}
+
+.action-dropdown-btn:hover,
+.action-dropdown-btn:focus,
+.action-dropdown-btn.show {
+    background: #FAF9F6;
+    border-color: #FF5E2B;
+    color: #FF5E2B;
+    box-shadow: none;
+}
+
+.action-dropdown-btn::after {
+    display: none;
+}
+
+.action-dropdown-menu {
+    border: 1px solid #E2E0DD;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 4px;
+    min-width: 180px;
+}
+
+.action-dropdown-menu .dropdown-item {
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-dropdown-menu .dropdown-item i {
+    font-size: 0.9rem;
+}
+
+/* View button - Blue */
+.action-dropdown-menu .dropdown-item.view {
+    color: #2563EB;
+}
+
+.action-dropdown-menu .dropdown-item.view:hover {
+    background: #EFF6FF;
+    color: #2563EB;
+}
+
+/* Approve button - Green */
+.action-dropdown-menu .dropdown-item.approve {
+    color: #059669;
+}
+
+.action-dropdown-menu .dropdown-item.approve:hover {
+    background: #ECFDF5;
+    color: #059669;
+}
+
+/* Reject button - Red */
+.action-dropdown-menu .dropdown-item.reject {
+    color: #DC2626;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.action-dropdown-menu .dropdown-item.reject:hover {
+    background: #FEF2F2;
+    color: #DC2626;
+}
+
+/* Divider */
+.action-divider {
+    margin: 4px 0;
+    border-color: #F4F4F0;
+}
+
+/* Remove default button styles from form submit */
+.action-dropdown-menu form {
+    margin: 0;
+    padding: 0;
+}
+
+.action-dropdown-menu button[type="submit"] {
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
 </style>
 @endpush
 
@@ -552,19 +654,52 @@
                             <span class="badge-rejected">REJECTED</span>
                         @endif
                     </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            @if($leave->status === 'pending')
-                                <form method="POST" action="{{ route('admin.leave.approve', $leave->id) }}">
-                                    @csrf @method('PATCH')
-                                    <button type="submit" class="btn-approve"><i class="bi bi-check"></i> Approve</button>
-                                </form>
-                                <button class="btn-reject" onclick="openAdminLeaveRejectModal({{ $leave->id }})">
-                                    <i class="bi bi-x"></i> Reject
-                                </button>
-                            @endif
-                        </div>
-                    </td>
+                   <td>
+    <div class="dropdown">
+        <button class="btn btn-sm dropdown-toggle action-dropdown-btn" 
+                type="button" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false">
+            <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end action-dropdown-menu">
+            
+            {{-- View Details - Always visible --}}
+            <li>
+                <a href="{{ route('hr.leave.show', $leave->id) }}" class="dropdown-item action-item view">
+                    <i class="bi bi-eye"></i> View Details
+                </a>
+            </li>
+            
+            {{-- Pending actions --}}
+            @if($leave->status === 'pending')
+                <li><hr class="dropdown-divider action-divider"></li>
+                <li>
+                    <form method="POST" action="{{ route('admin.leave.approve', $leave->id) }}">
+                        @csrf @method('PATCH')
+                        <button type="submit" class="dropdown-item action-item approve">
+                            <i class="bi bi-check-circle"></i> Approve
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <button class="dropdown-item action-item reject" 
+                            onclick="openAdminLeaveRejectModal({{ $leave->id }})">
+                        <i class="bi bi-x-circle"></i> Reject
+                    </button>
+                </li>
+            @else
+                <li><hr class="dropdown-divider action-divider"></li>
+                <li>
+                    <span class="dropdown-item text-muted" style="cursor:default;">
+                        <i class="bi bi-check2-all"></i> Status: {{ ucfirst($leave->status) }}
+                    </span>
+                </li>
+            @endif
+            
+        </ul>
+    </div>
+</td>
                 </tr>
                 @empty
                 <tr>
