@@ -64,9 +64,255 @@
     .pending-message { font-size: 0.82rem; color: #4A4A4A; }
     .pending-status { font-size: 0.72rem; font-weight: 800; white-space: nowrap; }
 
+    /* ============================================
+       PAGE-SPECIFIC RESPONSIVE (Using Unique Class)
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .emp-card {
+            padding: 16px;
+        }
+
+        .emp-photo {
+            width: 64px;
+            height: 64px;
+        }
+
+        .emp-name {
+            font-size: 0.95rem;
+        }
+
+        .pending-item {
+            grid-template-columns: 40px 1fr;
+            gap: 10px;
+            padding: 12px 14px;
+        }
+
+        .pending-message, .pending-status {
+            grid-column: 2;
+        }
+    }
+
+    /* ===== Mobile (≤768px) ===== */
     @media (max-width: 768px) {
-        .pending-item { grid-template-columns: 40px 1fr; }
-        .pending-message, .pending-status { grid-column: 2; }
+        .page-title {
+            font-size: 1.3rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.8rem;
+        }
+
+        /* Page header section - stack vertically (using unique class) */
+        .page-header-section {
+            flex-direction: column !important;
+            gap: 12px !important;
+            align-items: stretch !important;
+        }
+
+        .page-header-section > div:last-child {
+            width: 100%;
+        }
+
+        .page-header-section .btn-export,
+        .page-header-section .btn-add-emp {
+            flex: 1;
+            justify-content: center;
+            font-size: 0.82rem;
+            padding: 9px 16px;
+        }
+
+        /* Filter bar - stack elements */
+        .filter-bar {
+            padding: 12px 14px;
+        }
+
+        .filter-bar > div:first-child {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 10px;
+        }
+
+        .filter-bar > div:first-child > div {
+            width: 100%;
+        }
+
+        .filter-select {
+            width: 100%;
+            font-size: 0.82rem;
+            padding: 9px 32px 9px 12px;
+        }
+
+        .view-toggle {
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .view-btn {
+            flex: 1;
+            padding: 9px 12px;
+        }
+
+        /* Employee cards - single column */
+        .col-12.col-sm-6.col-xl-3 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .emp-card {
+            padding: 16px;
+        }
+
+        .emp-photo {
+            width: 60px;
+            height: 60px;
+        }
+
+        .emp-name {
+            font-size: 0.95rem;
+        }
+
+        .emp-role {
+            font-size: 0.75rem;
+        }
+
+        .emp-dept {
+            font-size: 0.75rem;
+        }
+
+        .emp-card-add {
+            min-height: 160px;
+            padding: 16px;
+        }
+
+        .add-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+
+        .add-label {
+            font-size: 0.82rem;
+        }
+
+        /* Pending panel - mobile layout */
+        .pending-panel-header {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 12px 14px;
+        }
+
+        .pending-panel-title {
+            font-size: 0.88rem;
+        }
+
+        .pending-item {
+            grid-template-columns: 36px 1fr;
+            gap: 10px;
+            padding: 12px 14px;
+        }
+
+        .pending-avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 0.72rem;
+        }
+
+        .pending-name {
+            font-size: 0.85rem;
+        }
+
+        .pending-meta {
+            font-size: 0.72rem;
+        }
+
+        .pending-message {
+            font-size: 0.78rem;
+            margin-top: 4px;
+        }
+
+        .pending-status {
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+
+        /* Pagination - stack */
+        .page-pagination-section {
+            flex-direction: column !important;
+            gap: 12px !important;
+            align-items: stretch !important;
+        }
+
+        .page-pagination-section .pagination-info {
+            font-size: 0.78rem;
+            text-align: center;
+        }
+
+        .page-pagination-section .pagination {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .page-pagination-section .page-link {
+            padding: 6px 10px;
+            font-size: 0.82rem;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 1.2rem;
+        }
+
+        .emp-card {
+            padding: 14px;
+        }
+
+        .emp-photo {
+            width: 56px;
+            height: 56px;
+        }
+
+        .status-badge {
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            top: -6px;
+            right: -6px;
+        }
+
+        .emp-name {
+            font-size: 0.9rem;
+        }
+
+        .link-view {
+            font-size: 0.78rem;
+        }
+
+        .page-header-section .btn-export,
+        .page-header-section .btn-add-emp {
+            font-size: 0.78rem;
+            padding: 8px 14px;
+        }
+
+        .filter-select {
+            font-size: 0.78rem;
+        }
+
+        .pending-panel-title {
+            font-size: 0.82rem;
+            flex-wrap: wrap;
+        }
+
+        .pending-count-badge {
+            font-size: 0.68rem;
+        }
     }
 </style>
 @endpush
@@ -97,7 +343,8 @@
         ->get();
 @endphp
 
-<div class="d-flex justify-content-between align-items-start mb-4">
+{{-- Page Header with unique class --}}
+<div class="page-header-section d-flex justify-content-between align-items-start mb-4">
     <div>
         <h1 class="page-title mb-1">Employee Directory</h1>
         <p class="page-subtitle mb-0">Manage and view all team members across the organization.</p>
@@ -219,7 +466,7 @@
 
 <div class="row g-3 mb-4">
     @forelse($employees as $employee)
-    @if($employee->status === 'active')  {{-- শুধু active দেখাবে --}}
+    @if($employee->status === 'active')
     
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="emp-card">
@@ -231,7 +478,6 @@
                     @endif
 
                     <span class="status-badge status-active">ACTIVE</span>
-                    {{-- উপরে duplicate badge মুছে দিন --}}
                 </div>
 
                 <div class="emp-name">{{ $employee->name }}</div>
@@ -273,7 +519,8 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-between align-items-center">
+{{-- Pagination with unique class --}}
+<div class="page-pagination-section d-flex justify-content-between align-items-center">
     <span class="pagination-info">
         Showing {{ $employees->firstItem() ?? 0 }} to {{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} employees
     </span>

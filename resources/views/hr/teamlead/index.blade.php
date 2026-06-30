@@ -52,6 +52,275 @@
     .pagination { margin-bottom: 0; }
     .page-link { color: #FF5E2B; border-color: #E2E0DD; }
     .page-item.active .page-link { background-color: #FF5E2B; border-color: #FF5E2B; }
+
+    /* ============================================
+       PAGE-SPECIFIC RESPONSIVE (Unique Classes)
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .kpi-card {
+            padding: 16px 20px;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+        }
+
+        .kpi-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
+
+        .tl-table thead th {
+            padding: 12px 16px;
+            font-size: 0.75rem;
+        }
+
+        .tl-table td {
+            padding: 14px 16px;
+        }
+
+        .emp-avatar {
+            width: 34px;
+            height: 34px;
+            font-size: 0.75rem;
+        }
+
+        .emp-name {
+            font-size: 0.85rem;
+        }
+
+        .emp-designation {
+            font-size: 0.8rem;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-cancel {
+            font-size: 0.72rem;
+            padding: 6px 14px;
+        }
+    }
+
+    /* ===== Mobile (≤768px) ===== */
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 1.1rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.78rem;
+        }
+
+        /* Page header - stack vertically (unique class) */
+        .tl-assignment-header {
+            flex-direction: column !important;
+            gap: 16px !important;
+            align-items: stretch !important;
+        }
+
+        .tl-assignment-header form {
+            width: 100%;
+        }
+
+        .tl-assignment-header .filter-select {
+            width: 100%;
+            min-width: auto;
+        }
+
+        /* KPI Cards - single column */
+        .row.g-3.mb-4 .col-12.col-md-4 {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+
+        .kpi-card {
+            padding: 14px 16px;
+        }
+
+        .kpi-label {
+            font-size: 0.68rem;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+        }
+
+        .kpi-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 0.95rem;
+        }
+
+        /* Table - horizontal scroll */
+        .tl-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tl-table {
+            min-width: 700px;
+        }
+
+        .tl-table thead th {
+            padding: 10px 12px;
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+
+        .tl-table td {
+            padding: 12px 12px;
+        }
+
+        .emp-avatar {
+            width: 32px;
+            height: 32px;
+            font-size: 0.72rem;
+        }
+
+        .emp-name {
+            font-size: 0.82rem;
+        }
+
+        .emp-id {
+            font-size: 0.7rem;
+        }
+
+        .emp-designation {
+            font-size: 0.78rem;
+        }
+
+        .badge-member,
+        .badge-tl,
+        .badge-pending {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-cancel {
+            font-size: 0.7rem;
+            padding: 6px 12px;
+            white-space: nowrap;
+        }
+
+        /* Pagination - stack (unique class) */
+        .tl-pagination-wrap {
+            padding: 12px 16px !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            align-items: stretch !important;
+        }
+
+        .tl-pagination-wrap .pagination-info {
+            font-size: 0.72rem;
+            text-align: center;
+        }
+
+        .tl-pagination-wrap .pagination {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.75rem;
+        }
+
+        .kpi-card {
+            padding: 12px 14px;
+        }
+
+        .kpi-value {
+            font-size: 1.35rem;
+        }
+
+        .kpi-label {
+            font-size: 0.65rem;
+        }
+
+        .tl-table {
+            min-width: 650px;
+        }
+
+        .tl-table thead th {
+            padding: 8px 10px;
+            font-size: 0.7rem;
+        }
+
+        .tl-table td {
+            padding: 10px 10px;
+        }
+
+        .emp-avatar {
+            width: 30px;
+            height: 30px;
+            font-size: 0.7rem;
+        }
+
+        .emp-name {
+            font-size: 0.78rem;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-cancel {
+            font-size: 0.68rem;
+            padding: 5px 10px;
+        }
+
+        .filter-select {
+            font-size: 0.8rem;
+            padding: 8px 32px 8px 12px;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-title {
+            font-size: 0.95rem;
+        }
+
+        .kpi-value {
+            font-size: 1.2rem;
+        }
+
+        .kpi-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.85rem;
+        }
+
+        .tl-table {
+            min-width: 600px;
+        }
+
+        .emp-avatar {
+            width: 28px;
+            height: 28px;
+            font-size: 0.68rem;
+        }
+
+        .emp-name {
+            font-size: 0.75rem;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-cancel {
+            font-size: 0.65rem;
+            padding: 5px 8px;
+        }
+    }
 </style>
 @endpush
 
@@ -97,7 +366,8 @@
         </div>
     @endif
 
-    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+    {{-- Page Header with unique class --}}
+    <div class="tl-assignment-header d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
         <div>
             <h1 class="page-title mb-1">Team Lead Assignment</h1>
             <p class="page-subtitle mb-0">Delegate leadership responsibilities to senior staff members.</p>
@@ -219,7 +489,8 @@
             </tbody>
         </table>
 
-        <div class="pagination-wrap">
+        {{-- Pagination with unique class --}}
+        <div class="tl-pagination-wrap pagination-wrap">
             <span class="pagination-info">
                 Showing {{ $employees->firstItem() ?? 0 }}-{{ $employees->lastItem() ?? 0 }} of {{ $employees->total() }} employees
             </span>

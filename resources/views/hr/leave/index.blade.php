@@ -46,8 +46,8 @@
     .btn-approve:hover { background: #E04B1A; color: #fff; }
     .btn-reject { background: #fff; color: #DC2626; border: 1px solid #DC2626; border-radius: 6px; font-size: 0.78rem; font-weight: 600; padding: 6px 14px; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
     .btn-reject:hover { background: #FEF2F2; }
-    .btn-view { background: #fff; border: 1px solid #E2E0DD; color: #4A4A4A; border-radius: 6px; font-size: 0.78rem; font-weight: 600; padding: 6px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; }
-    .btn-view:hover { border-color: #FF5E2B; color: #FF5E2B; }
+    .btn-view { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; border-radius: 6px; font-size: 0.78rem; font-weight: 600; padding: 5px 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all .15s; white-space: nowrap; }
+    .btn-view:hover { background: #2563EB; color: #fff; border-color: #2563EB; }
 
     .trends-card { background: #fff; border: 1px solid #E2E0DD; border-radius: 12px; padding: 24px; }
     .trends-title { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: #1A1A1A; margin-bottom: 4px; }
@@ -62,22 +62,351 @@
     .staff-status { font-size: 0.72rem; color: rgba(255,255,255,0.65); }
     .staff-icon { color: rgba(255,255,255,0.7); font-size: 1rem; }
 
-    .btn-view {
-    background: #EFF6FF;
-    color: #2563EB;
-    border: 1px solid #BFDBFE;
-    border-radius: 6px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 5px 12px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: all .15s;
-    white-space: nowrap;
-}
-.btn-view:hover { background: #2563EB; color: #fff; border-color: #2563EB; }
+    /* ============================================
+       PAGE-SPECIFIC RESPONSIVE (Unique Classes)
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .page-title {
+            font-size: 1.6rem;
+        }
+
+        .kpi-stat {
+            padding: 12px 16px;
+            min-width: 110px;
+        }
+
+        .kpi-stat-value {
+            font-size: 1.5rem;
+        }
+
+        .filter-bar {
+            padding: 12px 16px;
+        }
+
+        .leave-table thead th {
+            padding: 12px 16px;
+            font-size: 0.7rem;
+        }
+
+        .leave-table td {
+            padding: 14px 16px;
+            font-size: 0.82rem;
+        }
+
+        .emp-avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 0.8rem;
+        }
+
+        .emp-name {
+            font-size: 0.82rem;
+        }
+
+        .btn-approve,
+        .btn-reject,
+        .btn-view {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+        }
+
+        .trends-card,
+        .staff-card {
+            padding: 20px;
+        }
+    }
+
+    /* ===== Mobile (≤768px) ===== */
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 1.3rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.78rem;
+        }
+
+        /* Page header - stack vertically (unique class) */
+        .leave-management-header {
+            flex-direction: column !important;
+            gap: 16px !important;
+            align-items: stretch !important;
+        }
+
+        .leave-management-header .d-flex.gap-2.flex-wrap {
+            width: 100%;
+            justify-content: stretch;
+        }
+
+        .leave-management-header .kpi-stat {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 14px;
+        }
+
+        .kpi-stat-label {
+            font-size: 0.65rem;
+        }
+
+        .kpi-stat-value {
+            font-size: 1.3rem;
+        }
+
+        /* Filter bar - stack elements */
+        .leave-management-filter-bar {
+            padding: 12px 14px !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+        }
+
+        .leave-management-filter-bar > div:first-child {
+            width: 100%;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+
+        .leave-management-filter-bar > div:first-child > div {
+            width: 100%;
+        }
+
+        .leave-management-filter-bar .filter-select,
+        .leave-management-filter-bar .filter-date-input {
+            width: 100%;
+            font-size: 0.8rem;
+        }
+
+        .leave-management-filter-bar .btn-export {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Table - horizontal scroll */
+        .leave-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .leave-table {
+            min-width: 750px;
+        }
+
+        .leave-table thead th {
+            padding: 10px 12px;
+            font-size: 0.68rem;
+            white-space: nowrap;
+        }
+
+        .leave-table td {
+            padding: 12px 12px;
+            font-size: 0.78rem;
+        }
+
+        .emp-avatar {
+            width: 32px;
+            height: 32px;
+            font-size: 0.75rem;
+        }
+
+        .emp-name {
+            font-size: 0.78rem;
+        }
+
+        .emp-role {
+            font-size: 0.7rem;
+        }
+
+        .leave-type,
+        .duration-date,
+        .days-count {
+            font-size: 0.78rem;
+        }
+
+        .duration-year {
+            font-size: 0.7rem;
+        }
+
+        .badge-pending,
+        .badge-approved,
+        .badge-rejected {
+            font-size: 0.68rem;
+            padding: 3px 8px;
+        }
+
+        .tl-status-tag {
+            font-size: 0.65rem;
+        }
+
+        .btn-approve,
+        .btn-reject,
+        .btn-view {
+            font-size: 0.72rem;
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+
+        /* Pagination - stack (unique class) */
+        .leave-management-pagination {
+            flex-direction: column !important;
+            gap: 12px !important;
+            align-items: stretch !important;
+        }
+
+        .leave-management-pagination > span {
+            text-align: center;
+            font-size: 0.78rem;
+        }
+
+        .leave-management-pagination > div {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Trends card - stack */
+        .trends-card {
+            padding: 18px;
+        }
+
+        .trends-card .d-flex.flex-wrap.gap-4 {
+            gap: 16px !important;
+        }
+
+        .trends-card .d-flex.flex-wrap.gap-4 > div > div:last-child {
+            font-size: 1.3rem !important;
+        }
+
+        /* Staff card */
+        .staff-card {
+            padding: 18px;
+        }
+
+        .staff-item {
+            padding: 10px 12px;
+        }
+
+        .staff-avatar {
+            width: 32px;
+            height: 32px;
+            font-size: 0.72rem;
+        }
+
+        .staff-name {
+            font-size: 0.8rem;
+        }
+
+        .staff-status {
+            font-size: 0.68rem;
+        }
+
+        /* Modal fullscreen on mobile */
+        .modal-dialog {
+            margin: 0;
+            max-width: 100%;
+            height: 100vh;
+        }
+
+        .modal-content {
+            border-radius: 0 !important;
+            height: 100vh;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 1.15rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.75rem;
+        }
+
+        /* KPI stats - single column on very small */
+        .leave-management-header .d-flex.gap-2.flex-wrap {
+            flex-direction: column !important;
+        }
+
+        .leave-management-header .kpi-stat {
+            width: 100%;
+        }
+
+        .kpi-stat-value {
+            font-size: 1.2rem;
+        }
+
+        .leave-table {
+            min-width: 700px;
+        }
+
+        .leave-table thead th {
+            padding: 8px 10px;
+            font-size: 0.65rem;
+        }
+
+        .leave-table td {
+            padding: 10px 10px;
+            font-size: 0.75rem;
+        }
+
+        .emp-avatar {
+            width: 30px;
+            height: 30px;
+            font-size: 0.7rem;
+        }
+
+        .emp-name {
+            font-size: 0.75rem;
+        }
+
+        .btn-approve,
+        .btn-reject,
+        .btn-view {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+        }
+
+        .trends-card,
+        .staff-card {
+            padding: 16px;
+        }
+
+        .trends-card .d-flex.flex-wrap.gap-4 > div > div:last-child {
+            font-size: 1.15rem !important;
+        }
+
+        .filter-label {
+            font-size: 0.68rem;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-title {
+            font-size: 1.05rem;
+        }
+
+        .leave-table {
+            min-width: 650px;
+        }
+
+        .kpi-stat-value {
+            font-size: 1.1rem;
+        }
+
+        .kpi-stat-label {
+            font-size: 0.62rem;
+        }
+
+        .btn-approve,
+        .btn-reject,
+        .btn-view {
+            font-size: 0.68rem;
+            padding: 4px 7px;
+        }
+    }
 </style>
 @endpush
 
@@ -90,8 +419,8 @@
         </div>
     @endif
 
-    {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+    {{-- Header with unique class --}}
+    <div class="leave-management-header d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
         <div>
             <h1 class="page-title mb-1">Leave Management</h1>
             <p class="page-subtitle mb-0">Review and manage employee time-off requests.</p>
@@ -112,9 +441,9 @@
         </div>
     </div>
 
-    {{-- Filter Bar --}}
+    {{-- Filter Bar with unique class --}}
     <form method="GET" action="{{ route('admin.employee_leave.index') }}"
-          class="filter-bar d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
+          class="leave-management-filter-bar filter-bar d-flex align-items-end justify-content-between flex-wrap gap-3 mb-4">
 
         <div class="d-flex align-items-end gap-3 flex-wrap">
             <div>
@@ -156,9 +485,9 @@
             @endif
         </div>
 
-      <a href="{{ route('hr_admin.leave.export-csv', request()->query()) }}" class="btn-export">
-    <i class="bi bi-download"></i> Export
-</a>
+        <a href="{{ route('hr_admin.leave.export-csv', request()->query()) }}" class="btn-export">
+            <i class="bi bi-download"></i> Export
+        </a>
     </form>
 
     {{-- Table --}}
@@ -228,14 +557,10 @@
                                 </button>
                             @endif
 
-                             {{-- View Button --}}
-        <a href="{{ route('hr.leave.show', $leave->id) }}"
-           class="btn-view">
-            <i class="bi bi-eye"></i> View
-        </a>
-
+                            <a href="{{ route('hr.leave.show', $leave->id) }}" class="btn-view">
+                                <i class="bi bi-eye"></i> View
+                            </a>
                         </div>
-                          
                     </td>
                 </tr>
                 @empty
@@ -250,12 +575,12 @@
         </table>
     </div>
 
-    {{-- Pagination --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    {{-- Pagination with unique class --}}
+    <div class="leave-management-pagination d-flex justify-content-between align-items-center mb-4">
         <span style="font-size:0.82rem; color:#7F7F7F;">
             Showing {{ $leaves->firstItem() ?? 0 }}–{{ $leaves->lastItem() ?? 0 }} of {{ $leaves->total() }} requests
         </span>
-        {{ $leaves->links() }}
+        <div>{{ $leaves->links() }}</div>
     </div>
 
     {{-- Bottom --}}
@@ -311,7 +636,7 @@
 
     {{-- Reject Modal --}}
     <div class="modal fade" id="adminLeaveRejectModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
             <div class="modal-content" style="border-radius:14px;border:1px solid #E2E0DD;">
                 <div class="modal-header" style="border-bottom:1px solid #F4F4F0;">
                     <h6 class="modal-title" style="font-family:'Outfit',sans-serif;font-weight:700;">Reject Leave Request</h6>
