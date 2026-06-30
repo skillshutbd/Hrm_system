@@ -33,7 +33,7 @@
 .filter-select:focus { outline:none; border-color:#FF5E2B; box-shadow:0 0 0 3px rgba(255,94,43,.1); }
 
 .view-toggle { border:1px solid #E2E0DD; border-radius:8px; overflow:hidden; display:flex; }
-.view-btn    { background:none; border:none; padding:7px 10px; color:#7F7F7F; transition:all .2s; }
+.view-btn    { background:none; border:none; padding:7px 10px; color:#7F7F7F; transition:all .2s; cursor:pointer; }
 .view-btn.active          { background:#FF5E2B; color:#fff; }
 .view-btn:hover:not(.active) { background:#FAF9F6; }
 
@@ -86,7 +86,7 @@
 }
 .btn-reject:hover { background:#DC2626; color:#fff; border-color:#DC2626; }
 
-/* ── Employee Cards ──────────────────────────── */
+/* ── Employee Cards (Grid View) ──────────────── */
 .emp-card {
     background:#fff; border:1px solid #E2E0DD; border-radius:14px;
     padding:20px; transition:all .2s; height:100%;
@@ -125,11 +125,118 @@
 .emp-card-add:hover .add-icon { background:#FF5E2B; color:#fff; }
 .add-label                    { font-size:0.85rem; color:#7F7F7F; font-weight:500; }
 
+/* ── LIST VIEW TABLE ─────────────────────────── */
+.list-view-table-wrap {
+    background:#fff; border:1px solid #E2E0DD; border-radius:12px;
+    overflow:hidden; margin-bottom:16px;
+}
+
+.list-view-table {
+    width:100%; border-collapse:collapse; margin:0;
+}
+
+.list-view-table thead th {
+    font-size:0.72rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.8px; color:#7F7F7F; padding:14px 20px;
+    border-bottom:1px solid #E2E0DD; background:#FAFAFA; text-align:left;
+}
+
+.list-view-table tbody tr {
+    border-bottom:1px solid #F4F4F0; transition:background .15s;
+}
+
+.list-view-table tbody tr:last-child { border-bottom:none; }
+.list-view-table tbody tr:hover { background:#FAF9F6; }
+
+.list-view-table tbody td {
+    padding:16px 20px; font-size:0.88rem; color:#1A1A1A; vertical-align:middle;
+}
+
+.list-emp-info {
+    display:flex; align-items:center; gap:12px;
+}
+
+.list-emp-avatar {
+    width:40px; height:40px; border-radius:10px; object-fit:cover;
+    border:1px solid #E2E0DD; flex-shrink:0;
+}
+
+.list-emp-avatar-placeholder {
+    width:40px; height:40px; border-radius:10px; background:#FFF0EB;
+    color:#FF5E2B; font-family:'Outfit',sans-serif; font-weight:700;
+    font-size:0.82rem; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+}
+
+.list-emp-name {
+    font-weight:700; font-size:0.9rem; color:#1A1A1A;
+}
+
+.list-emp-id {
+    font-size:0.72rem; color:#B2ADA7; font-family:monospace; margin-top:2px;
+}
+
+.list-emp-designation {
+    color:#4A4A4A; font-size:0.85rem;
+}
+
+.list-emp-dept {
+    color:#7F7F7F; font-size:0.85rem;
+}
+
+.list-status-badge {
+    font-size:0.72rem; font-weight:700; padding:4px 10px;
+    border-radius:20px; display:inline-block;
+}
+
+.list-status-active {
+    background:#ECFDF5; color:#059669;
+}
+
+.list-status-inactive {
+    background:#F4F4F0; color:#7F7F7F;
+}
+
+.list-status-pending {
+    background:#FFFBEB; color:#D97706;
+}
+
+.btn-view-profile {
+    background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE;
+    border-radius:6px; font-size:0.78rem; font-weight:600;
+    padding:6px 14px; text-decoration:none; display:inline-flex;
+    align-items:center; gap:4px; transition:all .15s; white-space:nowrap;
+}
+
+.btn-view-profile:hover {
+    background:#2563EB; color:#fff; border-color:#2563EB;
+}
+
+.list-view-empty {
+    text-align:center; padding:60px 20px; color:#7F7F7F;
+}
+
+.list-view-empty i {
+    font-size:2.5rem; color:#E2E0DD; margin-bottom:12px; display:block;
+}
+
 /* ── Pagination ──────────────────────────────── */
 .pagination-info                  { font-size:0.82rem; color:#7F7F7F; }
 .pagination                       { margin-bottom:0; }
 .page-link                        { color:#FF5E2B; border-color:#E2E0DD; }
 .page-item.active .page-link      { background-color:#FF5E2B; border-color:#FF5E2B; }
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 768px) {
+    .list-view-table-wrap {
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+    
+    .list-view-table {
+        min-width:700px;
+    }
+}
 </style>
 @endpush
 
@@ -309,66 +416,137 @@
 </form>
 
 {{-- ════════════════════════════════════════════
-     EMPLOYEE GRID
+     GRID VIEW
 ═════════════════════════════════════════════ --}}
-<div class="row g-3 mb-4" id="employee-grid">
+<div id="grid-view-container">
+    <div class="row g-3 mb-4">
 
-    @forelse($employees as $employee)
-     @if($employee->status === 'active')
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="emp-card">
+        @forelse($employees as $employee)
+        @if($employee->status === 'active')
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="emp-card">
 
-            {{-- Photo + status badge --}}
-            <div class="emp-photo-wrap">
-                <img src="{{ $employee->profile_picture
-                             ? asset('storage/'.$employee->profile_picture)
-                             : asset('images/admin_avatar.png') }}"
-                     class="emp-photo" alt="{{ $employee->name }}">
+                {{-- Photo + status badge --}}
+                <div class="emp-photo-wrap">
+                    <img src="{{ $employee->profile_picture
+                                 ? asset('storage/'.$employee->profile_picture)
+                                 : asset('images/admin_avatar.png') }}"
+                         class="emp-photo" alt="{{ $employee->name }}">
 
-                 <span class="status-badge status-active">ACTIVE</span>
-            </div>
-
-            {{-- Details --}}
-            <div class="emp-name">{{ $employee->name }}</div>
-            <div class="emp-role">{{ $employee->designation ?? 'N/A' }}</div>
-            <div class="emp-dept">
-                <i class="bi bi-building" style="font-size:.7rem;"></i>
-                {{ $employee->department->name ?? 'No Department' }}
-            </div>
-
-            <hr class="emp-divider">
-
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="emp-avatar-initials">
-                    {{ strtoupper(substr($employee->name,0,1)) }}
+                    <span class="status-badge status-active">ACTIVE</span>
                 </div>
-                <a href="{{ route('admin.employee.show',$employee->id) }}" class="link-view">
-                    View Profile <i class="bi bi-arrow-right"></i>
-                </a>
+
+                {{-- Details --}}
+                <div class="emp-name">{{ $employee->name }}</div>
+                <div class="emp-role">{{ $employee->designation ?? 'N/A' }}</div>
+                <div class="emp-dept">
+                    <i class="bi bi-building" style="font-size:.7rem;"></i>
+                    {{ $employee->department->name ?? 'No Department' }}
+                </div>
+
+                <hr class="emp-divider">
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="emp-avatar-initials">
+                        {{ strtoupper(substr($employee->name,0,1)) }}
+                    </div>
+                    <a href="{{ route('admin.employee.show',$employee->id) }}" class="link-view">
+                        View Profile <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
             </div>
-
         </div>
-    </div>
         @endif
-    @empty
-    <div class="col-12">
-        <div class="emp-card text-center py-5">
-            <i class="bi bi-people" style="font-size:2rem; color:#E2E0DD;"></i>
-            <p class="mb-0 mt-2" style="color:#7F7F7F;">No employees found.</p>
+        @empty
+        <div class="col-12">
+            <div class="emp-card text-center py-5">
+                <i class="bi bi-people" style="font-size:2rem; color:#E2E0DD;"></i>
+                <p class="mb-0 mt-2" style="color:#7F7F7F;">No employees found.</p>
+            </div>
         </div>
-    </div>
-    
-    @endforelse
-  
+        @endforelse
 
-    {{-- Add new card --}}
-    <div class="col-12 col-sm-6 col-xl-3">
-        <a href="{{ route('admin.employee.create') }}" class="emp-card-add">
-            <div class="add-icon"><i class="bi bi-plus-lg"></i></div>
-            <div class="add-label">Add New Employee</div>
-        </a>
-    </div>
+        {{-- Add new card --}}
+        <div class="col-12 col-sm-6 col-xl-3">
+            <a href="{{ route('admin.employee.create') }}" class="emp-card-add">
+                <div class="add-icon"><i class="bi bi-plus-lg"></i></div>
+                <div class="add-label">Add New Employee</div>
+            </a>
+        </div>
 
+    </div>
+</div>
+
+{{-- ════════════════════════════════════════════
+     LIST VIEW (TABLE)
+═════════════════════════════════════════════ --}}
+<div id="list-view-container" style="display:none;">
+    <div class="list-view-table-wrap mb-4">
+        <table class="list-view-table">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Employee ID</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($employees as $employee)
+                @if($employee->status === 'active')
+                <tr>
+                    <td>
+                        <div class="list-emp-info">
+                            @if($employee->profile_picture)
+                                <img src="{{ asset('storage/'.$employee->profile_picture) }}" 
+                                     class="list-emp-avatar" alt="{{ $employee->name }}">
+                            @else
+                                <div class="list-emp-avatar-placeholder">
+                                    {{ strtoupper(substr($employee->name, 0, 2)) }}
+                                </div>
+                            @endif
+                            <div>
+                                <div class="list-emp-name">{{ $employee->name }}</div>
+                                <div class="list-emp-id">{{ $employee->employee_id ?? 'N/A' }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="list-emp-designation">{{ $employee->designation ?? 'N/A' }}</span>
+                    </td>
+                    <td>
+                        <span class="list-emp-dept">{{ $employee->department->name ?? 'No Department' }}</span>
+                    </td>
+                    <td>
+                        <span style="font-family:monospace; color:#4A4A4A;">{{ $employee->employee_id ?? 'N/A' }}</span>
+                    </td>
+                    <td>
+                        <span class="list-status-badge list-status-active">ACTIVE</span>
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.employee.show', $employee->id) }}" class="btn-view-profile">
+                            <i class="bi bi-eye"></i> View Profile
+                        </a>
+                    </td>
+                </tr>
+                @endif
+                @empty
+                <tr>
+                    <td colspan="6">
+                        <div class="list-view-empty">
+                            <i class="bi bi-people"></i>
+                            <div style="font-weight:600; color:#1A1A1A; margin-bottom:6px;">No employees found</div>
+                            <div style="font-size:0.85rem;">Add your first employee to get started.</div>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {{-- ════════════════════════════════════════════
@@ -383,3 +561,48 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const gridViewBtn = document.getElementById('grid-view');
+    const listViewBtn = document.getElementById('list-view');
+    const gridViewContainer = document.getElementById('grid-view-container');
+    const listViewContainer = document.getElementById('list-view-container');
+
+    // Load saved view from localStorage
+    const savedView = localStorage.getItem('employeeView');
+    if (savedView === 'list') {
+        showListView();
+    } else {
+        showGridView();
+    }
+
+    // Grid view click
+    gridViewBtn.addEventListener('click', function() {
+        showGridView();
+        localStorage.setItem('employeeView', 'grid');
+    });
+
+    // List view click
+    listViewBtn.addEventListener('click', function() {
+        showListView();
+        localStorage.setItem('employeeView', 'list');
+    });
+
+    function showGridView() {
+        gridViewContainer.style.display = 'block';
+        listViewContainer.style.display = 'none';
+        gridViewBtn.classList.add('active');
+        listViewBtn.classList.remove('active');
+    }
+
+    function showListView() {
+        gridViewContainer.style.display = 'none';
+        listViewContainer.style.display = 'block';
+        listViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+    }
+});
+</script>
+@endpush
