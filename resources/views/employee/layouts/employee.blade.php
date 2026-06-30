@@ -514,6 +514,160 @@
         font-weight: 500;
         color: #9A9590;
     }
+
+    /* ============================================
+       MOBILE SIDEBAR TOGGLE (Phone Only)
+       ============================================ */
+    
+    /* Hamburger button - hidden by default, shown only on mobile */
+    .mobile-sidebar-toggle {
+        display: none;
+        background: none;
+        border: 1px solid #E2E0DD;
+        border-radius: 8px;
+        color: #4A4A4A;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        padding: 0;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+
+    .mobile-sidebar-toggle:hover {
+        background: #FAF9F6;
+        color: #FF5E2B;
+        border-color: #FF5E2B;
+    }
+
+    /* Close button inside sidebar - hidden by default, shown only on mobile when open */
+    .sidebar-close-btn {
+        display: none;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: #fff;
+        border: 1px solid #E2E0DD;
+        border-radius: 8px;
+        color: #4A4A4A;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        padding: 0;
+        font-size: 1.1rem;
+        z-index: 10;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .sidebar-close-btn:hover {
+        background: #FEF2F2;
+        color: #DC2626;
+        border-color: #DC2626;
+    }
+
+    /* Overlay - hidden by default */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 100;
+        backdrop-filter: blur(2px);
+    }
+
+    /* ===== Mobile Styles ===== */
+    @media (max-width: 768px) {
+        .app-header {
+            left: 0;
+            padding: 0 16px;
+            height: 60px;
+        }
+
+        .app-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: none;
+            width: 260px;
+            z-index: 1050;
+            padding-top: 50px;
+        }
+
+        .main-wrapper {
+            margin-left: 0;
+            padding-top: 60px;
+        }
+
+        .app-content {
+            padding: 20px 16px;
+        }
+
+        /* Show hamburger button on mobile */
+        .mobile-sidebar-toggle {
+            display: flex;
+        }
+
+        /* Show close button inside sidebar when open */
+        body.sidebar-open .sidebar-close-btn {
+            display: flex;
+        }
+
+        /* Sidebar open state */
+        body.sidebar-open .app-sidebar {
+            transform: translateX(0);
+            box-shadow: 2px 0 16px rgba(0,0,0,0.15);
+        }
+
+        /* Show overlay when sidebar open */
+        body.sidebar-open .sidebar-overlay {
+            display: block;
+        }
+
+        /* Adjust brand on mobile */
+        .sidebar-brand {
+            margin-top: 0;
+            padding: 10px;
+        }
+
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Hide search on mobile to save space - profile stays visible */
+        .header-search {
+            display: none;
+        }
+
+        /* Hide welcome text on mobile to save space */
+        .topbar-welcome {
+            display: none;
+        }
+
+        /* Profile and notification stay EXACTLY as they are */
+        .profile-name, .profile-role, .profile-avatar {
+            /* No changes - keep as is */
+        }
+    }
+
+    /* ===== Desktop Styles - No changes ===== */
+    @media (min-width: 769px) {
+        .sidebar-overlay {
+            display: none !important;
+        }
+        .mobile-sidebar-toggle {
+            display: none !important;
+        }
+        .sidebar-close-btn {
+            display: none !important;
+        }
+    }
     </style>
 
     @stack('styles')
@@ -521,6 +675,9 @@
 
 <body>
     <div class="app-container">
+
+        {{-- Mobile Sidebar Overlay --}}
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         @include('employee.layouts.header')
 
@@ -540,6 +697,91 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+
+    <script>
+        // Mobile Sidebar Toggle Functionality
+        (function() {
+            const overlay = document.getElementById('sidebarOverlay');
+            const body = document.body;
+            let isAnimating = false;
+
+            function openSidebar() {
+                if (window.innerWidth >= 769) return;
+                body.classList.add('sidebar-open');
+                isAnimating = true;
+                setTimeout(function() { isAnimating = false; }, 300);
+            }
+
+            function closeSidebar() {
+                body.classList.remove('sidebar-open');
+            }
+
+            // Handle hamburger and close button clicks
+            document.addEventListener('click', function(e) {
+                const hamburger = e.target.closest('.mobile-sidebar-toggle');
+                const closeBtn = e.target.closest('.sidebar-close-btn');
+
+                if (hamburger) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    
+                    if (body.classList.contains('sidebar-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                    return false;
+                }
+
+                if (closeBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    closeSidebar();
+                    return false;
+                }
+            }, true);
+
+            // Overlay click - only close if not animating
+            if (overlay) {
+                overlay.addEventListener('click', function(e) {
+                    if (isAnimating) {
+                        e.stopPropagation();
+                        return;
+                    }
+                    if (body.classList.contains('sidebar-open')) {
+                        closeSidebar();
+                    }
+                });
+            }
+
+            // Prevent clicks inside sidebar from closing it
+            document.addEventListener('click', function(e) {
+                if (body.classList.contains('sidebar-open') && window.innerWidth < 769) {
+                    if (e.target.closest('.app-sidebar')) {
+                        e.stopPropagation();
+                    }
+                }
+            }, true);
+
+            // Close sidebar when clicking any nav link on mobile
+            document.querySelectorAll('.sidebar-nav .nav-link, .sidebar-nav .sub-link, .sidebar-bottom .nav-link').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 769) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Auto close sidebar if window resized to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 769) {
+                    closeSidebar();
+                }
+            });
+        })();
+    </script>
 
     @stack('scripts')
 </body>

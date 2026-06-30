@@ -1,5 +1,10 @@
 <aside class="app-sidebar" id="sidebar">
 
+    {{-- Close button for mobile (only visible on mobile when open) --}}
+    <button class="sidebar-close-btn" type="button" aria-label="Close Menu">
+        <i class="bi bi-x-lg"></i>
+    </button>
+
     {{-- Brand Logo --}}
     <div class="sidebar-brand">
         <div class="brand-logo">
@@ -10,7 +15,6 @@
     {{-- Main Navigation --}}
     <nav class="sidebar-nav">
         <ul class="nav flex-column">
-
             <li class="nav-item">
                 <a href="{{ route('employee.dashboard') }}" class="nav-link {{ request()->routeIs('employee.dashboard') ? 'active' : '' }}">
                     <i class="bi bi-grid-1x2-fill"></i>
@@ -24,7 +28,6 @@
                     <span>Leave Requests</span>
                 </a>
             </li>
-
         </ul>
     </nav>
 

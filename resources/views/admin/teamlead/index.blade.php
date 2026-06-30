@@ -45,6 +45,223 @@
     .pagination { margin-bottom: 0; }
     .page-link { color: #FF5E2B; border-color: #E2E0DD; }
     .page-item.active .page-link { background-color: #FF5E2B; border-color: #FF5E2B; }
+
+    /* ============================================
+       RESPONSIVE STYLES - 768px BREAKPOINT
+       ============================================ */
+
+    /* ===== Mobile (≤768px) ===== */
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 1rem !important;
+        }
+
+        .page-subtitle {
+            font-size: 0.78rem !important;
+        }
+
+        /* Header - stack vertically */
+        .d-flex.justify-content-between.align-items-start.mb-4 {
+            flex-direction: column !important;
+            gap: 16px !important;
+            align-items: stretch !important;
+        }
+
+        .filter-select {
+            width: 100% !important;
+            min-width: auto !important;
+        }
+
+        /* KPI Cards - single column */
+        .row.g-3.mb-4 .col-12.col-md-4 {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+
+        .kpi-card {
+            padding: 14px 16px !important;
+        }
+
+        .kpi-label {
+            font-size: 0.68rem !important;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem !important;
+        }
+
+        .kpi-icon {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* Table - horizontal scroll */
+        .tl-table-wrap {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .tl-table {
+            min-width: 700px !important;
+        }
+
+        .tl-table thead th {
+            padding: 10px 12px !important;
+            font-size: 0.72rem !important;
+            white-space: nowrap !important;
+        }
+
+        .tl-table td {
+            padding: 12px 12px !important;
+        }
+
+        .emp-avatar {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 0.72rem !important;
+        }
+
+        .emp-name {
+            font-size: 0.82rem !important;
+        }
+
+        .emp-id {
+            font-size: 0.7rem !important;
+        }
+
+        .emp-designation {
+            font-size: 0.78rem !important;
+        }
+
+        .badge-member,
+        .badge-tl,
+        .badge-pending {
+            font-size: 0.7rem !important;
+            padding: 4px 10px !important;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-reject {
+            font-size: 0.7rem !important;
+            padding: 6px 12px !important;
+            white-space: nowrap !important;
+        }
+
+        /* Pagination - stack */
+        .pagination-wrap {
+            padding: 12px 16px !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            align-items: stretch !important;
+        }
+
+        .pagination-info {
+            font-size: 0.72rem !important;
+            text-align: center !important;
+        }
+
+        .pagination {
+            justify-content: center !important;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 0.95rem !important;
+        }
+
+        .page-subtitle {
+            font-size: 0.75rem !important;
+        }
+
+        .kpi-card {
+            padding: 12px 14px !important;
+        }
+
+        .kpi-value {
+            font-size: 1.35rem !important;
+        }
+
+        .kpi-label {
+            font-size: 0.65rem !important;
+        }
+
+        .tl-table {
+            min-width: 650px !important;
+        }
+
+        .tl-table thead th {
+            padding: 8px 10px !important;
+            font-size: 0.7rem !important;
+        }
+
+        .tl-table td {
+            padding: 10px 10px !important;
+        }
+
+        .emp-avatar {
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 0.7rem !important;
+        }
+
+        .emp-name {
+            font-size: 0.78rem !important;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-reject {
+            font-size: 0.68rem !important;
+            padding: 5px 10px !important;
+        }
+
+        .filter-select {
+            font-size: 0.8rem !important;
+            padding: 8px 32px 8px 12px !important;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-title {
+            font-size: 0.9rem !important;
+        }
+
+        .kpi-value {
+            font-size: 1.2rem !important;
+        }
+
+        .kpi-icon {
+            width: 28px !important;
+            height: 28px !important;
+            font-size: 0.85rem !important;
+        }
+
+        .tl-table {
+            min-width: 600px !important;
+        }
+
+        .emp-avatar {
+            width: 28px !important;
+            height: 28px !important;
+            font-size: 0.68rem !important;
+        }
+
+        .emp-name {
+            font-size: 0.75rem !important;
+        }
+
+        .btn-assign,
+        .btn-modify,
+        .btn-reject {
+            font-size: 0.65rem !important;
+            padding: 5px 8px !important;
+        }
+    }
 </style>
 @endpush
 
@@ -69,7 +286,6 @@
         ->pluck('employee_id')
         ->toArray();
 
-    // keyBy employee_id — latest notification নেবে
     $pendingNotifications = \App\Models\Notification::where('type', 'tl_assignment_request')
         ->where('status', 'pending')
         ->orderBy('id', 'desc')
@@ -89,7 +305,7 @@
             <h1 class="page-title mb-1">Team Lead Assignment</h1>
             <p class="page-subtitle mb-0">Delegate leadership responsibilities to senior staff members.</p>
         </div>
-        <form method="GET" action="{{ url()->current() }}">
+        <form method="GET" action="{{ url()->current() }}" class="w-100">
             <div style="font-size:0.75rem; font-weight:700; color:#7F7F7F; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Filter by Department</div>
             <div class="filter-wrap">
                 <select name="department_id" class="filter-select" onchange="this.form.submit()">
@@ -127,94 +343,88 @@
     </div>
 
     <div class="tl-table-wrap">
-        <table class="tl-table">
-            <thead>
-                <tr>
-                    <th>Employee Name</th>
-                    <th>Designation</th>
-                    <th>Department</th>
-                    <th>Current Role</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($employees as $employee)
+        <div class="table-responsive">
+            <table class="tl-table">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="emp-avatar {{ $employee->role === 'team_lead' ? 'tl-avatar' : '' }}">
-                                    {{ strtoupper(substr($employee->name, 0, 1)) }}
+                        <th>Employee Name</th>
+                        <th>Designation</th>
+                        <th>Department</th>
+                        <th>Current Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($employees as $employee)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="emp-avatar {{ $employee->role === 'team_lead' ? 'tl-avatar' : '' }}">
+                                        {{ strtoupper(substr($employee->name, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <div class="emp-name">{{ $employee->name }}</div>
+                                        <div class="emp-id">{{ $employee->employee_id ?? 'N/A' }}</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="emp-name">{{ $employee->name }}</div>
-                                    <div class="emp-id">{{ $employee->employee_id ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="emp-designation">{{ $employee->designation ?? 'N/A' }}</span></td>
-                        <td><span class="emp-designation">{{ $employee->department->name ?? 'No Department' }}</span></td>
-                        <td>
-                            @if($employee->role === 'team_lead')
-                                <span class="badge-tl">Team Lead</span>
-                            @else
-                                <span class="badge-member">Member</span>
-                            @endif
-                        </td>
-
-                        {{-- Status --}}
-                        <td>
-                            @if(in_array($employee->id, $pendingRequests))
-                                <span class="badge-pending">Pending</span>
-                            @elseif($employee->role === 'team_lead')
-                                <span style="font-size:0.75rem; color:#059669; font-weight:600;">Approved</span>
-                            @else
-                                <span style="font-size:0.75rem; color:#B2ADA7;">—</span>
-                            @endif
-                        </td>
-
-                        {{-- Actions --}}
-                       <td>
-    @if(in_array($employee->id, $pendingRequests) && isset($pendingNotifications[$employee->id]))
-        <div class="d-flex align-items-center gap-2">
-            <form action="{{ route('admin.tl-assignment.approve', $pendingNotifications[$employee->id]->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-
-                <button type="submit" class="btn-assign" style="padding:6px 14px;">
-                    <i class="bi bi-check-lg"></i> Approve
-                </button>
-            </form>
-
-            <form action="{{ route('admin.tl-assignment.reject', $pendingNotifications[$employee->id]->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-
-                <button type="submit" class="btn-reject" style="padding:6px 14px;">
-                    <i class="bi bi-x-lg"></i> Reject
-                </button>
-            </form>
+                            </td>
+                            <td><span class="emp-designation">{{ $employee->designation ?? 'N/A' }}</span></td>
+                            <td><span class="emp-designation">{{ $employee->department->name ?? 'No Department' }}</span></td>
+                            <td>
+                                @if($employee->role === 'team_lead')
+                                    <span class="badge-tl">Team Lead</span>
+                                @else
+                                    <span class="badge-member">Member</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(in_array($employee->id, $pendingRequests))
+                                    <span class="badge-pending">Pending</span>
+                                @elseif($employee->role === 'team_lead')
+                                    <span style="font-size:0.75rem; color:#059669; font-weight:600;">Approved</span>
+                                @else
+                                    <span style="font-size:0.75rem; color:#B2ADA7;">—</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if(in_array($employee->id, $pendingRequests) && isset($pendingNotifications[$employee->id]))
+                                    <div class="d-flex align-items-center gap-2">
+                                        <form action="{{ route('admin.tl-assignment.approve', $pendingNotifications[$employee->id]->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn-assign" style="padding:6px 14px;">
+                                                <i class="bi bi-check-lg"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.tl-assignment.reject', $pendingNotifications[$employee->id]->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn-reject" style="padding:6px 14px;">
+                                                <i class="bi bi-x-lg"></i> Reject
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <form action="{{ route('admin.tl-assignment.toggle', $employee->id) }}" method="POST">
+                                        @csrf
+                                        @if($employee->role === 'team_lead')
+                                            <button type="submit" class="btn-modify">REMOVE TL</button>
+                                        @else
+                                            <button type="submit" class="btn-assign">ASSIGN AS TL</button>
+                                        @endif
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-4">No employees found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @else
-        <form action="{{ route('admin.tl-assignment.toggle', $employee->id) }}" method="POST">
-            @csrf
-
-            @if($employee->role === 'team_lead')
-                <button type="submit" class="btn-modify">REMOVE TL</button>
-            @else
-                <button type="submit" class="btn-assign">ASSIGN AS TL</button>
-            @endif
-        </form>
-    @endif
-</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center py-4">No employees found.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
 
         <div class="pagination-wrap">
             <span class="pagination-info">
@@ -224,4 +434,4 @@
         </div>
     </div>
 
-@endsection 
+@endsection

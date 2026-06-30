@@ -319,6 +319,438 @@
         display: block;
     }
     .btn-message-hr:hover { background: #FAF9F6; color: #1A1A1A; }
+
+    /* ============================================
+       RESPONSIVE STYLES
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+
+        .profile-card {
+            padding: 20px;
+        }
+
+        .profile-avatar-wrap,
+        .profile-avatar,
+        .profile-avatar-placeholder {
+            width: 80px;
+            height: 80px;
+        }
+
+        .profile-name {
+            font-size: 1.15rem;
+        }
+
+        .stat-card {
+            padding: 16px;
+        }
+
+        .stat-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+        }
+
+        .stat-number {
+            font-size: 1.7rem;
+        }
+
+        .history-card {
+            padding: 16px;
+        }
+
+        .history-table thead th {
+            padding: 6px 10px;
+            font-size: 0.68rem;
+        }
+
+        .history-table tbody td {
+            padding: 12px 10px;
+            font-size: 0.82rem;
+        }
+
+        .cta-card {
+            padding: 20px;
+        }
+
+        .cta-title {
+            font-size: 1rem;
+        }
+
+        .hr-support-card {
+            padding: 16px;
+        }
+    }
+
+    /* ===== Mobile (≤768px) ===== */
+    @media (max-width: 768px) {
+        .welcome-title {
+            font-size: 1.3rem;
+        }
+
+        .welcome-sub {
+            font-size: 0.82rem;
+        }
+
+        /* Profile card - full width */
+        .profile-card {
+            padding: 18px;
+        }
+
+        .profile-avatar-wrap,
+        .profile-avatar,
+        .profile-avatar-placeholder {
+            width: 70px;
+            height: 70px;
+        }
+
+        .profile-avatar-placeholder {
+            font-size: 1.2rem;
+        }
+
+        .profile-name {
+            font-size: 1.1rem;
+        }
+
+        .profile-role {
+            font-size: 0.78rem;
+            margin-bottom: 16px;
+        }
+
+        .profile-meta-row {
+            gap: 16px;
+            padding-top: 12px;
+        }
+
+        .profile-meta-item label {
+            font-size: 0.65rem;
+        }
+
+        .profile-meta-item span {
+            font-size: 0.82rem;
+        }
+
+        /* Stat cards - smaller */
+        .stat-card {
+            padding: 14px;
+        }
+
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            margin-bottom: 4px;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+        }
+
+        .stat-number span {
+            font-size: 0.8rem;
+        }
+
+        /* History card - horizontal scroll */
+        .history-card {
+            padding: 14px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .history-title {
+            font-size: 0.92rem;
+        }
+
+        .view-all-link {
+            font-size: 0.78rem;
+        }
+
+        .history-table {
+            min-width: 600px;
+        }
+
+        .history-table thead th {
+            padding: 6px 8px;
+            font-size: 0.65rem;
+            white-space: nowrap;
+        }
+
+        .history-table tbody td {
+            padding: 10px 8px;
+            font-size: 0.78rem;
+        }
+
+        .leave-status-pill {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+        }
+
+        /* CTA card */
+        .cta-card {
+            padding: 18px;
+        }
+
+        .cta-icon {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .cta-title {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .cta-sub {
+            font-size: 0.78rem;
+            margin-bottom: 16px;
+        }
+
+        .btn-submit-request {
+            font-size: 0.82rem;
+            padding: 10px 16px;
+        }
+
+        /* HR support card */
+        .hr-support-card {
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        .hr-support-title {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .hr-person-avatar {
+            width: 40px;
+            height: 40px;
+        }
+
+        .hr-person-name {
+            font-size: 0.82rem;
+        }
+
+        .hr-person-role {
+            font-size: 0.72rem;
+        }
+
+        .btn-message-hr {
+            font-size: 0.82rem;
+            padding: 9px;
+            margin-top: 12px;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .welcome-title {
+            font-size: 1.15rem;
+        }
+
+        .welcome-sub {
+            font-size: 0.78rem;
+        }
+
+        /* Profile card - more compact */
+        .profile-card {
+            padding: 16px;
+        }
+
+        .profile-avatar-wrap,
+        .profile-avatar,
+        .profile-avatar-placeholder {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 12px;
+        }
+
+        .profile-avatar-placeholder {
+            font-size: 1rem;
+        }
+
+        .employment-badge {
+            font-size: 0.62rem;
+            padding: 2px 6px;
+            top: -6px;
+            right: -6px;
+        }
+
+        .profile-name {
+            font-size: 1rem;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            margin-bottom: 14px;
+        }
+
+        .profile-meta-row {
+            gap: 12px;
+        }
+
+        .profile-meta-item label {
+            font-size: 0.62rem;
+        }
+
+        .profile-meta-item span {
+            font-size: 0.78rem;
+        }
+
+        /* Stat cards - even smaller */
+        .stat-card {
+            padding: 12px;
+        }
+
+        .stat-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        .stat-label {
+            font-size: 0.68rem;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+        }
+
+        .stat-number span {
+            font-size: 0.75rem;
+        }
+
+        .stat-badge-active {
+            font-size: 0.62rem;
+            padding: 2px 6px;
+            top: 12px;
+            right: 12px;
+        }
+
+        /* History table */
+        .history-card {
+            padding: 12px;
+        }
+
+        .history-table {
+            min-width: 550px;
+        }
+
+        .history-table thead th {
+            padding: 5px 6px;
+            font-size: 0.62rem;
+        }
+
+        .history-table tbody td {
+            padding: 8px 6px;
+            font-size: 0.75rem;
+        }
+
+        /* CTA card */
+        .cta-card {
+            padding: 16px;
+        }
+
+        .cta-icon {
+            font-size: 1.3rem;
+        }
+
+        .cta-title {
+            font-size: 0.9rem;
+        }
+
+        .cta-sub {
+            font-size: 0.75rem;
+        }
+
+        .btn-submit-request {
+            font-size: 0.78rem;
+            padding: 9px 14px;
+        }
+
+        /* HR support */
+        .hr-support-card {
+            padding: 12px;
+        }
+
+        .hr-support-title {
+            font-size: 0.85rem;
+        }
+
+        .hr-person-avatar {
+            width: 36px;
+            height: 36px;
+        }
+
+        .hr-person-name {
+            font-size: 0.78rem;
+        }
+
+        .hr-person-role {
+            font-size: 0.68rem;
+        }
+
+        .btn-message-hr {
+            font-size: 0.78rem;
+            padding: 8px;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .welcome-title {
+            font-size: 1.05rem;
+        }
+
+        .profile-card {
+            padding: 14px;
+        }
+
+        .profile-avatar-wrap,
+        .profile-avatar,
+        .profile-avatar-placeholder {
+            width: 55px;
+            height: 55px;
+        }
+
+        .profile-name {
+            font-size: 0.95rem;
+        }
+
+        .stat-card {
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+        }
+
+        .history-table {
+            min-width: 500px;
+        }
+
+        .cta-card {
+            padding: 14px;
+        }
+
+        .cta-title {
+            font-size: 0.85rem;
+        }
+    }
 </style>
 @endpush
 
@@ -345,7 +777,7 @@
         <div class="row g-3 mb-3">
 
             {{-- Profile card --}}
-            <div class="col-md-4">
+            <div class="col-12 col-md-4">
                 <div class="profile-card">
                     <div class="profile-avatar-wrap">
                         @if(auth('employee')->user()->profile_picture)
@@ -387,7 +819,7 @@
             </div>
 
             {{-- Stat cards --}}
-            <div class="col-md-8">
+            <div class="col-12 col-md-8">
                 <div class="row g-3">
                     <div class="col-6">
                         <div class="stat-card">
@@ -438,74 +870,76 @@
                 <a href="{{route('employee.leave.history')}}" class="view-all-link">View All History</a>
             </div>
 
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Leave Type</th>
-                        <th>Duration</th>
-                        <th>Dates</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentLeaves ?? [] as $leave)
-                    <tr>
-                        <td style="font-weight:600;">{{ $leave->leaveType->name ?? 'N/A' }}</td>
-                        <td style="color:#7F7F7F;">{{ $leave->duration }} {{ $leave->duration == 1 ? 'Day' : 'Days' }}</td>
-                        <td style="color:#7F7F7F;">
-                            @if($leave->from_date === $leave->to_date)
-                                {{ \Carbon\Carbon::parse($leave->from_date)->format('M d, Y') }}
-                            @else
-                                {{ \Carbon\Carbon::parse($leave->from_date)->format('M d') }} -
-                                {{ \Carbon\Carbon::parse($leave->to_date)->format('M d, Y') }}
-                            @endif
-                        </td>
-                        <td>
-                            @php
-                                $st = $leave->status ?? 'pending';
-                                $cls = match($st) {
-                                    'approved' => 'status-approved',
-                                    'rejected' => 'status-rejected',
-                                    default    => 'status-pending',
-                                };
-                            @endphp
-                            <span class="leave-status-pill {{ $cls }}">
-                                {{ ucfirst($st) }}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn-action-dot">
-                                <i class="bi bi-three-dots-vertical"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @empty
-                    @foreach([
-                        ['Annual Leave',  '5 Days', 'Dec 24 - Dec 28, 2023', 'approved'],
-                        ['Casual Leave',  '1 Day',  'Nov 15, 2023',          'approved'],
-                        ['Sick Leave',    '2 Days', 'Oct 02 - Oct 03, 2023', 'rejected'],
-                        ['Annual Leave',  '3 Days', 'Sep 10 - Sep 12, 2023', 'pending'],
-                    ] as [$type, $dur, $dates, $status])
-                    <tr>
-                        <td style="font-weight:600;">{{ $type }}</td>
-                        <td style="color:#7F7F7F;">{{ $dur }}</td>
-                        <td style="color:#7F7F7F;">{{ $dates }}</td>
-                        <td>
-                            <span class="leave-status-pill {{ match($status) { 'approved' => 'status-approved', 'rejected' => 'status-rejected', default => 'status-pending' } }}">
-                                {{ ucfirst($status) }}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn-action-dot">
-                                <i class="bi bi-three-dots-vertical"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
-                    @endforelse
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Leave Type</th>
+                            <th>Duration</th>
+                            <th>Dates</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($recentLeaves ?? [] as $leave)
+                        <tr>
+                            <td style="font-weight:600;">{{ $leave->leaveType->name ?? 'N/A' }}</td>
+                            <td style="color:#7F7F7F;">{{ $leave->duration }} {{ $leave->duration == 1 ? 'Day' : 'Days' }}</td>
+                            <td style="color:#7F7F7F;">
+                                @if($leave->from_date === $leave->to_date)
+                                    {{ \Carbon\Carbon::parse($leave->from_date)->format('M d, Y') }}
+                                @else
+                                    {{ \Carbon\Carbon::parse($leave->from_date)->format('M d') }} -
+                                    {{ \Carbon\Carbon::parse($leave->to_date)->format('M d, Y') }}
+                                @endif
+                            </td>
+                            <td>
+                                @php
+                                    $st = $leave->status ?? 'pending';
+                                    $cls = match($st) {
+                                        'approved' => 'status-approved',
+                                        'rejected' => 'status-rejected',
+                                        default    => 'status-pending',
+                                    };
+                                @endphp
+                                <span class="leave-status-pill {{ $cls }}">
+                                    {{ ucfirst($st) }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-action-dot">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @empty
+                        @foreach([
+                            ['Annual Leave',  '5 Days', 'Dec 24 - Dec 28, 2023', 'approved'],
+                            ['Casual Leave',  '1 Day',  'Nov 15, 2023',          'approved'],
+                            ['Sick Leave',    '2 Days', 'Oct 02 - Oct 03, 2023', 'rejected'],
+                            ['Annual Leave',  '3 Days', 'Sep 10 - Sep 12, 2023', 'pending'],
+                        ] as [$type, $dur, $dates, $status])
+                        <tr>
+                            <td style="font-weight:600;">{{ $type }}</td>
+                            <td style="color:#7F7F7F;">{{ $dur }}</td>
+                            <td style="color:#7F7F7F;">{{ $dates }}</td>
+                            <td>
+                                <span class="leave-status-pill {{ match($status) { 'approved' => 'status-approved', 'rejected' => 'status-rejected', default => 'status-pending' } }}">
+                                    {{ ucfirst($status) }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-action-dot">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>

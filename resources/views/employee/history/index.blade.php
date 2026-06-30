@@ -44,6 +44,89 @@
     .tl-note-tag { font-size: 0.7rem; color: #7F7F7F; margin-top: 3px; display: block; }
     .btn-add { background: #FF5E2B; color: #fff; border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; padding: 10px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
     .btn-add:hover { background: #E04B1A; color: #fff; }
+
+    /* ============================================
+       RESPONSIVE STYLES
+       ============================================ */
+    @media (max-width: 768px) {
+        .page-title { font-size: 1.25rem !important; }
+        .page-subtitle { font-size: 0.78rem !important; }
+
+        .btn-add {
+            width: 100%;
+            justify-content: center;
+            padding: 9px 16px;
+        }
+
+        /* KPI row - horizontal scroll instead of wrap-squeeze */
+        .d-flex.gap-2.flex-wrap.mb-4 {
+            flex-wrap: nowrap !important;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 4px;
+        }
+        .kpi-stat {
+            min-width: 110px;
+            flex: 0 0 auto;
+            padding: 12px 16px;
+        }
+        .kpi-stat-value { font-size: 1.5rem; }
+
+        /* Filter tabs - horizontal scroll */
+        .filter-tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 4px;
+        }
+        .filter-tab {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            font-size: 0.78rem;
+            padding: 6px 12px;
+        }
+
+        /* Table - horizontal scroll */
+        .leave-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .leave-table {
+            min-width: 680px;
+        }
+        .leave-table thead th {
+            padding: 10px 14px;
+            font-size: 0.68rem;
+            white-space: nowrap;
+        }
+        .leave-table td {
+            padding: 12px 14px;
+            font-size: 0.8rem;
+        }
+        .leave-reason {
+            max-width: 160px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Pagination - stack */
+        .pagination-wrap-responsive {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 10px;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .page-title { font-size: 1.1rem !important; }
+        .kpi-stat { min-width: 95px; padding: 10px 14px; }
+        .kpi-stat-value { font-size: 1.3rem; }
+        .kpi-stat-label { font-size: 0.65rem; }
+        .leave-table { min-width: 620px; }
+        .leave-reason { max-width: 120px; }
+    }
 </style>
 @endpush
 
@@ -127,7 +210,7 @@
                         </div>
                         <div class="duration-year">{{ $leave->duration }} {{ $leave->duration == 1 ? 'Day' : 'Days' }}</div>
                     </td>
-                    <td><span class="leave-reason">{{ $leave->reason }}</span></td>
+                    <td><span class="leave-reason" title="{{ $leave->reason }}">{{ $leave->reason }}</span></td>
                     <td>
                         @if($leave->tl_status === 'recommended')
                             <span class="badge-approved">RECOMMENDED</span>
@@ -172,7 +255,7 @@
     </div>
 
     {{-- Pagination --}}
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center pagination-wrap-responsive">
         <span style="font-size:0.82rem; color:#7F7F7F;">
             Showing {{ $leaves->firstItem() ?? 0 }}–{{ $leaves->lastItem() ?? 0 }} of {{ $leaves->total() }}
         </span>
