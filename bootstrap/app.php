@@ -35,6 +35,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin_or_hr' => \App\Http\Middleware\AdminOrHr::class,
         ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias([
+        'team_lead' => \App\Http\Middleware\EnsureIsTeamLead::class,
+    ]);
+    })
     
     ->withExceptions(function (Exceptions $exceptions): void {
         //

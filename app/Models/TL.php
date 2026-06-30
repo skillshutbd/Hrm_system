@@ -8,10 +8,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Tl extends Authenticatable
 {
-      use Notifiable, HasRoles;
+    use Notifiable, HasRoles;
 
-    protected $table = 'team_leads';  // এটা add করো
-    protected $guard = 'Tl';          // 'team_leads' → 'Tl'
+    protected $table = 'team_leads';
+    protected $guard = 'Tl';
 
     protected $fillable = [
         'employee_id',
@@ -26,13 +26,15 @@ class Tl extends Authenticatable
         'remember_token',
     ];
 
+    // এই TL এর নিজের employee record
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 
-    public function department()
+    // এই TL যে যে department handle করে
+    public function departments()
     {
-        return $this -> hasOneThrough(Department::class,Employee::class,id,id,employee_id,departmetn_id);
+        return $this->hasMany(Department::class, 'hod_id', 'employee_id');
     }
 }

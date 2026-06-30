@@ -187,6 +187,8 @@ class EmployeeController extends Controller
         return redirect()->route($this->getRoute('employee.index'))->with('success', 'Employee updated successfully.');
     }
 
+    
+
     public function destroy(Employee $employee)
     {
         DB::table('notifications')->where('employee_id', $employee->id)->delete();
@@ -249,8 +251,10 @@ class EmployeeController extends Controller
         return response()->streamDownload($callback, $fileName, $headers);
     }
 
-    public function toggleTeamLead(Employee $employee)
+public function toggleTeamLead(Request $request, Employee $employee)
 {
+    $departmentIds = $request->input('department_ids', []);
+
     if (auth('Hr')->check()) {
         $existing = \App\Models\Notification::where('type', 'tl_assignment_request')
             ->where('employee_id', $employee->id)
@@ -262,28 +266,53 @@ class EmployeeController extends Controller
         }
 
         \App\Models\Notification::create([
-            'type'         => 'tl_assignment_request',
-            'employee_id'  => $employee->id,
-            'requested_by' => auth('Hr')->id(),
-            'message'      => auth('Hr')->user()->name . ' wants to assign ' . $employee->name . ' as Team Lead.',
-            'status'       => 'pending',
+            'type'           => 'tl_assignment_request',
+            'employee_id'    => $employee->id,
+            'requested_by'   => auth('Hr')->id(),
+            'message'        => auth('Hr')->user()->name . ' wants to assign ' . $employee->name . ' as Team Lead.',
+            'status'         => 'pending',
+            'department_ids' => json_encode($departmentIds),
         ]);
 
         return back()->with('success', 'Request sent to Admin for approval.');
     }
 
-    // Admin সরাসরি toggle করছে
     $makeTeamLead = $employee->role !== 'team_lead';
 
     $employee->update([
         'role' => $makeTeamLead ? 'team_lead' : 'employee',
     ]);
 
-    $this->syncTeamLeadRecord($employee, $makeTeamLead);
+    $this->syncTeamLeadRecord($employee, $makeTeamLead); // ← যোগ করা হলো
+
+    \App\Models\Department::where('hod_id', $employee->id)->update(['hod_id' => null]);
+
+    if ($makeTeamLead && !empty($departmentIds)) {
+        \App\Models\Department::whereIn('id', $departmentIds)
+            ->update(['hod_id' => $employee->id]);
+    }
 
     return back()->with('success', 'Employee role updated successfully.');
 }
 
+public function approveTlRequest(int $id)
+{
+    $notification  = \App\Models\Notification::findOrFail($id);
+    $employee      = Employee::findOrFail($notification->employee_id);
+    $departmentIds = json_decode($notification->department_ids ?? '[]', true);
+
+    $employee->update(['role' => 'team_lead']);
+    $this->syncTeamLeadRecord($employee, true); // ← যোগ করা হলো
+
+    \App\Models\Department::where('hod_id', $employee->id)->update(['hod_id' => null]);
+    if (!empty($departmentIds)) {
+        \App\Models\Department::whereIn('id', $departmentIds)->update(['hod_id' => $employee->id]);
+    }
+
+    $notification->update(['status' => 'approved', 'read_at' => now()]);
+
+    return back()->with('success', 'TL request approved.');
+}
 public function cancelTlRequest(int $id)
 {
     \App\Models\Notification::where('id', $id)
@@ -293,18 +322,24 @@ public function cancelTlRequest(int $id)
     return back()->with('success', 'TL request cancelled.');
 }
 
-public function approveTlRequest(int $id)
-{
-    $notification = \App\Models\Notification::findOrFail($id);
-    $employee = Employee::findOrFail($notification->employee_id);
+// public function approveTlRequest(int $id)
+// {
+//     $notification = \App\Models\Notification::findOrFail($id);
+//     $employee = Employee::findOrFail($notification->employee_id);
+//     $departmentIds = json_decode($notification->department_ids ?? '[]', true);
 
-    $employee->update(['role' => 'team_lead']);
-    $this->syncTeamLeadRecord($employee, true);
+//     $employee->update(['role' => 'team_lead']);
+//     $this->syncTeamLeadRecord($employee, true);
 
-    $notification->update(['status' => 'approved', 'read_at' => now()]);
+//     \App\Models\Department::where('hod_id', $employee->id)->update(['hod_id' => null]);
+//     if (!empty($departmentIds)) {
+//         \App\Models\Department::whereIn('id', $departmentIds)->update(['hod_id' => $employee->id]);
+//     }
 
-    return back()->with('success', 'TL request approved.');
-}
+//     $notification->update(['status' => 'approved', 'read_at' => now()]);
+
+//     return back()->with('success', 'TL request approved.');
+// }
 
 public function rejectTlRequest(int $id)
 {
@@ -322,7 +357,7 @@ private function syncTeamLeadRecord(Employee $employee, bool $makeTeamLead)
             [
                 'name'     => $employee->name,
                 'email'    => $employee->email,
-                'password' => $employee->password,
+                'password' => $employee->password ?? Hash::make('changeme123'),
                 'role'     => 'team_lead',
             ]
         );

@@ -326,12 +326,15 @@
 @section('content')
 
 @php
-    $tl           = auth('tl')->user();
-    $departmentId = $tl->employee->department_id ?? null;
-    $department   = \App\Models\Department::find($departmentId);
+    $tl = auth('tl')->user();
+    $employeeId = $tl->employee_id;
+
+    $departmentIds = \App\Models\Department::where('hod_id', $employeeId)->pluck('id');
+    $departments   = \App\Models\Department::whereIn('id', $departmentIds)->get();
 
     $membersQuery = \App\Models\Employee::with('department')
-        ->where('department_id', $departmentId)
+        ->whereIn('department_id', $departmentIds)
+        ->where('role', '!=', 'team_lead')
         ->when(request('status'), fn($q) => $q->where('status', request('status')));
 
     $totalMembers  = (clone $membersQuery)->count();
@@ -340,7 +343,6 @@
 
     $members = $membersQuery->latest()->paginate(10)->withQueryString();
 @endphp
-
     {{-- Alerts --}}
     @if(session('success'))
         <div class="alert alert-success py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">

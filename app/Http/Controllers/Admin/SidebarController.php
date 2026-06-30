@@ -243,7 +243,45 @@ public function employee_activity()
 
     public function Department() { return view('admin.department.index'); }
     public function Employee() { return view('admin.employee.index'); }
-    public function TeamLead() { return view('admin.teamlead.index'); }
+  public function TeamLead()
+{
+    $departments = \App\Models\Department::orderBy('name')->get();
+
+    $employeesQuery = \App\Models\Employee::with('department')
+        ->when(request('department_id'), function ($query) {
+            $query->where('department_id', request('department_id'));
+        })
+        ->when(request('dept_ids'), function ($query) {
+            $query->whereIn('department_id', request('dept_ids'));
+        });
+
+    $totalMembers  = (clone $employeesQuery)->count();
+    $assignedLeads = (clone $employeesQuery)->where('role', 'team_lead')->count();
+    $openPositions = max(0, $totalMembers - $assignedLeads);
+
+    $employees = $employeesQuery->latest()->paginate(8)->withQueryString();
+
+    $pendingRequests = \App\Models\Notification::where('type', 'tl_assignment_request')
+        ->where('status', 'pending')
+        ->pluck('employee_id')
+        ->toArray();
+
+    $pendingNotifications = \App\Models\Notification::where('type', 'tl_assignment_request')
+        ->where('status', 'pending')
+        ->orderBy('id', 'desc')
+        ->get()
+        ->keyBy('employee_id');
+
+    return view('admin.teamlead.index', compact(
+        'departments',
+        'employees',
+        'totalMembers',
+        'assignedLeads',
+        'openPositions',
+        'pendingRequests',
+        'pendingNotifications'
+    ));
+}
 
  public function employee_leave()
 {

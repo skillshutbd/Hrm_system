@@ -52,20 +52,26 @@ class TeamLeadController extends Controller
         ));
     }
 
-    public function memberIndex()
-    {
-        $tl           = auth('tl')->user();
-        $departmentId = $tl->employee->department_id ?? null;
+  public function memberIndex()
+{
+    $tl = auth('tl')->user();
+    
+    // tl.employee_id যেটা employees.id কে point করে
+    $employeeId = $tl->employee_id;
 
-        $members = Employee::where('department_id', $departmentId)
-            ->where('role', '!=', 'team_lead')
-            ->latest()
-            ->get();
+    // এই employee যে যে department-এর hod, সেগুলোর id বের করো
+    $departmentIds = Department::where('hod_id', $employeeId)->pluck('id');
 
-        $department = Department::find($departmentId);
+    // ঐ সব department-এর সব member (team_lead বাদে)
+    $members = Employee::whereIn('department_id', $departmentIds)
+        ->where('role', '!=', 'team_lead')
+        ->latest()
+        ->get();
 
-        return view('team_lead.members.index', compact('members', 'department'));
-    }
+    $departments = Department::whereIn('id', $departmentIds)->get();
+
+    return view('team_lead.members.index', compact('members', 'departments'));
+}
   public function recommend_index()
 {
     $tl           = auth('tl')->user();

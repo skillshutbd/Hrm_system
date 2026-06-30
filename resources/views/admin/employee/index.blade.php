@@ -467,13 +467,13 @@
         </div>
         @endforelse
 
-        {{-- Add new card --}}
+        <!-- {{-- Add new card --}}
         <div class="col-12 col-sm-6 col-xl-3">
             <a href="{{ route('admin.employee.create') }}" class="emp-card-add">
                 <div class="add-icon"><i class="bi bi-plus-lg"></i></div>
                 <div class="add-label">Add New Employee</div>
             </a>
-        </div>
+        </div> -->
 
     </div>
 </div>
