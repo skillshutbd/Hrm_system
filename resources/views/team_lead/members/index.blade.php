@@ -46,6 +46,280 @@
     .pagination { margin-bottom: 0; }
     .page-link { color: #FF5E2B; border-color: #E2E0DD; }
     .page-item.active .page-link { background-color: #FF5E2B; border-color: #FF5E2B; }
+
+    /* ============================================
+       PAGE-SPECIFIC RESPONSIVE (Unique Classes)
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .page-header-title {
+            font-size: 1.4rem;
+        }
+
+        .kpi-card {
+            padding: 16px 20px;
+        }
+
+        .kpi-value {
+            font-size: 1.6rem;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            font-size: 0.95rem;
+        }
+
+        .team-table thead th {
+            padding: 12px 16px;
+            font-size: 0.75rem;
+        }
+
+        .team-table tbody td {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+        }
+
+        .member-avatar,
+        .member-avatar-placeholder {
+            width: 36px;
+            height: 36px;
+            font-size: 0.78rem;
+        }
+
+        .member-name {
+            font-size: 0.85rem;
+        }
+
+        .btn-message {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* ===== Mobile (≤768px) ===== */
+    @media (max-width: 768px) {
+        .page-header-title {
+            font-size: 1.2rem;
+        }
+
+        .page-header-sub {
+            font-size: 0.78rem;
+        }
+
+        /* Page header - stack vertically (unique class) */
+        .my-team-header {
+            flex-direction: column !important;
+            gap: 16px !important;
+            align-items: stretch !important;
+        }
+
+        .my-team-header .d-flex.align-items-center.gap-2.flex-wrap {
+            width: 100%;
+        }
+
+        /* Filter tabs - horizontal scroll */
+        .filter-tabs {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .filter-tab {
+            flex-shrink: 0;
+            font-size: 0.78rem;
+            padding: 6px 14px;
+            white-space: nowrap;
+        }
+
+        /* KPI Cards - single column */
+        .row.g-3.mb-4 .col-12.col-md-4 {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+
+        .kpi-card {
+            padding: 14px 16px;
+        }
+
+        .kpi-label {
+            font-size: 0.68rem;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+        }
+
+        .kpi-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+        }
+
+        /* Table - horizontal scroll */
+        .team-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .team-table {
+            min-width: 700px;
+        }
+
+        .team-table thead th {
+            padding: 10px 12px;
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+
+        .team-table tbody td {
+            padding: 12px 12px;
+            font-size: 0.8rem;
+        }
+
+        .member-avatar,
+        .member-avatar-placeholder {
+            width: 32px;
+            height: 32px;
+            font-size: 0.75rem;
+        }
+
+        .member-name {
+            font-size: 0.82rem;
+        }
+
+        .member-id {
+            font-size: 0.68rem;
+        }
+
+        .status-pill {
+            font-size: 0.68rem;
+            padding: 3px 8px;
+        }
+
+        .btn-message {
+            width: 30px;
+            height: 30px;
+            font-size: 0.85rem;
+        }
+
+        /* Pagination - stack (unique class) */
+        .my-team-pagination-wrap {
+            padding: 12px 16px !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            align-items: stretch !important;
+        }
+
+        .my-team-pagination-wrap .pagination-info {
+            font-size: 0.72rem;
+            text-align: center;
+        }
+
+        .my-team-pagination-wrap .pagination {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .page-header-title {
+            font-size: 1.1rem;
+        }
+
+        .page-header-sub {
+            font-size: 0.75rem;
+        }
+
+        .kpi-card {
+            padding: 12px 14px;
+        }
+
+        .kpi-value {
+            font-size: 1.35rem;
+        }
+
+        .kpi-label {
+            font-size: 0.65rem;
+        }
+
+        .team-table {
+            min-width: 650px;
+        }
+
+        .team-table thead th {
+            padding: 8px 10px;
+            font-size: 0.7rem;
+        }
+
+        .team-table tbody td {
+            padding: 10px 10px;
+            font-size: 0.78rem;
+        }
+
+        .member-avatar,
+        .member-avatar-placeholder {
+            width: 30px;
+            height: 30px;
+            font-size: 0.7rem;
+        }
+
+        .member-name {
+            font-size: 0.78rem;
+        }
+
+        .filter-tab {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+        }
+
+        .btn-message {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-header-title {
+            font-size: 1rem;
+        }
+
+        .kpi-value {
+            font-size: 1.2rem;
+        }
+
+        .kpi-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.85rem;
+        }
+
+        .team-table {
+            min-width: 600px;
+        }
+
+        .member-avatar,
+        .member-avatar-placeholder {
+            width: 28px;
+            height: 28px;
+            font-size: 0.68rem;
+        }
+
+        .member-name {
+            font-size: 0.75rem;
+        }
+
+        .filter-tab {
+            font-size: 0.72rem;
+            padding: 5px 10px;
+        }
+    }
 </style>
 @endpush
 
@@ -74,8 +348,8 @@
         </div>
     @endif
 
-    {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+    {{-- Header with unique class --}}
+    <div class="my-team-header d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
         <div>
             <div class="page-header-title">My Team</div>
             <div class="page-header-sub">
@@ -192,8 +466,8 @@
             </tbody>
         </table>
 
-        {{-- Pagination --}}
-        <div class="pagination-wrap">
+        {{-- Pagination with unique class --}}
+        <div class="my-team-pagination-wrap pagination-wrap">
             <span class="pagination-info">
                 Showing {{ $members->firstItem() ?? 0 }}–{{ $members->lastItem() ?? 0 }}
                 of {{ $members->total() }} members
