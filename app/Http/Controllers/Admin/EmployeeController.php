@@ -7,6 +7,7 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -49,6 +50,11 @@ class EmployeeController extends Controller
         'phone'                          => 'nullable|string|max:255',
         'employee_id'                    => 'nullable|string|max:255|unique:employees,employee_id',
         'nid'                            => 'required|string|max:255|unique:employees,nid',
+        'blood_group' => [
+    'required',
+    'string',
+    Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+],
         'profile_picture'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'date_of_birth'                  => 'nullable|date',
         'gender'                         => 'nullable|in:male,female,other',
@@ -147,7 +153,12 @@ class EmployeeController extends Controller
             'email'                          => 'required|email|unique:employees,email,' . $employee->id,
             'phone'                          => 'nullable|string|max:255',
             'employee_id'                    => 'nullable|string|max:255|unique:employees,employee_id,' . $employee->id,
-            'nid'                            => 'required|string|max:255|unique:employees,nid,' . $employee->id,
+            'nid'                            => 'required|string|max:16|unique:employees,nid,' . $employee->id,
+             'blood_group'                    => [
+            'required',
+            'string',
+            Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+        ],
             'profile_picture'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'date_of_birth'                  => 'nullable|date',
             'gender'                         => 'nullable|in:male,female,other',

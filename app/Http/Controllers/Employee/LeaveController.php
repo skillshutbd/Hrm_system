@@ -64,8 +64,7 @@ class LeaveController extends Controller
    public function store(Request $request)
 {
     $employee = auth('employee')->user();
-
-    // ── একই সময়ে একাধিক pending leave request আটকাও ──
+// check pending
     $existingPending = Leave::where('employee_id', $employee->id)
         ->where('status', 'pending')
         ->exists();

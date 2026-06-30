@@ -81,10 +81,23 @@
                         </div>
 
                         <div class="col-12 col-md-6">
-                            <label class="form-label">NID <span class="text-danger">*</span></label>
-                            <input type="text" name="nid" class="form-control @error('nid') is-invalid @enderror" value="{{ old('nid') }}" placeholder="e.g. 1234567890" required>
-                            @error('nid')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
+    <label class="form-label">NID <span class="text-danger">*</span></label>
+    <input type="text" name="nid" class="form-control @error('nid') is-invalid @enderror" value="{{ old('nid') }}" placeholder="e.g. 1234567890" required>
+    @error('nid')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+
+<div class="col-12 col-md-6">
+    <label class="form-label">Blood Group</label>
+    <select name="blood_group" class="form-control @error('blood_group') is-invalid @enderror">
+        <option value="">Select Blood Group</option>
+        @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $bg)
+            <option value="{{ $bg }}" {{ old('blood_group') == $bg ? 'selected' : '' }}>
+                {{ $bg }}
+            </option>
+        @endforeach
+    </select>
+    @error('blood_group')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
                         <div class="col-12 col-md-6">
                             <label class="form-label">Email Address <span class="text-danger">*</span></label>
                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="john@skillshut.com" required>
@@ -207,26 +220,33 @@
 
             {{-- Right Column --}}
             <div class="col-12 col-lg-4">
-                <div class="form-card">
-                    <div class="form-section-title">
-                        <i class="bi bi-image-fill"></i> Profile Photo
-                    </div>
-                    <label for="photo" style="cursor:pointer; display:block;">
-                        <div class="photo-upload" id="photo-drop">
-                            <div class="photo-upload-icon">
-                                <i class="bi bi-cloud-upload"></i>
-                            </div>
-                            <div class="photo-upload-text">Click to upload photo</div>
-                            <div class="photo-upload-hint">JPG, PNG — Max 2MB</div>
-                        </div>
-                    </label>
-                    <input type="file" name="photo" id="photo" class="d-none" accept="image/*" onchange="previewPhoto(this)">
-                    <div id="photo-preview" class="text-center mt-3" style="display:none!important;">
-                        <img id="preview-img" src="" alt="Preview" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border: 2px solid #FF5E2B;">
-                    </div>
-                    @error('photo')<div class="text-danger mt-2" style="font-size:0.78rem;">{{ $message }}</div>@enderror
+    <div class="form-card">
+        <div class="form-section-title">
+            <i class="bi bi-image-fill"></i> Profile Photo
+        </div>
+        <label for="profile_picture" style="cursor:pointer; display:block;">
+            <div class="photo-upload" id="photo-drop">
+                <div class="photo-upload-icon">
+                    <i class="bi bi-cloud-upload"></i>
                 </div>
+                <div class="photo-upload-text">Click to upload photo</div>
+                <div class="photo-upload-hint">JPG, PNG — Max 2MB</div>
             </div>
+        </label>
+        <input type="file" name="profile_picture" id="profile_picture"
+               class="d-none" accept="image/*" onchange="previewPhoto(this)">
+
+        <div id="photo-preview" class="text-center mt-3" style="display:none;">
+            <img id="preview-img" src="" alt="Preview"
+                 style="width:100px; height:100px; border-radius:50%;
+                        object-fit:cover; border:2px solid #FF5E2B;">
+        </div>
+
+        @error('profile_picture')
+            <div class="text-danger mt-2" style="font-size:0.78rem;">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
 
         </div>
 

@@ -198,6 +198,10 @@
                 <div class="info-label">NID</div>
                 <div class="info-value">{{ $employee->nid ?? 'N/A' }}</div>
             </div>
+            <div class="info-row">
+                <div class="info-label">Blood Group</div>
+                <div class="info-value">{{ $employee->blood_group ?? 'N/A' }}</div>
+            </div>
 
             <div class="info-row">
                 <div class="info-label">Name</div>
