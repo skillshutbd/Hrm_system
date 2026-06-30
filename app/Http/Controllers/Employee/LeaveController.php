@@ -61,74 +61,82 @@ class LeaveController extends Controller
         ));
     }
 
-    public function store(Request $request)
-    {
+   public function store(Request $request)
+{
+    $employee = auth('employee')->user();
 
-     
-        $validated = $request->validate([
-         'leave_type_id' => 'required|exists:leave_types,id',
-            'from_date'     => 'required|date',
-            'to_date'       => 'required|date|after_or_equal:from_date',
-           'reason' => [
-                    'required',
-                    'string',
-                    'max:1000',
-                   function ($attribute, $value, $fail) {
-    $wordCount = str_word_count(trim($value));
-    if ($wordCount > 3) {
-        $fail('The reason must not exceed 3 words.');
+    // ── একই সময়ে একাধিক pending leave request আটকাও ──
+    $existingPending = Leave::where('employee_id', $employee->id)
+        ->where('status', 'pending')
+        ->exists();
+
+    if ($existingPending) {
+        return back()
+            ->withInput()
+            ->with('error', 'You already have a pending leave request. Please wait until it is approved or rejected before submitting a new one.');
     }
-},
 
-                ],
-            'attachment'    => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        ]);
+    $validated = $request->validate([
+        'leave_type_id' => 'required|exists:leave_type,id',
+        'from_date'     => 'required|date',
+        'to_date'       => 'required|date|after_or_equal:from_date',
+        'reason' => [
+            'required',
+            'string',
+            'max:1000',
+            function ($attribute, $value, $fail) {
+                $wordCount = str_word_count(trim($value));
+                if ($wordCount > 3) {
+                    $fail('The reason must contain at least 3 words.');
+                }
+            },
+        ],
+        'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+    ]);
 
-        $attachmentPath = null;
-        if ($request->hasFile('attachment')) {
-            $attachmentPath = $request->file('attachment')->store('leave_attachments', 'public');
-        }
-
-        $from     = \Carbon\Carbon::parse($validated['from_date']);
-        $to       = \Carbon\Carbon::parse($validated['to_date']);
-        $duration = 0;
-        $current  = $from->copy();
-        while ($current <= $to) {
-            if (!$current->isWeekend()) $duration++;
-            $current->addDay();
-        }
-
-        $employee = auth('employee')->user();
-
-        $leave = Leave::create([
-            'employee_id'   => $employee->id,
-            'leave_type_id' => $validated['leave_type_id'],
-            'from_date'     => $validated['from_date'],
-            'to_date'       => $validated['to_date'],
-            'duration'      => $duration,
-            'reason'        => $validated['reason'],
-            'attachment'    => $attachmentPath,
-            'status'        => 'pending',
-            'tl_status'     => 'pending',
-        ]);
-
-        // Employee এর department অনুযায়ী TL খুঁজো
-        $tl = Tl::whereHas('employee', function ($q) use ($employee) {
-            $q->where('department_id', $employee->department_id);
-        })->first();
-
-        if ($tl) {
-            LeaveNotification::create([
-                'leave_id'       => $leave->id,
-                'recipient_type' => 'tl',
-                'recipient_id'   => $tl->id,
-                'type'           => 'leave_request',
-                'message'        => $employee->name . ' has submitted a leave request for your review.',
-            ]);
-        }
-
-        return redirect()
-            ->route('employee.dashboard')
-            ->with('success', 'Leave request submitted successfully.');
+    $attachmentPath = null;
+    if ($request->hasFile('attachment')) {
+        $attachmentPath = $request->file('attachment')->store('leave_attachments', 'public');
     }
+
+    $from     = \Carbon\Carbon::parse($validated['from_date']);
+    $to       = \Carbon\Carbon::parse($validated['to_date']);
+    $duration = 0;
+    $current  = $from->copy();
+    while ($current <= $to) {
+        if (!$current->isWeekend()) $duration++;
+        $current->addDay();
+    }
+
+    $leave = Leave::create([
+        'employee_id'   => $employee->id,
+        'leave_type_id' => $validated['leave_type_id'],
+        'from_date'     => $validated['from_date'],
+        'to_date'       => $validated['to_date'],
+        'duration'      => $duration,
+        'reason'        => $validated['reason'],
+        'attachment'    => $attachmentPath,
+        'status'        => 'pending',
+        'tl_status'     => 'pending',
+    ]);
+
+    // Employee এর department অনুযায়ী TL খুঁজো
+    $tl = Tl::whereHas('employee', function ($q) use ($employee) {
+        $q->where('department_id', $employee->department_id);
+    })->first();
+
+    if ($tl) {
+        LeaveNotification::create([
+            'leave_id'       => $leave->id,
+            'recipient_type' => 'tl',
+            'recipient_id'   => $tl->id,
+            'type'           => 'leave_request',
+            'message'        => $employee->name . ' has submitted a leave request for your review.',
+        ]);
+    }
+
+    return redirect()
+        ->route('employee.dashboard')
+        ->with('success', 'Leave request submitted successfully.');
+}
 }

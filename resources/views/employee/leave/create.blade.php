@@ -230,6 +230,12 @@
 
 {{-- Form --}}
 <div class="form-card">
+
+@if(session('error'))
+    <div class="alert alert-danger py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">
+        <i class="bi bi-exclamation-circle me-1"></i> {{ session('error') }}
+    </div>
+@endif
    <form action="{{ route('employee.leave_request.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
