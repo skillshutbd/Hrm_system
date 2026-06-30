@@ -33,6 +33,196 @@
 
     .empty-state { text-align: center; padding: 60px 20px; color: #7F7F7F; }
     .empty-state i { font-size: 2.5rem; color: #E2E0DD; margin-bottom: 12px; display: block; }
+
+    /* ============================================
+       PAGE-SPECIFIC RESPONSIVE (Unique Classes)
+       ============================================ */
+
+    /* ===== Tablet (≤991px) ===== */
+    @media (max-width: 991.98px) {
+        .page-title {
+            font-size: 1.4rem;
+        }
+
+        .leave-table thead th {
+            padding: 12px 16px;
+            font-size: 0.72rem;
+        }
+
+        .leave-table tbody td {
+            padding: 14px 16px;
+            font-size: 0.85rem;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            font-size: 0.78rem;
+            padding: 5px 12px;
+        }
+    }
+
+    /* ===== Mobile (≤768px) ===== */
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 1.2rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.78rem;
+        }
+
+        .breadcrumb-custom {
+            font-size: 0.72rem;
+            margin-bottom: 16px;
+        }
+
+        /* Page header - stack vertically (unique class) */
+        .leave-types-header {
+            flex-direction: column !important;
+            gap: 12px !important;
+            align-items: stretch !important;
+        }
+
+        .leave-types-header .btn-create {
+            width: 100%;
+            justify-content: center;
+            font-size: 0.85rem;
+            padding: 10px 16px;
+        }
+
+        /* Table - horizontal scroll (unique class) */
+        .leave-types-table-card {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .leave-types-table-card .leave-table {
+            min-width: 780px;
+        }
+
+        .leave-types-table-card .leave-table thead th {
+            padding: 10px 12px;
+            font-size: 0.68rem;
+            white-space: nowrap;
+        }
+
+        .leave-types-table-card .leave-table tbody td {
+            padding: 12px 12px;
+            font-size: 0.8rem;
+        }
+
+        .badge-active,
+        .badge-inactive {
+            font-size: 0.68rem;
+            padding: 3px 8px;
+        }
+
+        .days-badge {
+            font-size: 0.72rem;
+            padding: 3px 8px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            font-size: 0.72rem;
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+
+        /* Action buttons wrap on mobile */
+        .leave-types-table-card .d-flex.gap-2 {
+            flex-wrap: wrap;
+            gap: 6px !important;
+        }
+
+        /* Empty state */
+        .empty-state {
+            padding: 40px 16px;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+        }
+    }
+
+    /* ===== Small Mobile (≤576px) ===== */
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 1.1rem;
+        }
+
+        .page-subtitle {
+            font-size: 0.75rem;
+        }
+
+        .breadcrumb-custom {
+            font-size: 0.7rem;
+            margin-bottom: 14px;
+        }
+
+        .leave-types-table-card .leave-table {
+            min-width: 720px;
+        }
+
+        .leave-types-table-card .leave-table thead th {
+            padding: 8px 10px;
+            font-size: 0.65rem;
+        }
+
+        .leave-types-table-card .leave-table tbody td {
+            padding: 10px 10px;
+            font-size: 0.78rem;
+        }
+
+        .btn-create {
+            font-size: 0.82rem;
+            padding: 9px 14px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+        }
+
+        .empty-state {
+            padding: 32px 12px;
+        }
+
+        .empty-state i {
+            font-size: 1.8rem;
+        }
+    }
+
+    /* ===== Extra Small Mobile (≤400px) ===== */
+    @media (max-width: 400px) {
+        .page-title {
+            font-size: 1rem;
+        }
+
+        .breadcrumb-custom {
+            font-size: 0.68rem;
+        }
+
+        .leave-types-table-card .leave-table {
+            min-width: 680px;
+        }
+
+        .btn-create {
+            font-size: 0.78rem;
+            padding: 8px 12px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            font-size: 0.68rem;
+            padding: 4px 7px;
+        }
+
+        .empty-state {
+            padding: 28px 10px;
+        }
+    }
 </style>
 @endpush
 
@@ -44,7 +234,8 @@
     <span>Leave Types</span>
 </div>
 
-<div class="d-flex justify-content-between align-items-start mb-4">
+{{-- Page Header with unique class --}}
+<div class="leave-types-header d-flex justify-content-between align-items-start mb-4">
     <div>
         <h1 class="page-title mb-1">Leave Types</h1>
         <p class="page-subtitle mb-0">Manage all leave categories available to employees.</p>
@@ -65,7 +256,8 @@ use App\Models\LeaveType;
 $leaveTypes = LeaveType::all();
 @endphp
 
-<div class="table-card">
+{{-- Table with unique class --}}
+<div class="leave-types-table-card table-card">
     <table class="leave-table">
         <thead>
             <tr>
@@ -99,15 +291,14 @@ $leaveTypes = LeaveType::all();
                             <i class="bi bi-pencil"></i> Edit
                         </a>
 
-                        
                         <form method="POST" action="{{ route('admin.leave.destroy', $type->id) }}">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn-delete"
-            onclick="return confirm('Are you sure?')">
-        <i class="bi bi-trash"></i> Delete
-    </button>
-</form>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete"
+                                    onclick="return confirm('Are you sure?')">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
                     </div>
                 </td>
             </tr>
