@@ -14,13 +14,17 @@ class TeamLeadController extends Controller
 {
     public function dashboard()
     {
-        $tl           = auth('tl')->user();
-        $departmentId = $tl->employee->department_id ?? null;
+        $tl = auth('tl')->user();
 
-        $members = Employee::where('department_id', $departmentId)->get();
+        // FIX: আগে এখানে $tl->employee->department_id (শুধু নিজের department)
+        // ব্যবহার হচ্ছিল। কিন্তু একজন TL একাধিক department এর HOD হতে পারে
+        // (departments টেবিলের hod_id অনুযায়ী)। তাই সব department বের করতে হবে।
+        $departmentIds = Department::where('hod_id', $tl->employee_id)->pluck('id');
 
-        $leaveRequests = Leave::whereHas('employee', function ($q) use ($departmentId) {
-                $q->where('department_id', $departmentId);
+        $members = Employee::whereIn('department_id', $departmentIds)->get();
+
+        $leaveRequests = Leave::whereHas('employee', function ($q) use ($departmentIds) {
+                $q->whereIn('department_id', $departmentIds);
             })
             ->where('tl_status', 'pending')
             ->with(['employee', 'leaveType'])
@@ -52,62 +56,66 @@ class TeamLeadController extends Controller
         ));
     }
 
-  public function memberIndex()
-{
-    $tl = auth('tl')->user();
-    
-    // tl.employee_id যেটা employees.id কে point করে
-    $employeeId = $tl->employee_id;
+    public function memberIndex()
+    {
+        $tl = auth('tl')->user();
 
-    // এই employee যে যে department-এর hod, সেগুলোর id বের করো
-    $departmentIds = Department::where('hod_id', $employeeId)->pluck('id');
+        // tl.employee_id যেটা employees.id কে point করে
+        $employeeId = $tl->employee_id;
 
-    // ঐ সব department-এর সব member (team_lead বাদে)
-    $members = Employee::whereIn('department_id', $departmentIds)
-        ->where('role', '!=', 'team_lead')
-        ->latest()
-        ->get();
+        // এই employee যে যে department-এর hod, সেগুলোর id বের করো
+        $departmentIds = Department::where('hod_id', $employeeId)->pluck('id');
 
-    $departments = Department::whereIn('id', $departmentIds)->get();
+        // ঐ সব department-এর সব member (team_lead বাদে)
+        $members = Employee::whereIn('department_id', $departmentIds)
+            ->where('role', '!=', 'team_lead')
+            ->latest()
+            ->get();
 
-    return view('team_lead.members.index', compact('members', 'departments'));
-}
-  public function recommend_index()
-{
-    $tl           = auth('tl')->user();
-    $departmentId = $tl->employee->department_id ?? null;
+        $departments = Department::whereIn('id', $departmentIds)->get();
 
-    $query = Leave::with(['employee.department', 'leaveType'])
-        ->whereHas('employee', function ($q) use ($departmentId) {
-            $q->where('department_id', $departmentId);
-        });
-
-    // Filter
-    $filter = request('filter', 'pending');
-
-    if ($filter === 'pending') {
-        $query->where('tl_status', 'pending');
-    } elseif ($filter === 'recommended') {
-        $query->where('tl_status', 'recommended');
-    } elseif ($filter === 'declined') {
-        $query->where('tl_status', 'not_recommended');
+        return view('team_lead.members.index', compact('members', 'departments'));
     }
 
-    $leaves = $query->latest()->paginate(10)->withQueryString();
+    public function recommend_index()
+    {
+        $tl = auth('tl')->user();
 
-    // KPI counts
-    $baseQuery = Leave::whereHas('employee', function ($q) use ($departmentId) {
-        $q->where('department_id', $departmentId);
-    });
+        // TL এর single department_id এর বদলে HOD হিসেবে assign সব departments
+        $departmentIds = Department::where('hod_id', $tl->employee_id)
+            ->pluck('id');
 
-    $pendingCount    = (clone $baseQuery)->where('tl_status', 'pending')->count();
-    $recommendedCount = (clone $baseQuery)->where('tl_status', 'recommended')->count();
-    $declinedCount   = (clone $baseQuery)->where('tl_status', 'not_recommended')->count();
+        $query = Leave::with(['employee.department', 'leaveType'])
+            ->whereHas('employee', function ($q) use ($departmentIds) {
+                $q->whereIn('department_id', $departmentIds);
+            });
 
-    return view('team_lead.recommend.index', compact(
-        'leaves', 'filter', 'pendingCount', 'recommendedCount', 'declinedCount'
-    ));
-}
+        // Filter
+        $filter = request('filter', 'pending');
+
+        if ($filter === 'pending') {
+            $query->where('tl_status', 'pending');
+        } elseif ($filter === 'recommended') {
+            $query->where('tl_status', 'recommended');
+        } elseif ($filter === 'declined') {
+            $query->where('tl_status', 'not_recommended');
+        }
+
+        $leaves = $query->latest()->paginate(15);
+
+        // KPI counts
+        $baseQuery = Leave::whereHas('employee', function ($q) use ($departmentIds) {
+            $q->whereIn('department_id', $departmentIds);
+        });
+
+        $pendingCount     = (clone $baseQuery)->where('tl_status', 'pending')->count();
+        $recommendedCount = (clone $baseQuery)->where('tl_status', 'recommended')->count();
+        $declinedCount    = (clone $baseQuery)->where('tl_status', 'not_recommended')->count();
+
+        return view('team_lead.recommend.index', compact(
+            'leaves', 'filter', 'pendingCount', 'recommendedCount', 'declinedCount'
+        ));
+    }
 
     public function recommend(Request $request, Leave $leave)
     {
@@ -158,38 +166,38 @@ class TeamLeadController extends Controller
     }
 
     public function markNotificationRead($id)
-{
-    $notification = \App\Models\LeaveNotification::find($id);
+    {
+        $notification = \App\Models\LeaveNotification::find($id);
 
-    if ($notification) {
-        $notification->update(['read_at' => now()]);
+        if ($notification) {
+            $notification->update(['read_at' => now()]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
-    return response()->json(['success' => true]);
-}
+    public function markAllNotificationsRead()
+    {
+        $tl = auth('tl')->user();
 
-public function markAllNotificationsRead()
-{
-    $tl = auth('tl')->user();
+        \App\Models\LeaveNotification::where('recipient_type', 'tl')
+            ->where('recipient_id', $tl->id)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
 
-    \App\Models\LeaveNotification::where('recipient_type', 'tl')
-        ->where('recipient_id', $tl->id)
-        ->whereNull('read_at')
-        ->update(['read_at' => now()]);
+        return back()->with('success', 'All notifications marked as read.');
+    }
 
-    return back()->with('success', 'All notifications marked as read.');
-}
+    public function notificationsIndex()
+    {
+        $tl = auth('tl')->user();
 
-public function notificationsIndex()
-{
-    $tl = auth('tl')->user();
+        $notifications = \App\Models\LeaveNotification::where('recipient_type', 'tl')
+            ->where('recipient_id', $tl->id)
+            ->with('leave.employee')
+            ->latest()
+            ->paginate(15);
 
-    $notifications = \App\Models\LeaveNotification::where('recipient_type', 'tl')
-        ->where('recipient_id', $tl->id)
-        ->with('leave.employee')
-        ->latest()
-        ->paginate(15);
-
-    return view('team_lead.notifications.index', compact('notifications'));
-}
+        return view('team_lead.notifications.index', compact('notifications'));
+    }
 }

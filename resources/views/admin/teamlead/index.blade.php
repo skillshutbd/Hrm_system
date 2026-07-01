@@ -36,7 +36,7 @@
     .badge-pending::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #D97706; display: inline-block; }
     .btn-assign { background: #FF5E2B; color: #fff; border: none; border-radius: 6px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; cursor:pointer; }
     .btn-assign:hover { background: #E04B1A; color: #fff; }
-    .btn-modify { background: #fff; color: #1A1A1A; border: 1px solid #E2E0DD; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; }
+    .btn-modify { background: #fff; color: #1A1A1A; border: 1px solid #E2E0DD; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; cursor:pointer; }
     .btn-modify:hover { background: #FAF9F6; border-color: #FF5E2B; color: #FF5E2B; }
     .btn-reject { background: #fff; color: #dc3545; border: 1px solid #dc3545; border-radius: 6px; font-size: 0.75rem; font-weight: 700; padding: 8px 18px; transition: all 0.2s; }
     .btn-reject:hover { background: #FEF2F2; }
@@ -48,6 +48,13 @@
 
     /* ── TL Assign Popup ─────────────────────────── */
     .tl-assign-wrap { position: relative; display: inline-block; }
+    .dept-tl-trigger {
+        display: flex; align-items: center; gap: 6px; background: #fff; border: 1px dashed #E2E0DD;
+        border-radius: 8px; padding: 6px 10px; cursor: pointer; width: 100%; min-width: 160px; text-align: left;
+    }
+    .dept-tl-trigger.has-depts { border-style: solid; }
+    .dept-tl-trigger.has-pending { border-color: #D97706; border-style: dashed; background: #FFFBEB; }
+    .dept-tl-trigger:hover { border-color: #FF5E2B; }
     .tl-assign-panel {
         position: absolute; top: calc(100% + 6px); right: 0; width: 230px;
         background: #fff; border: 1px solid #E2E0DD; border-radius: 12px;
@@ -63,28 +70,28 @@
     .tl-assign-item:hover { background: #FAF9F6; }
     .tl-assign-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: #FF5E2B; cursor: pointer; }
     .tl-assign-item label { font-size: 0.82rem; color: #1A1A1A; cursor: pointer; flex: 1; margin: 0; }
-    .tl-assign-footer { padding: 10px 14px; border-top: 1px solid #F4F4F0; display: flex; gap: 6px; }
+    .tl-assign-footer { padding: 10px 14px; border-top: 1px solid #F4F4F0; }
     .tl-assign-save {
-        flex: 1; background: #FF5E2B; color: #fff; border: none; border-radius: 7px;
-        font-size: 0.78rem; font-weight: 700; padding: 7px; cursor: pointer; transition: background 0.2s;
+        width: 100%; background: #FF5E2B; color: #fff; border: none; border-radius: 7px;
+        font-size: 0.78rem; font-weight: 700; padding: 9px; cursor: pointer; transition: background 0.2s;
     }
     .tl-assign-save:hover { background: #E04B1A; }
-    .tl-assign-cancel {
-        background: #fff; color: #4A4A4A; border: 1px solid #E2E0DD; border-radius: 7px;
-        font-size: 0.78rem; font-weight: 600; padding: 7px 12px; cursor: pointer;
-    }
-    .tl-assign-cancel:hover { background: #FAF9F6; }
 
-    /* ── Dept(s) as TL display chips (for existing TLs) ── */
+    /* ── Dept(s) as TL display chips ── */
     .dept-tl-chips { display: flex; flex-wrap: wrap; gap: 4px; max-width: 200px; }
     .dept-tl-mini-chip {
         background: #FFF3EE; color: #FF5E2B; border: 1px solid rgba(255,94,43,0.2);
         font-size: 0.7rem; font-weight: 700; padding: 3px 9px; border-radius: 10px; white-space: nowrap;
     }
+    /* Pending preview chip (saved but not yet assigned) */
+    .dept-tl-mini-chip.pending {
+        background: #FEF3C7; color: #D97706; border-color: rgba(217,119,6,0.25);
+    }
     .dept-tl-empty { font-size: 0.78rem; color: #B2ADA7; font-style: italic; }
+    .pending-hint { font-size: 0.68rem; color: #D97706; font-weight: 600; margin-top: 3px; }
 
     /* ============================================
-       RESPONSIVE — 768 / 576 / 400px
+       RESPONSIVE
        ============================================ */
     @media (max-width: 768px) {
         .page-title { font-size: 1rem !important; }
@@ -224,8 +231,11 @@
                         ->pluck('id')->toArray();
                     $assignedDeptNames = \App\Models\Department::where('hod_id', $employee->id)
                         ->pluck('name')->toArray();
+                    $initialCount = count($assignedDeptIds);
                 @endphp
-                    <tr>
+                    <tr data-employee-id="{{ $employee->id }}"
+                        data-employee-role="{{ $employee->role }}"
+                        data-is-pending="{{ in_array($employee->id, $pendingRequests) ? '1' : '0' }}">
                         {{-- Employee --}}
                         <td>
                             <div class="d-flex align-items-center gap-3">
@@ -265,66 +275,62 @@
                             @endif
                         </td>
 
-                        {{-- Dept(s) as TL — read-only chips view --}}
-                       {{-- Dept(s) as TL — click করলেই checklist popup খুলবে, edit করা যাবে --}}
-<td>
-    <div class="tl-assign-wrap">
-        <button type="button"
-                class="dept-tl-trigger {{ count($assignedDeptIds) ? 'has-depts' : '' }}"
-                onclick="toggleTlAssignPanel({{ $employee->id }})">
-            @if(count($assignedDeptNames) > 0)
-                <div class="dept-tl-chips">
-                    @foreach($assignedDeptNames as $dn)
-                        <span class="dept-tl-mini-chip">{{ $dn }}</span>
-                    @endforeach
-                </div>
-            @else
-                <span class="dept-tl-empty">Click to assign</span>
-            @endif
-            <i class="bi bi-chevron-down" style="font-size:0.6rem; margin-left:auto;"></i>
-        </button>
+                        {{-- Dept(s) as TL — trigger + panel --}}
+                        <td>
+                            <div class="tl-assign-wrap">
+                                <button type="button"
+                                        class="dept-tl-trigger {{ $initialCount ? 'has-depts' : '' }}"
+                                        id="trigger-{{ $employee->id }}"
+                                        onclick="toggleTlAssignPanel({{ $employee->id }})">
+                                    <div class="dept-tl-chips" id="deptChips-{{ $employee->id }}">
+                                        @if($initialCount > 0)
+                                            @foreach($assignedDeptNames as $dn)
+                                                <span class="dept-tl-mini-chip">{{ $dn }}</span>
+                                            @endforeach
+                                        @else
+                                            <span class="dept-tl-empty">Click to assign</span>
+                                        @endif
+                                    </div>
+                                    <i class="bi bi-chevron-down" style="font-size:0.6rem; margin-left:auto;"></i>
+                                </button>
+                                <div class="pending-hint" id="pendingHint-{{ $employee->id }}" style="display:none;">
+                                    <i class="bi bi-info-circle"></i> Pending — click Actions to assign
+                                </div>
 
-        <div class="tl-assign-panel" id="tlAssignPanel-{{ $employee->id }}">
-            <div class="tl-assign-panel-header">
-                Select department(s)
-            </div>
+                                <div class="tl-assign-panel" id="tlAssignPanel-{{ $employee->id }}">
+                                    <div class="tl-assign-panel-header">
+                                        Select department(s)
+                                    </div>
 
-            <form action="{{ route('admin.tl-assignment.toggle', $employee->id) }}" method="POST">
-                @csrf
+                                    <div class="tl-assign-list">
+                                        @foreach($departments as $department)
+                                        <div class="tl-assign-item">
+                                            <input type="checkbox"
+                                                   data-emp-id="{{ $employee->id }}"
+                                                   id="tlDept_{{ $employee->id }}_{{ $department->id }}"
+                                                   value="{{ $department->id }}"
+                                                   data-dept-name="{{ $department->name }}"
+                                                   {{ in_array($department->id, $assignedDeptIds) ? 'checked' : '' }}>
+                                            <label for="tlDept_{{ $employee->id }}_{{ $department->id }}">
+                                                {{ $department->name }}
+                                            </label>
+                                        </div>
+                                        @endforeach
+                                    </div>
 
-                <div class="tl-assign-list">
-                    @foreach($departments as $department)
-                    <div class="tl-assign-item">
-                        <input type="checkbox"
-                               name="department_ids[]"
-                               id="tlDept_{{ $employee->id }}_{{ $department->id }}"
-                               value="{{ $department->id }}"
-                               {{ in_array($department->id, $assignedDeptIds) ? 'checked' : '' }}>
-                        <label for="tlDept_{{ $employee->id }}_{{ $department->id }}">
-                            {{ $department->name }}
-                        </label>
-                    </div>
-                    @endforeach
-                </div>
-
-                <div class="tl-assign-footer">
-                    <button type="button" class="tl-assign-cancel"
-                            onclick="toggleTlAssignPanel({{ $employee->id }})">
-                        Cancel
-                    </button>
-                    <button type="submit" class="tl-assign-save">
-                        Save
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</td>
+                                    <div class="tl-assign-footer">
+                                        <button type="button" class="tl-assign-save"
+                                                onclick="saveDeptSelection({{ $employee->id }})">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
 
                         {{-- Actions --}}
                         <td>
                             @if(in_array($employee->id, $pendingRequests) && isset($pendingNotifications[$employee->id]))
-                                {{-- Pending → Approve / Reject --}}
                                 <div class="d-flex align-items-center gap-2">
                                     <form action="{{ route('admin.tl-assignment.approve', $pendingNotifications[$employee->id]->id) }}" method="POST">
                                         @csrf
@@ -341,57 +347,12 @@
                                         </button>
                                     </form>
                                 </div>
-
-                            @elseif($employee->role === 'team_lead')
-                                {{-- ইতিমধ্যে TL → Remove --}}
-                                <form action="{{ route('admin.tl-assignment.toggle', $employee->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn-modify">REMOVE TL</button>
-                                </form>
-
                             @else
-                                {{-- TL না → Assign popup with dept checklist --}}
-                                <div class="tl-assign-wrap">
-                                    <button type="button" class="btn-assign"
-                                            onclick="toggleTlAssignPanel({{ $employee->id }})">
-                                        ASSIGN AS TL
-                                    </button>
-
-                                    <div class="tl-assign-panel" id="tlAssignPanel-{{ $employee->id }}">
-                                        <div class="tl-assign-panel-header">
-                                            Select department(s)
-                                        </div>
-
-                                        <form action="{{ route('admin.tl-assignment.toggle', $employee->id) }}" method="POST">
-                                            @csrf
-
-                                            <div class="tl-assign-list">
-                                                @foreach($departments as $department)
-                                                <div class="tl-assign-item">
-                                                    <input type="checkbox"
-                                                           name="department_ids[]"
-                                                           id="tlDept_{{ $employee->id }}_{{ $department->id }}"
-                                                           value="{{ $department->id }}"
-                                                           {{ in_array($department->id, $assignedDeptIds) ? 'checked' : '' }}>
-                                                    <label for="tlDept_{{ $employee->id }}_{{ $department->id }}">
-                                                        {{ $department->name }}
-                                                    </label>
-                                                </div>
-                                                @endforeach
-                                            </div>
-
-                                            <div class="tl-assign-footer">
-                                                <button type="button" class="tl-assign-cancel"
-                                                        onclick="toggleTlAssignPanel({{ $employee->id }})">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit" class="tl-assign-save">
-                                                    Assign
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                                <button type="button"
+                                        class="{{ $employee->role === 'team_lead' ? 'btn-modify' : 'btn-assign' }}"
+                                        onclick="assignAsTl({{ $employee->id }})">
+                                    {{ $employee->role === 'team_lead' ? 'MODIFY' : 'ASSIGN AS TL' }}
+                                </button>
                             @endif
                         </td>
                     </tr>
@@ -414,13 +375,137 @@
 
 @push('scripts')
 <script>
+/* ════════════════════════════════════════════════
+   TL Assignment — Two-step flow
+   Step 1: Save  → just stores selection in localStorage (no backend call)
+   Step 2: Actions button → submits form with saved selection
+════════════════════════════════════════════════ */
+
+const CSRF_TOKEN   = '{{ csrf_token() }}';
+const TOGGLE_URL   = '{{ url("admin/tl-assignment") }}';
+const DEPARTMENTS  = @json($departments->pluck('name', 'id'));
+
+/* ── On page load: restore any pending selections from localStorage ── */
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('tr[data-employee-id]').forEach(row => {
+        const empId      = row.dataset.employeeId;
+        const isPending  = row.dataset.isPending === '1';
+        const saved      = localStorage.getItem(`tlSelection_${empId}`);
+
+        if (saved) {
+            const ids = JSON.parse(saved);
+            // sync checkboxes
+            document.querySelectorAll(`input[data-emp-id="${empId}"]`).forEach(cb => {
+                cb.checked = ids.includes(cb.value);
+            });
+            // show preview chips (only if not already a confirmed TL)
+            if (!isPending && row.dataset.employeeRole !== 'team_lead') {
+                updateDeptChipsPreview(empId, ids, true);
+            } else {
+                // clean stale localStorage if already assigned
+                localStorage.removeItem(`tlSelection_${empId}`);
+            }
+        }
+    });
+});
+
+/* ── Toggle dropdown panel ── */
 function toggleTlAssignPanel(employeeId) {
     document.querySelectorAll('.tl-assign-panel.open').forEach(p => {
         if (p.id !== `tlAssignPanel-${employeeId}`) p.classList.remove('open');
     });
-    document.getElementById(`tlAssignPanel-${employeeId}`).classList.toggle('open');
+    const panel = document.getElementById(`tlAssignPanel-${employeeId}`);
+    panel.classList.toggle('open');
 }
 
+/* ── STEP 1: Save selection (localStorage only, no backend) ── */
+function saveDeptSelection(employeeId) {
+    const panel      = document.getElementById(`tlAssignPanel-${employeeId}`);
+    const checkboxes = panel.querySelectorAll('input[type="checkbox"]:checked');
+    const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+
+    if (selectedIds.length === 0) {
+        alert('Please select at least one department.');
+        return;
+    }
+
+    // Save to localStorage
+    localStorage.setItem(`tlSelection_${employeeId}`, JSON.stringify(selectedIds));
+
+    // Close panel
+    panel.classList.remove('open');
+
+    // Update preview chips (yellow = pending)
+    updateDeptChipsPreview(employeeId, selectedIds, true);
+
+    // Small visual feedback
+    const trigger = document.getElementById(`trigger-${employeeId}`);
+    trigger.classList.add('has-pending');
+    const hint = document.getElementById(`pendingHint-${employeeId}`);
+    if (hint) hint.style.display = 'block';
+}
+
+/* ── Update the "Dept(s) as TL" column chips ── */
+function updateDeptChipsPreview(employeeId, selectedIds, isPending) {
+    const chipsContainer = document.getElementById(`deptChips-${employeeId}`);
+    const trigger        = document.getElementById(`trigger-${employeeId}`);
+
+    if (selectedIds.length === 0) {
+        chipsContainer.innerHTML = '<span class="dept-tl-empty">Click to assign</span>';
+        trigger.classList.remove('has-depts', 'has-pending');
+        return;
+    }
+
+    trigger.classList.add('has-depts');
+    const chipClass = isPending ? 'dept-tl-mini-chip pending' : 'dept-tl-mini-chip';
+    chipsContainer.innerHTML = selectedIds.map(id => {
+        const name = DEPARTMENTS[id] || 'Unknown';
+        return `<span class="${chipClass}">${name}</span>`;
+    }).join('');
+}
+
+/* ── STEP 2: Actually assign TL (form submit with saved selection) ── */
+function assignAsTl(employeeId) {
+    const row = document.querySelector(`tr[data-employee-id="${employeeId}"]`);
+    const currentRole = row.dataset.employeeRole;
+
+    const selectedIds = JSON.parse(localStorage.getItem(`tlSelection_${employeeId}`) || '[]');
+
+    if (selectedIds.length === 0) {
+        alert('Please select at least one department first from the dropdown, then click Save.');
+        toggleTlAssignPanel(employeeId);
+        return;
+    }
+
+    const actionWord = currentRole === 'team_lead' ? 'modify' : 'assign';
+    if (!confirm(`Are you sure you want to ${actionWord} TL for ${selectedIds.length} department(s)?`)) {
+        return;
+    }
+
+    // Build hidden form and submit
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `${TOGGLE_URL}/${employeeId}/toggle`;
+
+    const csrf = document.createElement('input');
+    csrf.type  = 'hidden';
+    csrf.name  = '_token';
+    csrf.value = CSRF_TOKEN;
+    form.appendChild(csrf);
+
+    selectedIds.forEach(id => {
+        const input = document.createElement('input');
+        input.type  = 'hidden';
+        input.name  = 'department_ids[]';
+        input.value = id;
+        form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+/* ── Close panel when clicking outside ── */
 document.addEventListener('click', function (e) {
     document.querySelectorAll('.tl-assign-wrap').forEach(wrap => {
         if (!wrap.contains(e.target)) {
