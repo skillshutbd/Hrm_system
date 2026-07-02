@@ -251,48 +251,51 @@ class EmployeeController extends Controller
         return response()->streamDownload($callback, $fileName, $headers);
     }
 
-public function toggleTeamLead(Request $request, Employee $employee)
+public function toggleTeamLead(Request $request, $employeeId)
 {
-    $departmentIds = $request->input('department_ids', []);
-
-    if (auth('Hr')->check()) {
-        $existing = \App\Models\Notification::where('type', 'tl_assignment_request')
-            ->where('employee_id', $employee->id)
-            ->where('status', 'pending')
-            ->first();
-
-        if ($existing) {
-            return back()->with('info', 'Request already pending for this employee.');
-        }
-
-        \App\Models\Notification::create([
-            'type'           => 'tl_assignment_request',
-            'employee_id'    => $employee->id,
-            'requested_by'   => auth('Hr')->id(),
-            'message'        => auth('Hr')->user()->name . ' wants to assign ' . $employee->name . ' as Team Lead.',
-            'status'         => 'pending',
-            'department_ids' => json_encode($departmentIds),
-        ]);
-
-        return back()->with('success', 'Request sent to Admin for approval.');
+    $employee = Employee::findOrFail($employeeId);
+ 
+    $deptIds   = $request->input('department_ids', []);
+    $isRemove  = $request->boolean('is_remove');
+ 
+    // ── Case 1: Explicit "Remove TL" ──────────────────────────────
+    if ($isRemove || empty($deptIds)) {
+        Department::where('hod_id', $employee->id)->update(['hod_id' => null]);
+ 
+        $employee->role = 'member';
+        $employee->save();
+ 
+        return back()->with('success', "{$employee->name} has been removed as Team Lead.");
     }
-
-    $makeTeamLead = $employee->role !== 'team_lead';
-
-    $employee->update([
-        'role' => $makeTeamLead ? 'team_lead' : 'employee',
-    ]);
-
-    $this->syncTeamLeadRecord($employee, $makeTeamLead); // ← যোগ করা হলো
-
-    \App\Models\Department::where('hod_id', $employee->id)->update(['hod_id' => null]);
-
-    if ($makeTeamLead && !empty($departmentIds)) {
-        \App\Models\Department::whereIn('id', $departmentIds)
-            ->update(['hod_id' => $employee->id]);
+ 
+    // ── Case 2: Assign / Modify ────────────────────────────────────
+    // Validate none of the selected departments belong to someone else
+    $conflicts = Department::whereIn('id', $deptIds)
+        ->whereNotNull('hod_id')
+        ->where('hod_id', '!=', $employee->id)
+        ->with('hod:id,name')
+        ->get();
+ 
+    if ($conflicts->isNotEmpty()) {
+        $names = $conflicts->map(function ($d) {
+            return "{$d->name} (already led by {$d->hod->name})";
+        })->implode(', ');
+ 
+        return back()->with('error', "Cannot assign: {$names}.");
     }
-
-    return back()->with('success', 'Employee role updated successfully.');
+ 
+    // Clear departments this employee previously led but is no longer selecting
+    Department::where('hod_id', $employee->id)
+        ->whereNotIn('id', $deptIds)
+        ->update(['hod_id' => null]);
+ 
+    // Assign the selected departments to this employee
+    Department::whereIn('id', $deptIds)->update(['hod_id' => $employee->id]);
+ 
+    $employee->role = 'team_lead';
+    $employee->save();
+ 
+    return back()->with('success', "{$employee->name} has been assigned as Team Lead.");
 }
 
 public function approveTlRequest(int $id)

@@ -38,7 +38,7 @@
     .btn-assign:hover { background: #E04B1A; color: #fff; }
     .btn-modify { background: #fff; color: #1A1A1A; border: 1px solid #E2E0DD; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; padding: 8px 18px; transition: all 0.2s; cursor:pointer; }
     .btn-modify:hover { background: #FAF9F6; border-color: #FF5E2B; color: #FF5E2B; }
-    .btn-reject { background: #fff; color: #dc3545; border: 1px solid #dc3545; border-radius: 6px; font-size: 0.75rem; font-weight: 700; padding: 8px 18px; transition: all 0.2s; }
+    .btn-reject { background: #fff; color: #dc3545; border: 1px solid #dc3545; border-radius: 6px; font-size: 0.75rem; font-weight: 700; padding: 8px 18px; transition: all 0.2s; cursor:pointer; }
     .btn-reject:hover { background: #FEF2F2; }
     .pagination-wrap { padding: 16px 20px; border-top: 1px solid #E2E0DD; display: flex; justify-content: space-between; align-items: center; }
     .pagination-info { font-size: 0.78rem; color: #7F7F7F; font-family: monospace; }
@@ -56,7 +56,7 @@
     .dept-tl-trigger.has-pending { border-color: #D97706; border-style: dashed; background: #FFFBEB; }
     .dept-tl-trigger:hover { border-color: #FF5E2B; }
     .tl-assign-panel {
-        position: absolute; top: calc(100% + 6px); right: 0; width: 230px;
+        position: absolute; top: calc(100% + 6px); right: 0; width: 250px;
         background: #fff; border: 1px solid #E2E0DD; border-radius: 12px;
         box-shadow: 0 8px 28px rgba(0,0,0,0.14); z-index: 50; display: none; overflow: hidden;
     }
@@ -66,10 +66,12 @@
         font-size: 0.75rem; font-weight: 700; color: #1A1A1A; background: #FAFAFA;
     }
     .tl-assign-list { max-height: 220px; overflow-y: auto; padding: 6px 0; }
-    .tl-assign-item { display: flex; align-items: center; gap: 8px; padding: 8px 14px; cursor: pointer; transition: background 0.15s; }
+    .tl-assign-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 14px; cursor: pointer; transition: background 0.15s; }
     .tl-assign-item:hover { background: #FAF9F6; }
-    .tl-assign-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: #FF5E2B; cursor: pointer; }
+    .tl-assign-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: #FF5E2B; cursor: pointer; margin-top: 2px; }
     .tl-assign-item label { font-size: 0.82rem; color: #1A1A1A; cursor: pointer; flex: 1; margin: 0; }
+    .tl-assign-item.taken label { color: #B2ADA7; }
+    .taken-note { display: block; font-size: 0.68rem; color: #D97706; font-weight: 600; margin-top: 2px; }
     .tl-assign-footer { padding: 10px 14px; border-top: 1px solid #F4F4F0; }
     .tl-assign-save {
         width: 100%; background: #FF5E2B; color: #fff; border: none; border-radius: 7px;
@@ -106,7 +108,7 @@
         .kpi-value { font-size: 1.5rem !important; }
         .kpi-icon { width: 32px !important; height: 32px !important; font-size: 0.95rem !important; }
         .tl-table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
-        .tl-table { min-width: 820px !important; }
+        .tl-table { min-width: 860px !important; }
         .tl-table thead th { padding: 10px 12px !important; font-size: 0.72rem !important; white-space: nowrap !important; }
         .tl-table td { padding: 12px 12px !important; }
         .emp-avatar { width: 32px !important; height: 32px !important; font-size: 0.72rem !important; }
@@ -125,7 +127,7 @@
         .kpi-card { padding: 12px 14px !important; }
         .kpi-value { font-size: 1.35rem !important; }
         .kpi-label { font-size: 0.65rem !important; }
-        .tl-table { min-width: 760px !important; }
+        .tl-table { min-width: 780px !important; }
         .tl-table thead th { padding: 8px 10px !important; font-size: 0.7rem !important; }
         .tl-table td { padding: 10px 10px !important; }
         .emp-avatar { width: 30px !important; height: 30px !important; font-size: 0.7rem !important; }
@@ -137,7 +139,7 @@
         .page-title { font-size: 0.9rem !important; }
         .kpi-value { font-size: 1.2rem !important; }
         .kpi-icon { width: 28px !important; height: 28px !important; font-size: 0.85rem !important; }
-        .tl-table { min-width: 700px !important; }
+        .tl-table { min-width: 720px !important; }
         .emp-avatar { width: 28px !important; height: 28px !important; font-size: 0.68rem !important; }
         .emp-name { font-size: 0.75rem !important; }
         .btn-assign, .btn-modify, .btn-reject { font-size: 0.65rem !important; padding: 5px 8px !important; }
@@ -156,6 +158,11 @@
 @if(session('info'))
     <div class="alert alert-info py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">
         <i class="bi bi-info-circle me-1"></i> {{ session('info') }}
+    </div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger py-2 px-3 mb-3 rounded-3" style="font-size:0.88rem;">
+        <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
     </div>
 @endif
 
@@ -227,11 +234,20 @@
             <tbody>
                 @forelse($employees as $employee)
                 @php
+                    // All departments currently owned by this employee
                     $assignedDeptIds = \App\Models\Department::where('hod_id', $employee->id)
                         ->pluck('id')->toArray();
                     $assignedDeptNames = \App\Models\Department::where('hod_id', $employee->id)
                         ->pluck('name')->toArray();
                     $initialCount = count($assignedDeptIds);
+
+                    // Map of department_id => name of the OTHER employee who currently owns it
+                    // (used to block double-assignment in the UI)
+                    $takenByOthers = \App\Models\Department::whereNotNull('hod_id')
+                        ->where('hod_id', '!=', $employee->id)
+                        ->with('hod:id,name')
+                        ->get()
+                        ->pluck('hod.name', 'id');
                 @endphp
                     <tr data-employee-id="{{ $employee->id }}"
                         data-employee-role="{{ $employee->role }}"
@@ -304,15 +320,24 @@
 
                                     <div class="tl-assign-list">
                                         @foreach($departments as $department)
-                                        <div class="tl-assign-item">
+                                        @php
+                                            $isTaken = isset($takenByOthers[$department->id]);
+                                        @endphp
+                                        <div class="tl-assign-item {{ $isTaken ? 'taken' : '' }}">
                                             <input type="checkbox"
                                                    data-emp-id="{{ $employee->id }}"
                                                    id="tlDept_{{ $employee->id }}_{{ $department->id }}"
                                                    value="{{ $department->id }}"
                                                    data-dept-name="{{ $department->name }}"
-                                                   {{ in_array($department->id, $assignedDeptIds) ? 'checked' : '' }}>
+                                                   data-taken="{{ $isTaken ? '1' : '0' }}"
+                                                   {{ in_array($department->id, $assignedDeptIds) ? 'checked' : '' }}
+                                                   {{ $isTaken ? 'disabled' : '' }}
+                                                   onchange="handleDeptCheckboxChange(this, {{ $employee->id }})">
                                             <label for="tlDept_{{ $employee->id }}_{{ $department->id }}">
                                                 {{ $department->name }}
+                                                @if($isTaken)
+                                                    <span class="taken-note">Already TL: {{ $takenByOthers[$department->id] }}</span>
+                                                @endif
                                             </label>
                                         </div>
                                         @endforeach
@@ -347,11 +372,18 @@
                                         </button>
                                     </form>
                                 </div>
+                            @elseif($employee->role === 'team_lead')
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn-modify" onclick="assignAsTl({{ $employee->id }})">
+                                        MODIFY
+                                    </button>
+                                    <button type="button" class="btn-reject" onclick="removeAsTl({{ $employee->id }})">
+                                        REMOVE TL
+                                    </button>
+                                </div>
                             @else
-                                <button type="button"
-                                        class="{{ $employee->role === 'team_lead' ? 'btn-modify' : 'btn-assign' }}"
-                                        onclick="assignAsTl({{ $employee->id }})">
-                                    {{ $employee->role === 'team_lead' ? 'MODIFY' : 'ASSIGN AS TL' }}
+                                <button type="button" class="btn-assign" onclick="assignAsTl({{ $employee->id }})">
+                                    ASSIGN AS TL
                                 </button>
                             @endif
                         </td>
@@ -379,6 +411,7 @@
    TL Assignment — Two-step flow
    Step 1: Save  → just stores selection in localStorage (no backend call)
    Step 2: Actions button → submits form with saved selection
+   Step 3: Remove TL → clears role + unassigns all departments
 ════════════════════════════════════════════════ */
 
 const CSRF_TOKEN   = '{{ csrf_token() }}';
@@ -394,13 +427,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (saved) {
             const ids = JSON.parse(saved);
-            // sync checkboxes
+            // sync checkboxes (skip ones disabled because taken by someone else)
             document.querySelectorAll(`input[data-emp-id="${empId}"]`).forEach(cb => {
+                if (cb.dataset.taken === '1') return;
                 cb.checked = ids.includes(cb.value);
             });
             // show preview chips (only if not already a confirmed TL)
             if (!isPending && row.dataset.employeeRole !== 'team_lead') {
                 updateDeptChipsPreview(empId, ids, true);
+                const trigger = document.getElementById(`trigger-${empId}`);
+                if (trigger) trigger.classList.add('has-pending');
+                const hint = document.getElementById(`pendingHint-${empId}`);
+                if (hint) hint.style.display = 'block';
             } else {
                 // clean stale localStorage if already assigned
                 localStorage.removeItem(`tlSelection_${empId}`);
@@ -418,18 +456,24 @@ function toggleTlAssignPanel(employeeId) {
     panel.classList.toggle('open');
 }
 
-/* ── STEP 1: Save selection (localStorage only, no backend) ── */
+/* ── Prevent picking a department that's already owned by someone else ── */
+function handleDeptCheckboxChange(checkbox, employeeId) {
+    if (checkbox.checked && checkbox.dataset.taken === '1') {
+        alert('Already assigned to another TL. Please select a different department.');
+        checkbox.checked = false;
+    }
+}
+
+/* ── STEP 1: Save selection (localStorage only, no backend) ──
+   NOTE: empty selection IS allowed here — that just means
+   "clear my pending pick", it does NOT remove an existing TL.
+   Use the "REMOVE TL" button for actually removing a confirmed TL. */
 function saveDeptSelection(employeeId) {
     const panel      = document.getElementById(`tlAssignPanel-${employeeId}`);
-    const checkboxes = panel.querySelectorAll('input[type="checkbox"]:checked');
+    const checkboxes = panel.querySelectorAll('input[type="checkbox"]:checked:not(:disabled)');
     const selectedIds = Array.from(checkboxes).map(cb => cb.value);
 
-    if (selectedIds.length === 0) {
-        alert('Please select at least one department.');
-        return;
-    }
-
-    // Save to localStorage
+    // Save to localStorage (can legitimately be an empty array)
     localStorage.setItem(`tlSelection_${employeeId}`, JSON.stringify(selectedIds));
 
     // Close panel
@@ -440,9 +484,14 @@ function saveDeptSelection(employeeId) {
 
     // Small visual feedback
     const trigger = document.getElementById(`trigger-${employeeId}`);
-    trigger.classList.add('has-pending');
     const hint = document.getElementById(`pendingHint-${employeeId}`);
-    if (hint) hint.style.display = 'block';
+    if (selectedIds.length > 0) {
+        trigger.classList.add('has-pending');
+        if (hint) hint.style.display = 'block';
+    } else {
+        trigger.classList.remove('has-pending');
+        if (hint) hint.style.display = 'none';
+    }
 }
 
 /* ── Update the "Dept(s) as TL" column chips ── */
@@ -464,7 +513,7 @@ function updateDeptChipsPreview(employeeId, selectedIds, isPending) {
     }).join('');
 }
 
-/* ── STEP 2: Actually assign TL (form submit with saved selection) ── */
+/* ── STEP 2: Actually assign / modify TL (form submit with saved selection) ── */
 function assignAsTl(employeeId) {
     const row = document.querySelector(`tr[data-employee-id="${employeeId}"]`);
     const currentRole = row.dataset.employeeRole;
@@ -482,7 +531,24 @@ function assignAsTl(employeeId) {
         return;
     }
 
-    // Build hidden form and submit
+    submitToggleForm(employeeId, selectedIds);
+}
+
+/* ── STEP 3: Remove TL entirely — clears role + unassigns all departments ── */
+function removeAsTl(employeeId) {
+    if (!confirm('এই এমপ্লয়িকে টিম লিড থেকে সরাতে চাও? তার সব ডিপার্টমেন্ট আনঅ্যাসাইন হয়ে যাবে।')) {
+        return;
+    }
+
+    localStorage.removeItem(`tlSelection_${employeeId}`);
+
+    // Submit with an empty department list — backend must interpret
+    // an empty department_ids[] as "remove TL role + unassign all depts"
+    submitToggleForm(employeeId, []);
+}
+
+/* ── Shared form-builder/submitter ── */
+function submitToggleForm(employeeId, departmentIds) {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = `${TOGGLE_URL}/${employeeId}/toggle`;
@@ -493,13 +559,21 @@ function assignAsTl(employeeId) {
     csrf.value = CSRF_TOKEN;
     form.appendChild(csrf);
 
-    selectedIds.forEach(id => {
+    departmentIds.forEach(id => {
         const input = document.createElement('input');
         input.type  = 'hidden';
         input.name  = 'department_ids[]';
         input.value = id;
         form.appendChild(input);
     });
+
+    // Explicit flag so backend can distinguish "no depts sent because JS bug"
+    // from "deliberately removing TL"
+    const removeFlag = document.createElement('input');
+    removeFlag.type  = 'hidden';
+    removeFlag.name  = 'is_remove';
+    removeFlag.value = departmentIds.length === 0 ? '1' : '0';
+    form.appendChild(removeFlag);
 
     document.body.appendChild(form);
     form.submit();
